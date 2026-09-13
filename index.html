@@ -557,6 +557,41 @@ h2.sec-head__title{
 .games-table .gt-game .row-btn{white-space:nowrap}
 .games-table .gt-n{text-align:center}
 #gamesTable[hidden],.grid-games[hidden]{display:none}
+/* фильтры в заголовках столбцов */
+.games-table thead th{vertical-align:top; padding-bottom:10px}
+.gt-h{display:block; margin-bottom:7px}
+.gt-f{
+  display:block; width:100%; min-width:60px; height:30px; padding:0 8px; border-radius:8px;
+  border:1px solid var(--line-soft); background:rgba(0,10,32,.7); color:var(--cream);
+  font:500 12.5px/1 var(--font-body); letter-spacing:0; text-transform:none; transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+select.gt-f{
+  -webkit-appearance:none; appearance:none; cursor:pointer; padding:0 18px 0 8px; text-overflow:clip;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999691' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 6px center; background-size:10px 6px;
+}
+select.gt-f option{background:var(--night); color:var(--cream)}
+.gt-f::placeholder{color:var(--muted-2); opacity:1}
+.gt-f:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(236,176,36,.2)}
+.gt-f.is-on{border-color:rgba(236,176,36,.7); background:rgba(236,176,36,.1)}
+input.gt-f[type=number]{-moz-appearance:textfield; appearance:textfield}
+input.gt-f::-webkit-outer-spin-button,input.gt-f::-webkit-inner-spin-button{-webkit-appearance:none; margin:0}
+input.gt-f::-webkit-search-cancel-button{filter:invert(.7)}
+.games-table thead th,.games-table tbody td{padding-left:10px; padding-right:10px}
+.games-table thead th{letter-spacing:.1em}
+.games-table .tname{white-space:nowrap}
+.games-table .gt-f{min-width:56px}
+.games-table .gt-col-date .gt-f{min-width:80px}
+.games-table .gt-col-pkg .gt-f{min-width:116px}
+.games-table .gt-col-player .gt-f{min-width:120px}
+.games-table .gt-col-num .gt-f{min-width:60px}
+.gt-empty{padding:26px 16px !important; text-align:center; color:var(--muted)}
+.gt-empty .row-btn{color:var(--gold); text-decoration:underline; text-underline-offset:3px}
+.gt-reset{min-height:30px; padding:0 12px; margin-left:8px; font-size:12px; vertical-align:middle}
+/* заголовок таблицы прилипает под шапкой сайта при прокрутке страницы (clip не создаёт своей прокрутки) */
+.table-wrap.table-wrap--stick{overflow:visible; overflow:clip}
+.table-wrap.table-wrap--stick .table-scroll{overflow:visible}
+.table-wrap.table-wrap--stick thead th{top:var(--stick-top, 0px); z-index:5; box-shadow:0 1px 0 var(--line-soft), 0 10px 18px -14px rgba(0,0,0,.9)}
 @media (max-width:700px){
   .games-table tbody td,.games-table thead th{padding:9px 5px}
   .games-table tbody td{font-size:13.5px}
@@ -568,6 +603,11 @@ h2.sec-head__title{
   .games-table .row-meta{white-space:normal; font-size:11.5px}
   .games-table .rank{width:24px; height:24px; font-size:11px}
   .games-table .tname .row-btn{font-size:13.5px; line-height:1.3}
+  .games-table .gt-f,.games-table .gt-col-pkg .gt-f,.games-table .gt-col-player .gt-f,.games-table .gt-col-num .gt-f{min-width:0; height:28px; padding:0 4px; font-size:11.5px; border-radius:7px}
+  .games-table select.gt-f{padding:0 11px 0 3px; background-position:right 2px center; background-size:8px 5px; min-width:36px}
+  .games-table thead th.col-rank,.games-table tbody td:nth-child(4){padding-left:3px; padding-right:3px}
+  .games-table .tname{white-space:normal}
+  .games-table .gt-h{margin-bottom:5px}
 }
 .chip--tour[aria-pressed="true"]{background:linear-gradient(135deg,#A3C8C6,var(--teal)); box-shadow:0 12px 30px -12px rgba(111,168,168,.95)}
 @media (max-width:560px){
@@ -1774,7 +1814,7 @@ html.bg-ready body::before{
 
       <p class="result-count" id="ratingCount" aria-live="polite"></p>
 
-      <div class="table-wrap">
+      <div class="table-wrap table-wrap--stick">
         <div class="table-scroll">
           <table id="ratingTable">
             <caption class="sr-only">Рейтинг игроков</caption>
@@ -2059,6 +2099,7 @@ let DB = SNAPSHOT;
 const state = {
   tab: 'games',
   gkind: 'all', paket: 'all', gq: '', gsort: 'date-desc', gmonth: '', gview: 'cards',
+  gtf: {date:'', pkg:'', n:'', pos:'', player:'', pts:'', f:'', rb:'', ra:'', d:''},   // фильтры столбцов таблицы игр
   tour: 'year',
   rq: '', rfilter: 'active', rsort: 'r', rdir: -1
 };
@@ -2263,13 +2304,45 @@ function syncPaketScroll(){
   thumb.style.transform = `translateX(${(track - w) * el.scrollLeft / max}px)`;
 }
 // игры в виде таблицы: строка — один игрок в одной игре; строки одной игры идут подряд и выделены полосой
-function gamesTableHTML(list){
-  const anyTour = list.some(g => g.tour);
-  let rows = '';
-  list.forEach((g, gi) => {
-    const cls = gi % 2 ? ' gt-alt' : '';
-    g.players.forEach((p, pi) => {
-      rows += `<tr class="gt-row${pi === 0 ? ' gt-first' : ''}${cls}${g.tour ? ' gt-tour' : ''}">
+let gtList = [];   // игры, показанные в таблице (до фильтров столбцов)
+const gtNum = g => String(g.tour ? (g.num ?? g.n) : g.n);
+function gtMatch(g, p){
+  const f = state.gtf;
+  const q = f.date.trim();
+  if(q && !fmtDate(g.date).includes(q) && !(g.date || '').includes(q)) return false;
+  if(f.pkg && (g.tour ? g.season : g.paket) !== f.pkg) return false;
+  if(f.n && gtNum(g) !== f.n) return false;
+  if(f.pos === 'top3' ? p.pos > 3 : f.pos === 'rest' ? p.pos <= 3 : f.pos !== '' && p.pos !== +f.pos) return false;
+  if(f.player.trim() && !p.p.toLowerCase().includes(f.player.trim().toLowerCase())) return false;
+  const from = (v, s) => String(s).trim() === '' || (v != null && v >= parseFloat(String(s).replace(/\s/g, '').replace(',', '.')));
+  if(!from(p.pts, f.pts) || !from(p.f, f.f) || !from(p.r, f.rb) || !from(p.nr, f.ra)) return false;
+  if(f.d){
+    if(p.r == null || p.nr == null) return false;
+    const d = p.nr - p.r;
+    if(f.d === 'up' ? !(d > .5) : f.d === 'down' ? !(d < -.5) : Math.abs(d) > .5) return false;
+  }
+  return true;
+}
+const gtActive = () => Object.values(state.gtf).some(v => String(v).trim() !== '');
+function gtBodyHTML(anyTour){
+  let html = '', prev = null, alt = true, shown = 0;
+  gtList.forEach(g => g.players.forEach(p => {
+    if(!gtMatch(g, p)) return;
+    const first = g !== prev;
+    if(first){ alt = !alt; prev = g; }
+    shown++;
+    html += gtRowHTML(g, p, first, alt, anyTour);
+  }));
+  return shown ? html : `<tr><td colspan="${anyTour ? 10 : 9}" class="gt-empty">Нет строк под выбранные фильтры. <button class="row-btn" type="button" data-gt-reset>Сбросить фильтры столбцов</button></td></tr>`;
+}
+function gtCountSuffix(){
+  let all = 0, shown = 0;
+  gtList.forEach(g => g.players.forEach(p => { all++; if(gtMatch(g, p)) shown++; }));
+  return ` · <b>${shown}</b> ${plural(shown, 'строка', 'строки', 'строк')}${shown !== all ? ` из ${all}` : ''}`
+    + (gtActive() ? ` <button class="chip gt-reset" type="button" data-gt-reset>Сбросить фильтры столбцов</button>` : '');
+}
+function gtRowHTML(g, p, first, alt, anyTour){
+  return `<tr class="gt-row${first ? ' gt-first' : ''}${alt ? ' gt-alt' : ''}${g.tour ? ' gt-tour' : ''}">
         <td class="num gt-date hide-sm">${fmtDate(g.date)}</td>
         <td class="gt-game"><button class="row-btn" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${g.tour ? `<span class="gt-pfx">Турнир · </span>${esc(g.seasonName)}` : esc(g.paket)}</button><span class="row-meta num">${fmtDate(g.date)} · ${esc(gameTitle(g))}</span></td>
         <td class="num gt-n hide-sm">${g.tour ? (g.num ?? esc(g.n)) : g.n}</td>
@@ -2281,17 +2354,36 @@ function gamesTableHTML(list){
         <td class="num hide-sm">${n0(p.nr)}</td>
         <td>${deltaHTML(p.r, p.nr)}</td>
       </tr>`;
-    });
-  });
-  return `<div class="table-wrap"><div class="table-scroll"><table class="games-table">
+}
+// игры в виде таблицы: строка — один игрок в одной игре; под названием столбца — его фильтр
+function gamesTableHTML(list){
+  gtList = list;
+  const anyTour = list.some(g => g.tour);
+  const f = state.gtf;
+  const pk = [...new Set(list.filter(g => !g.tour).map(g => g.paket))].sort(paketOrder).map(p => [p, p])
+    .concat(DB.seasons.filter(se => list.some(g => g.season === se.key)).map(se => [se.key, 'Турнир · ' + se.name]));
+  const nums = [...new Set(list.map(gtNum))].sort(nCmp).map(n => [n, n]);
+  if(f.pkg && !pk.some(x => x[0] === f.pkg)) f.pkg = '';   // выбранного пакета нет в текущей выборке
+  if(f.n && !nums.some(x => x[0] === f.n)) f.n = '';
+  const opt = (v, label, cur) => `<option value="${esc(v)}"${String(cur) === String(v) ? ' selected' : ''}>${esc(label)}</option>`;
+  const inp = (key, ph, label, num = false) => `<input class="gt-f${String(f[key]).trim() ? ' is-on' : ''}" data-gtf="${key}" type="${num ? 'number' : 'search'}"${num ? ' inputmode="numeric"' : ''} placeholder="${ph}" value="${esc(f[key])}" aria-label="Фильтр: ${label}" autocomplete="off">`;
+  const sel = (key, label, options) => `<select class="gt-f${f[key] ? ' is-on' : ''}" data-gtf="${key}" aria-label="Фильтр: ${label}">${opt('', 'Все', f[key])}${options.map(([v, l]) => opt(v, l, f[key])).join('')}</select>`;
+  const th = (label, cls, control, title = '') => `<th scope="col"${cls ? ` class="${cls}"` : ''}${title ? ` title="${title}"` : ''}><span class="gt-h">${label}</span>${control}</th>`;
+  return `<div class="table-wrap table-wrap--stick"><div class="table-scroll"><table class="games-table">
       <caption class="sr-only">Все игры: игроки, очки и рейтинг</caption>
       <thead><tr>
-        <th scope="col" class="hide-sm">Дата</th><th scope="col">Пакет / турнир</th><th scope="col" class="hide-sm">Игра</th>
-        <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th><th scope="col">Очки</th>
-        ${anyTour ? '<th scope="col" class="hide-md" title="Игровой рейтинг турнира">fОчки</th>' : ''}
-        <th scope="col" class="hide-sm">Рейтинг до</th><th scope="col" class="hide-sm">После</th><th scope="col">Δ</th>
+        ${th('Дата', 'hide-sm gt-col-date', inp('date', 'дд.мм', 'дата'))}
+        ${th('Пакет / турнир', 'gt-col-pkg', sel('pkg', 'пакет или турнир', pk))}
+        ${th('Игра', 'hide-sm', sel('n', 'номер игры', nums))}
+        ${th('Место', 'col-rank', sel('pos', 'место', [['1','1'],['2','2'],['3','3'],['top3','Топ-3'],['rest','4 и ниже']]))}
+        ${th('Игрок', 'gt-col-player', inp('player', 'имя', 'игрок'))}
+        ${th('Очки', 'gt-col-num', inp('pts', 'от', 'очки от', true))}
+        ${anyTour ? th('fОчки', 'hide-md gt-col-num', inp('f', 'от', 'fОчки от', true), 'Игровой рейтинг турнира') : ''}
+        ${th('Рейтинг до', 'hide-sm gt-col-num', inp('rb', 'от', 'рейтинг до от', true))}
+        ${th('После', 'hide-sm gt-col-num', inp('ra', 'от', 'рейтинг после от', true))}
+        ${th('Δ', '', sel('d', 'изменение рейтинга', [['up','▲ Рост'],['down','▼ Падение'],['flat','± 0']]))}
       </tr></thead>
-      <tbody>${rows}</tbody>
+      <tbody id="gtBody">${gtBodyHTML(anyTour)}</tbody>
     </table></div></div>
     ${anyTour ? '<p class="result-count" style="margin-top:12px">В турнирных играх место — по fОчки, а рейтинг до и после — за весь сезон: он пересчитывается один раз, после последней игры сезона.</p>' : ''}`;
 }
@@ -2345,8 +2437,9 @@ function renderGames(){
   grid.hidden = asTable;
   $('#gamesTable').hidden = !asTable || !list.length;
   $('#gamesTable').innerHTML = asTable && list.length ? gamesTableHTML(list) : '';
+  if(asTable) requestAnimationFrame(fitStickTables);
   $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${allGames().length}</b> игр`
-    + (asTable ? (n => ` · <b>${n}</b> ${plural(n, 'строка', 'строки', 'строк')}`)(list.reduce((s, g) => s + g.players.length, 0)) : '') + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
+    + (asTable && list.length ? gtCountSuffix() : '') + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
   empty.hidden = list.length > 0;
   grid.innerHTML = list.map((g,i) => {
     const w = g.players[0];
@@ -3024,7 +3117,7 @@ function renderSchedule(){
 function ratingRows(){
   const q = state.rq.trim().toLowerCase();
   let list = DB.rating.filter(r => {
-    if(state.rfilter === 'active' && !(r.g > 0)) return false;
+    if(state.rfilter === 'active' && !(gamesAll(r) > 0)) return false;   // игравшие — в пакетах или в турнире
     return !q || r.p.toLowerCase().includes(q);
   });
   const k = state.rsort, dir = state.rdir;
@@ -3559,6 +3652,49 @@ $('#gameSearch').addEventListener('input', e => {
   gt = setTimeout(() => { state.gq = v; renderGames(); }, 160);
 });
 $('#gameSort').addEventListener('change', e => { state.gsort = e.target.value; renderGames(); });
+// фильтры столбцов таблицы игр: перерисовываем только строки, чтобы поле ввода не теряло курсор
+let gtTimer = 0;
+function renderGtBody(){
+  const body = $('#gtBody');
+  if(!body) return;
+  body.innerHTML = gtBodyHTML(gtList.some(g => g.tour));
+  $('#gamesCount').innerHTML = `Показано <b>${gtList.length}</b> из <b>${allGames().length}</b> игр` + gtCountSuffix()
+    + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
+}
+$('#gamesTable').addEventListener('input', e => {
+  const el = e.target.closest('[data-gtf]');
+  if(!el) return;
+  state.gtf[el.dataset.gtf] = el.value;
+  el.classList.toggle('is-on', el.value.trim() !== '');
+  clearTimeout(gtTimer);
+  gtTimer = setTimeout(renderGtBody, el.tagName === 'SELECT' ? 0 : 160);
+});
+document.addEventListener('click', e => {
+  if(!e.target.closest('[data-gt-reset]')) return;
+  Object.keys(state.gtf).forEach(k => { state.gtf[k] = ''; });
+  renderGames();
+});
+
+// высота шапки сайта (на компьютере — вместе с вкладками): под ней прилипают заголовки таблиц
+function syncStickTop(){
+  const hdr = $('.site-header'), tabs = $('.tabs-outer');
+  let top = hdr ? hdr.getBoundingClientRect().height : 0;
+  if(tabs && getComputedStyle(tabs).position === 'sticky') top += tabs.getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--stick-top', Math.round(top) + 'px');
+  fitStickTables();
+}
+// закрепление заголовка работает, только пока таблица помещается в ширину; иначе — обычная горизонтальная прокрутка
+function fitStickTables(){
+  $$('.table-wrap--stick, .table-wrap--wide').forEach(wrap => {
+    const table = $('table', wrap);
+    if(!table || !wrap.offsetWidth) return;
+    wrap.classList.add('table-wrap--stick'); wrap.classList.remove('table-wrap--wide');
+    if(table.scrollWidth > wrap.clientWidth + 1){ wrap.classList.remove('table-wrap--stick'); wrap.classList.add('table-wrap--wide'); }
+  });
+}
+syncStickTop();
+window.addEventListener('resize', syncStickTop, {passive:true});
+document.fonts?.ready.then(syncStickTop);
 // строка пакетов: колесо мыши крутит вбок, бегунок можно тянуть или нажать на дорожку
 (() => {
   const el = $('#paketChips'), bar = $('#paketScroll');
@@ -3591,6 +3727,7 @@ $('#gameSort').addEventListener('change', e => { state.gsort = e.target.value; r
 })();
 $('#gamesReset').addEventListener('click', () => {
   state.gq = ''; state.gkind = 'all'; state.paket = 'all'; state.gmonth = ''; $('#gameSearch').value = '';
+  Object.keys(state.gtf).forEach(k => { state.gtf[k] = ''; });
   renderPaketChips(); renderGames();
 });
 let rt;
