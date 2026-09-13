@@ -2231,9 +2231,22 @@ function tourGames(){
 const tourStats = name => (tourGames(), tourCache.stats.get(name) || {g:0, w:0});
 const allGames  = () => DB.games.concat(tourGames());
 const gameKey   = g => g.tour ? `tour|${g.season}|${g.n}` : `${g.paket}|${g.n}`;
-// игры и победы в рейтинге — вместе с турнирными играми
-const gamesAll  = r => r.g == null ? null : r.g + tourStats(r.p).g;
-const winsAll   = r => r.w == null ? null : r.w + tourStats(r.p).w;
+// игры и победы в рейтинге — считаем прямо по играм (пакеты и турнир), так число не зависит от версии листа Rating
+let playStatsCache = null;
+function playStats(name){
+  if(playStatsCache?.db !== DB){
+    const map = new Map();
+    allGames().forEach(g => g.players.forEach(p => {
+      const s = map.get(p.p) || {g:0, w:0};
+      s.g++; if(p.pos === 1 && g.players.length > 1) s.w++;
+      map.set(p.p, s);
+    }));
+    playStatsCache = {db:DB, map};
+  }
+  return playStatsCache.map.get(name);
+}
+const gamesAll  = r => playStats(r.p)?.g ?? r.g ?? null;
+const winsAll   = r => playStats(r.p)?.w ?? r.w ?? null;
 const ratingVal = (r, k) => k === 'g' ? gamesAll(r) : k === 'w' ? winsAll(r) : r[k];
 
 // штраф за пропуски (как в Apps Script): от 3 пропусков рейтинг делится на коэффициент, после 10 не растёт
