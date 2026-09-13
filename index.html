@@ -546,9 +546,33 @@ h2.sec-head__title{
 .gscroll__thumb{position:absolute; left:0; top:4px; height:6px; border-radius:6px; background:linear-gradient(90deg,var(--gold-600),var(--gold-300)); box-shadow:0 0 10px rgba(236,176,36,.35); transition:height var(--t-fast) var(--ease), top var(--t-fast) var(--ease)}
 .gscroll:hover .gscroll__thumb,.gscroll.is-drag .gscroll__thumb{top:3px; height:8px}
 .gstrip.is-tour .gscroll__thumb{background:linear-gradient(90deg,#4E8686,#A3C8C6); box-shadow:0 0 10px rgba(111,168,168,.4)}
+/* игры таблицей */
+.gview{align-self:flex-start}
+.games-table tbody td{padding-block:10px}
+.games-table .gt-first td{border-top:2px solid rgba(236,176,36,.22)}
+.games-table tbody tr.gt-first:first-child td{border-top:0}
+.games-table .gt-alt td{background:rgba(246,236,214,.025)}
+.games-table .gt-row:not(.gt-first) .gt-date,.games-table .gt-row:not(.gt-first) .gt-game .row-btn,.games-table .gt-row:not(.gt-first) .gt-n{color:var(--muted-2); font-weight:500}
+.games-table .gt-tour .gt-game .row-btn{color:#B6D3D0}
+.games-table .gt-game .row-btn{white-space:nowrap}
+.games-table .gt-n{text-align:center}
+#gamesTable[hidden],.grid-games[hidden]{display:none}
+@media (max-width:700px){
+  .games-table tbody td,.games-table thead th{padding:9px 5px}
+  .games-table tbody td{font-size:13.5px}
+  .games-table .gt-game .row-btn{white-space:normal; font-size:13px; line-height:1.3}
+  .games-table .gt-pfx{display:none}
+  .games-table .gt-game{min-width:0}
+  .games-table .delta{font-size:12px; white-space:nowrap}
+  .games-table thead th{white-space:normal; letter-spacing:.02em; font-size:10.5px; line-height:1.25}
+  .games-table .row-meta{white-space:normal; font-size:11.5px}
+  .games-table .rank{width:24px; height:24px; font-size:11px}
+  .games-table .tname .row-btn{font-size:13.5px; line-height:1.3}
+}
 .chip--tour[aria-pressed="true"]{background:linear-gradient(135deg,#A3C8C6,var(--teal)); box-shadow:0 12px 30px -12px rgba(111,168,168,.95)}
 @media (max-width:560px){
   .gfilter{flex-direction:column; align-items:stretch; gap:10px}
+  .gview{align-self:stretch}
   .gkind button{flex:1 1 0}
 }
 .result-count{font-size:13px; color:var(--muted-2); margin-bottom:var(--space-4)}
@@ -1477,6 +1501,13 @@ html.bg-ready body::before{
             <option value="points-desc">Выше результат</option>
           </select>
         </div>
+        <div class="field">
+          <span class="field__label" id="gviewLabel">Вид</span>
+          <div class="gkind gview" role="group" aria-labelledby="gviewLabel">
+            <button type="button" data-gview="cards" aria-pressed="true">Карточки</button>
+            <button type="button" data-gview="table" aria-pressed="false">Таблица</button>
+          </div>
+        </div>
         <div class="field field--grow" style="flex-basis:100%">
           <span class="field__label" id="paketLabel">Игры</span>
           <div class="gfilter">
@@ -1494,6 +1525,7 @@ html.bg-ready body::before{
 
       <p class="result-count" id="gamesCount" aria-live="polite"></p>
       <div class="grid-games" id="gamesGrid"></div>
+      <div id="gamesTable" hidden></div>
       <div id="gamesEmpty" hidden>
         <div class="empty">
           <svg class="empty__icon" aria-hidden="true"><use href="#i-search"/></svg>
@@ -2026,10 +2058,12 @@ function buildDB(raw){
 let DB = SNAPSHOT;
 const state = {
   tab: 'games',
-  gkind: 'all', paket: 'all', gq: '', gsort: 'date-desc', gmonth: '',
+  gkind: 'all', paket: 'all', gq: '', gsort: 'date-desc', gmonth: '', gview: 'cards',
   tour: 'year',
   rq: '', rfilter: 'active', rsort: 'r', rdir: -1
 };
+
+try{ if(localStorage.getItem('kinolega.gview') === 'table') state.gview = 'table'; }catch(err){}
 
 /* ---------------- bars ---------------- */
 const barIO = new IntersectionObserver(es => {
@@ -2228,6 +2262,39 @@ function syncPaketScroll(){
   thumb.style.width = w + 'px';
   thumb.style.transform = `translateX(${(track - w) * el.scrollLeft / max}px)`;
 }
+// игры в виде таблицы: строка — один игрок в одной игре; строки одной игры идут подряд и выделены полосой
+function gamesTableHTML(list){
+  const anyTour = list.some(g => g.tour);
+  let rows = '';
+  list.forEach((g, gi) => {
+    const cls = gi % 2 ? ' gt-alt' : '';
+    g.players.forEach((p, pi) => {
+      rows += `<tr class="gt-row${pi === 0 ? ' gt-first' : ''}${cls}${g.tour ? ' gt-tour' : ''}">
+        <td class="num gt-date hide-sm">${fmtDate(g.date)}</td>
+        <td class="gt-game"><button class="row-btn" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${g.tour ? `<span class="gt-pfx">Турнир · </span>${esc(g.seasonName)}` : esc(g.paket)}</button><span class="row-meta num">${fmtDate(g.date)} · ${esc(gameTitle(g))}</span></td>
+        <td class="num gt-n hide-sm">${g.tour ? (g.num ?? esc(g.n)) : g.n}</td>
+        <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
+        <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(p.p)}" aria-haspopup="dialog">${esc(p.p)}</button></td>
+        <td class="num">${n0(p.pts)}</td>
+        ${anyTour ? `<td class="num tmuted hide-md">${g.tour ? n0(p.f) : '—'}</td>` : ''}
+        <td class="num tmuted hide-sm">${n0(p.r)}</td>
+        <td class="num hide-sm">${n0(p.nr)}</td>
+        <td>${deltaHTML(p.r, p.nr)}</td>
+      </tr>`;
+    });
+  });
+  return `<div class="table-wrap"><div class="table-scroll"><table class="games-table">
+      <caption class="sr-only">Все игры: игроки, очки и рейтинг</caption>
+      <thead><tr>
+        <th scope="col" class="hide-sm">Дата</th><th scope="col">Пакет / турнир</th><th scope="col" class="hide-sm">Игра</th>
+        <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th><th scope="col">Очки</th>
+        ${anyTour ? '<th scope="col" class="hide-md" title="Игровой рейтинг турнира">fОчки</th>' : ''}
+        <th scope="col" class="hide-sm">Рейтинг до</th><th scope="col" class="hide-sm">После</th><th scope="col">Δ</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${anyTour ? '<p class="result-count" style="margin-top:12px">В турнирных играх место — по fОчки, а рейтинг до и после — за весь сезон: он пересчитывается один раз, после последней игры сезона.</p>' : ''}`;
+}
 function paketOrder(a,b){
   const na = +(a.match(/\d+/)?.[0] ?? 0), nb = +(b.match(/\d+/)?.[0] ?? 0);
   return na - nb;
@@ -2273,7 +2340,13 @@ function renderGames(){
   const list = filteredGames();
   const grid = $('#gamesGrid'), empty = $('#gamesEmpty');
   renderChron();
-  $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${allGames().length}</b> игр` + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
+  const asTable = state.gview === 'table';
+  $$('[data-gview]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.gview === state.gview)));
+  grid.hidden = asTable;
+  $('#gamesTable').hidden = !asTable || !list.length;
+  $('#gamesTable').innerHTML = asTable && list.length ? gamesTableHTML(list) : '';
+  $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${allGames().length}</b> игр`
+    + (asTable ? (n => ` · <b>${n}</b> ${plural(n, 'строка', 'строки', 'строк')}`)(list.reduce((s, g) => s + g.players.length, 0)) : '') + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
   empty.hidden = list.length > 0;
   grid.innerHTML = list.map((g,i) => {
     const w = g.players[0];
@@ -3423,6 +3496,15 @@ document.addEventListener('click', e => {
     return;
   }
 
+  const view = e.target.closest('[data-gview]');
+  if(view){
+    if(state.gview !== view.dataset.gview){
+      state.gview = view.dataset.gview;
+      try{ localStorage.setItem('kinolega.gview', state.gview); }catch(err){}
+      renderGames();
+    }
+    return;
+  }
   const kind = e.target.closest('[data-gkind]');
   if(kind){
     if(state.gkind !== kind.dataset.gkind){
