@@ -1549,7 +1549,7 @@ html.bg-ready body::before{
     <div class="modal__body" id="modalBody"></div>
   </div>
 </div>
-<script src="assets/data.js?v=202609131349"></script>
+<script src="assets/data.js?v=202609131404"></script>
 <script>
 /* ============================================================
    KinOlega Quiz — data + app
@@ -1570,7 +1570,7 @@ const PLAYER_PHOTOS = {};
 /* Главная таблица: игры, Rating и сезоны — сюда пишет Apps Script. Годовой зачёт — пока только во второй таблице. */
 const SHEET_ID = '1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU';
 const YEAR_SHEET_ID = '1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280';
-const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026',
+const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026', log:'Рейтинг_турниры',
                  seasons:['Зима_2026','Весна_2026','Лето_2026'] };
 
 /* ---------------- helpers ---------------- */
@@ -1725,7 +1725,20 @@ function buildDB(raw){
       }))};
   });
 
-  return {updated:new Date().toISOString().slice(0,10), games, rating, year, seasons};
+  // общий рейтинг до/после турнирного сезона — лист «Рейтинг_турниры» (пишет Apps Script)
+  const seasonRating = {};
+  const L = raw.log, li = n => L ? col(L.head, n) : -1;
+  if(L && ['Событие', 'Игрок', 'Общий до', 'Общий после'].every(n => li(n) >= 0)){
+    const r2 = v => { const x = num(v); return x == null ? null : Math.round(x * 100) / 100; };
+    L.rows.forEach(r => {
+      const before = r2(r[li('Общий до')]), after = r2(r[li('Общий после')]);
+      if(before == null || after == null) return;
+      const key = (r[li('Событие')] || '').trim();
+      (seasonRating[key] ||= {})[(r[li('Игрок')] || '').trim()] = [before, after];
+    });
+  }
+
+  return {updated:new Date().toISOString().slice(0,10), games, rating, year, seasons, seasonRating};
 }
 
 /* ---------------- state ---------------- */
@@ -2508,7 +2521,8 @@ function openPlayer(name, {push = true} = {}){
   // Игры турнирных сезонов: место в игре — по игровому рейтингу (fОчки) среди участников этой игры
   DB.seasons.forEach(se => se.items.filter(i => i.p === name).forEach(it => {
     const pos = 1 + se.items.filter(i => i.game === it.game && (i.f ?? -Infinity) > (it.f ?? -Infinity)).length;
-    played.push({season: se, g: {paket: se.name, n: it.game, date: it.date}, me: {pos, pts: it.pts, f: it.f, r: null, nr: null}});
+    const sr = DB.seasonRating?.[se.key]?.[name];   // [общий рейтинг до, после] — сезон учитывается после своей последней игры
+    played.push({season: se, g: {paket: se.name, n: it.game, date: it.date}, me: {pos, pts: it.pts, f: it.f, r: sr ? sr[0] : null, nr: sr ? sr[1] : null}});
   }));
   played.sort((a,b) => (b.g.date||'').localeCompare(a.g.date||''));
   const wins = played.filter(x => x.me.pos === 1).length;
@@ -2549,8 +2563,8 @@ function openPlayer(name, {push = true} = {}){
           ? `<a href="#tournament/${encodeURIComponent(x.season.key)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${esc(x.g.n || '')}</span>`
           : `${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span>`}<span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
-        <td class="num">${n0(x.me.pts)}${x.season ? `<span class="row-meta num">fОчки ${n0(x.me.f)}</span>` : ''}</td>
-        <td class="num tmuted hide-sm">${x.season ? `fОчки ${n0(x.me.f)}` : n0(x.me.nr)}</td>
+        <td class="num">${n0(x.me.pts)}</td>
+        <td class="num tmuted hide-sm">${n0(x.me.nr)}</td>
         <td>${deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
@@ -2931,16 +2945,17 @@ async function loadLive({silent=false} = {}){
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 15000);
   try{
-    const [games, rating, year, ...seasonData] = await Promise.all([
+    const [games, rating, year, log, ...seasonData] = await Promise.all([
       fetchSheet(SHEETS.games, ctl.signal),
       fetchSheet(SHEETS.rating, ctl.signal),
       fetchSheet(SHEETS.year, ctl.signal, YEAR_SHEET_ID),
+      fetchSheet(SHEETS.log, ctl.signal).catch(() => null),   // без лога сайт работает, просто без Δ у турнирных игр
       ...SHEETS.seasons.map(s => fetchSheet(s, ctl.signal))
     ]);
-    const db = buildDB({games, rating, year,
+    const db = buildDB({games, rating, year, log,
       seasons: SHEETS.seasons.map((name,i) => ({name, data:seasonData[i]}))});
     if(!db.games.length || !db.rating.length) throw new Error('пустые данные');
-    const sig = d => JSON.stringify([d.games, d.rating, d.year, d.seasons]);
+    const sig = d => JSON.stringify([d.games, d.rating, d.year, d.seasons, d.seasonRating]);
     if(!DB || sig(db) !== sig(DB)){
       const first = !DB;
       DB = db; renderAll();

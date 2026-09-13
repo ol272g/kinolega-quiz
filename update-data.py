@@ -140,8 +140,21 @@ def build():
                       for r in rows if r[c("Имя игрока")].strip()],
         })
 
+    # --- общий рейтинг до/после турнирного сезона (лист пишет Apps Script) ---
+    season_rating = {}
+    try:
+        head, rows = fetch("Рейтинг_турниры")
+        c = lambda n: col(head, n)
+        for r in rows:
+            before, after = num(r[c("Общий до")]), num(r[c("Общий после")])
+            if before is None or after is None:
+                continue
+            season_rating.setdefault(r[c("Событие")].strip(), {})[r[c("Игрок")].strip()] = [before, after]
+    except RuntimeError as e:
+        print("Изменения рейтинга по сезонам не загружены:", e)
+
     return {"updated": datetime.date.today().isoformat(), "games": games,
-            "rating": rating, "year": year, "seasons": seasons}
+            "rating": rating, "year": year, "seasons": seasons, "seasonRating": season_rating}
 
 
 def main():
