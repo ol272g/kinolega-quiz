@@ -1549,7 +1549,7 @@ html.bg-ready body::before{
     <div class="modal__body" id="modalBody"></div>
   </div>
 </div>
-<script src="assets/data.js?v=202609131011"></script>
+<script src="assets/data.js?v=202609131349"></script>
 <script>
 /* ============================================================
    KinOlega Quiz — data + app
@@ -1567,8 +1567,10 @@ const SCHEDULE = [];
    { 'Карим Кадырбаев': 'karim-kadyrbaev.jpg' }. Без фото показываются инициалы. */
 const PLAYER_PHOTOS = {};
 
-const SHEET_ID = '1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280';
-const SHEETS = { games:'Games', rating:'Rating', year:'KinOlega_2026',
+/* Главная таблица: игры, Rating и сезоны — сюда пишет Apps Script. Годовой зачёт — пока только во второй таблице. */
+const SHEET_ID = '1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU';
+const YEAR_SHEET_ID = '1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280';
+const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026',
                  seasons:['Зима_2026','Весна_2026','Лето_2026'] };
 
 /* ---------------- helpers ---------------- */
@@ -1648,11 +1650,11 @@ function isoDate(v){
   return Number.isNaN(+d) ? null : d.toISOString().slice(0,10);
 }
 
-const sheetURL = name =>
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`;
+const sheetURL = (name, id = SHEET_ID) =>
+  `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`;
 
-async function fetchSheet(name, signal){
-  const res = await fetch(sheetURL(name), {signal, cache:'no-store'});
+async function fetchSheet(name, signal, id = SHEET_ID){
+  const res = await fetch(sheetURL(name, id), {signal, cache:'no-store'});
   if(!res.ok) throw new Error(name + ': HTTP ' + res.status);
   const rows = parseCSV(await res.text());
   if(rows.length < 2) throw new Error(name + ': пусто');
@@ -1960,7 +1962,7 @@ function renderTournament(){
       <th scope="col" class="hide-sm">Взвешенные</th><th scope="col" class="hide-sm">Ответы</th><th scope="col" class="hide-md">Игра</th></tr>`;
     body.innerHTML = rows.map(r => `<tr>
       <td><span class="rank ${r.pos<=3?'rank--'+r.pos:''}">${r.pos ?? '—'}</span></td>
-      <td class="tname">${esc(r.p)}<span class="row-meta">${n0(r.ans)} ${plural(Math.round(r.ans||0),'ответ','ответа','ответов')} · ${esc(r.game || '—')}</span></td>
+      <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(r.p)}" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(r.ans)} ${plural(Math.round(r.ans||0),'ответ','ответа','ответов')} · ${esc(r.game || '—')}</span></td>
       <td class="num bar-cell"><i class="bar" data-sx="${((r.f||0)/max).toFixed(3)}"></i><span>${n0(r.f)}</span></td>
       <td class="num tmuted hide-sm">${n0(r.pts)}</td>
       <td class="num tmuted hide-sm">${r.w == null ? '—' : nf2.format(r.w)}</td>
@@ -2503,9 +2505,16 @@ function openPlayer(name, {push = true} = {}){
     const me = g.players.find(p => p.p === name);
     if(me) played.push({g, me});
   });
+  // Игры турнирных сезонов: место в игре — по игровому рейтингу (fОчки) среди участников этой игры
+  DB.seasons.forEach(se => se.items.filter(i => i.p === name).forEach(it => {
+    const pos = 1 + se.items.filter(i => i.game === it.game && (i.f ?? -Infinity) > (it.f ?? -Infinity)).length;
+    played.push({season: se, g: {paket: se.name, n: it.game, date: it.date}, me: {pos, pts: it.pts, f: it.f, r: null, nr: null}});
+  }));
   played.sort((a,b) => (b.g.date||'').localeCompare(a.g.date||''));
   const wins = played.filter(x => x.me.pos === 1).length;
-  const best = played.reduce((m,x) => Math.max(m, x.me.pts || 0), 0);
+  // лучший результат — по пакетам: номинал сезонных игр считается по другому числу вопросов
+  const pkgPlayed = played.filter(x => !x.season);
+  const best = pkgPlayed.length ? pkgPlayed.reduce((m,x) => Math.max(m, x.me.pts || 0), 0) : null;
 
   const kpis = `<div class="kpis">
     <div class="kpi"><div class="kpi__v">${r ? n0(r.r) : '—'}</div><div class="kpi__l">Рейтинг</div></div>
@@ -2532,14 +2541,16 @@ function openPlayer(name, {push = true} = {}){
   const table = played.length ? `
     <p class="field__label" style="margin-bottom:10px">Все игры</p>
     <div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th scope="col" class="hide-sm">Дата</th><th scope="col">Пакет</th><th scope="col">Место</th>
+      <thead><tr><th scope="col" class="hide-sm">Дата</th><th scope="col">Пакет / турнир</th><th scope="col">Место</th>
         <th scope="col">Очки</th><th scope="col" class="hide-sm">Рейтинг</th><th scope="col">Δ</th></tr></thead>
       <tbody>${played.map(x => `<tr>
         <td class="num tmuted hide-sm">${fmtDate(x.g.date)}</td>
-        <td>${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span><span class="row-meta num">${fmtDate(x.g.date)}</span></td>
+        <td>${x.season
+          ? `<a href="#tournament/${encodeURIComponent(x.season.key)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${esc(x.g.n || '')}</span>`
+          : `${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span>`}<span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
-        <td class="num">${n0(x.me.pts)}</td>
-        <td class="num tmuted hide-sm">${n0(x.me.nr)}</td>
+        <td class="num">${n0(x.me.pts)}${x.season ? `<span class="row-meta num">fОчки ${n0(x.me.f)}</span>` : ''}</td>
+        <td class="num tmuted hide-sm">${x.season ? `fОчки ${n0(x.me.f)}` : n0(x.me.nr)}</td>
         <td>${deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
@@ -2774,7 +2785,8 @@ function parseRoute(){
 }
 function applyRoute({scroll = true} = {}){
   const [kind, a, b] = parseRoute();
-  if(kind === 'player' && a && (DB.rating.some(x => x.p === a) || DB.games.some(g => g.players.some(p => p.p === a)))){
+  if(kind === 'player' && a && (DB.rating.some(x => x.p === a) || DB.games.some(g => g.players.some(p => p.p === a))
+      || DB.seasons.some(se => se.items.some(i => i.p === a)))){
     if(state.tab !== 'rating') setTab('rating', {scroll, push:false});
     openPlayer(a, {push:false});
     return true;
@@ -2922,7 +2934,7 @@ async function loadLive({silent=false} = {}){
     const [games, rating, year, ...seasonData] = await Promise.all([
       fetchSheet(SHEETS.games, ctl.signal),
       fetchSheet(SHEETS.rating, ctl.signal),
-      fetchSheet(SHEETS.year, ctl.signal),
+      fetchSheet(SHEETS.year, ctl.signal, YEAR_SHEET_ID),
       ...SHEETS.seasons.map(s => fetchSheet(s, ctl.signal))
     ]);
     const db = buildDB({games, rating, year,

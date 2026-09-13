@@ -15,15 +15,18 @@
 import csv, datetime, io, json, re, sys, urllib.parse, urllib.request
 from collections import defaultdict
 
-SHEET_ID = "1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280"
+# Главная таблица: игры, Rating и сезоны — сюда пишет Apps Script («Обновить рейтинги»)
+MAIN_ID  = "1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU"
+# Годовой зачёт KinOlega_2026 есть только в этой таблице
+YEAR_ID  = "1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280"
 HTML     = "index.html"
 DATA_JS  = "assets/data.js"
 SEASONS  = ["Зима_2026", "Весна_2026", "Лето_2026"]
 
 
-def fetch(sheet):
+def fetch(sheet, sheet_id=MAIN_ID):
     url = ("https://docs.google.com/spreadsheets/d/%s/gviz/tq?tqx=out:csv&sheet=%s"
-           % (SHEET_ID, urllib.parse.quote(sheet)))
+           % (sheet_id, urllib.parse.quote(sheet)))
     with urllib.request.urlopen(url, timeout=60) as r:
         text = r.read().decode("utf-8")
     rows = list(csv.reader(io.StringIO(text)))
@@ -76,7 +79,7 @@ def col(head, name):
 
 def build():
     # --- игры ---
-    head, rows = fetch("Games")
+    head, rows = fetch("KinOlega_игрыG")
     c = lambda n: col(head, n)
     bucket = {}
     for r in rows:
@@ -113,7 +116,7 @@ def build():
         })
 
     # --- годовой зачёт ---
-    head, rows = fetch("KinOlega_2026")
+    head, rows = fetch("KinOlega_2026", YEAR_ID)
     c = lambda n: col(head, n)
     year = [{"pos": num(r[c("Место")]), "p": r[c("Имя")].strip(),
              "pts": num(r[c("tОчки")]), "pen": num(r[c("Штраф")])}
