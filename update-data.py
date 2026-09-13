@@ -103,7 +103,10 @@ def build():
     # --- рейтинг ---
     head, rows = fetch("Rating")
     c = lambda n: col(head, n)
-    paket_cols = [(i, h) for i, h in enumerate(head) if h.startswith("KinOlega#")]
+    # история: пакеты и турнирные сезоны — в порядке колонок листа (он хронологический)
+    season_col = re.compile(r"^(Зима|Весна|Лето|Осень)_\d{4}$")
+    paket_cols = [(i, h) for i, h in enumerate(head) if h.startswith("KinOlega#") or season_col.match(h)]
+    hist_cols = [h for _, h in paket_cols]
     rating = []
     for r in rows:
         if not r[c("PLAYER")].strip():
@@ -153,8 +156,26 @@ def build():
     except RuntimeError as e:
         print("Изменения рейтинга по сезонам не загружены:", e)
 
+    # --- расписание: необязательный лист «Расписание» (Дата, Время, Название, Место, Примечание, Ссылка) ---
+    schedule = []
+    try:
+        head, rows = fetch("Расписание")
+        if "Дата" in head and "Название" in head:   # если листа нет, gviz отдаёт первый лист — его не берём
+            cell = lambda r, n: r[head.index(n)].strip() if n in head and head.index(n) < len(r) else ""
+            for r in rows:
+                d = iso(cell(r, "Дата"))
+                if not d:
+                    continue
+                url = cell(r, "Ссылка")
+                schedule.append({"date": d, "time": cell(r, "Время"), "title": cell(r, "Название"),
+                                 "place": cell(r, "Место"), "note": cell(r, "Примечание"),
+                                 "url": url if re.match(r"^https?://", url) else ""})
+    except RuntimeError:
+        pass
+
     return {"updated": datetime.date.today().isoformat(), "games": games,
-            "rating": rating, "year": year, "seasons": seasons, "seasonRating": season_rating}
+            "rating": rating, "histCols": hist_cols, "year": year, "seasons": seasons,
+            "seasonRating": season_rating, "schedule": schedule}
 
 
 def main():

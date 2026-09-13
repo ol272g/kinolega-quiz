@@ -453,6 +453,10 @@ tbody tr.cutline:hover{background:transparent}
 .howto__rules p{margin:0 0 8px; font-size:14px; color:var(--muted)}
 .howto__rules b{color:var(--cream)}
 .howto__link{display:inline-flex; align-items:center; gap:8px; min-height:44px; font-weight:600}
+.h2h .toolbar{margin-bottom:14px}
+.h2h .kpis{margin-bottom:14px}
+.h2h__win{color:var(--gold); font-weight:700}
+.modal__actions{display:flex; flex-wrap:wrap; gap:8px}
 @media (max-width:900px){.howto__steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.howto__steps{grid-template-columns:1fr} .howto__body{padding:4px 12px 14px}}
 
@@ -1258,7 +1262,7 @@ html.bg-ready body::before{
       <div class="sec-head">
         <p class="sec-head__eyebrow">Хроника</p>
         <h2 class="sec-head__title">Сыгранные игры</h2>
-        <p class="sec-head__desc">Каждая карточка — отдельная игра пакета. Откройте её, чтобы увидеть полную таблицу результатов и изменение рейтинга участников.</p>
+        <p class="sec-head__desc">Каждая карточка — отдельная игра пакета или турнирного сезона. Откройте её, чтобы увидеть полную таблицу результатов и изменение рейтинга участников.</p>
       </div>
 
       <figure class="chart chron" id="gamesChron">
@@ -1443,14 +1447,55 @@ html.bg-ready body::before{
       <div class="sec-head">
         <p class="sec-head__eyebrow">Табель о рангах</p>
         <h2 class="sec-head__title">Сквозной рейтинг</h2>
-        <p class="sec-head__desc">Рейтинг пересчитывается после каждой игры и учитывает силу соперников. Нажмите на строку, чтобы посмотреть карточку игрока: динамику рейтинга по пакетам и все его игры.</p>
+        <p class="sec-head__desc">Рейтинг пересчитывается после каждой игры пакета и после каждого турнирного сезона и учитывает силу соперников. Нажмите на строку, чтобы посмотреть карточку игрока: динамику рейтинга и все его игры.</p>
       </div>
+
+      <details class="fullstats howto" id="ratingHowto">
+        <summary class="fullstats__toggle">
+          <span class="fullstats__icon" aria-hidden="true"><svg width="18" height="18"><use href="#i-chart"/></svg></span>
+          <span class="fullstats__text">
+            <span class="fullstats__title">Как считается рейтинг</span>
+            <span class="fullstats__hint">4 шага · игры, пакеты, турнир и пропуски</span>
+          </span>
+          <svg class="fullstats__chev" width="18" height="18" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </summary>
+        <div class="howto__body">
+          <ol class="howto__steps">
+            <li class="howto__step">
+              <span class="howto__n" aria-hidden="true">1</span>
+              <h3>Игровой рейтинг</h3>
+              <p>После каждой игры результат сравнивается с каждым соперником за столом по системе Glicko-2. Обыграть сильного — большой плюс, уступить слабому — большой минус. Чем больше отрыв в очках, тем заметнее изменение.</p>
+            </li>
+            <li class="howto__step">
+              <span class="howto__n" aria-hidden="true">2</span>
+              <h3>Пакетный рейтинг</h3>
+              <p>Вопросы в пакете одинаковые, поэтому сравниваются все игроки пакета — даже те, кто не сидел за одним столом. Турнирные сезоны тоже идут сюда: по игровому рейтингу турнира (fОчки) и с двойным весом.</p>
+            </li>
+            <li class="howto__step">
+              <span class="howto__n" aria-hidden="true">3</span>
+              <h3>Общий рейтинг</h3>
+              <p>Игровой и пакетный рейтинги складываются, пакетный весит в полтора раза больше. Поправка на силу соперников — от 0,93 до 1,05: чем больше очков набирают ваши соперники, тем она выше.</p>
+              <span class="howto__f">(Игровой + 1,5 × Пакетный) ÷ 2,5 × поправка</span>
+            </li>
+            <li class="howto__step">
+              <span class="howto__n" aria-hidden="true">4</span>
+              <h3>Штраф за пропуски</h3>
+              <p>Пропуски считаются среди последних 10 событий — пакетов и турнирных сезонов. От трёх пропусков рейтинг в таблице снижается: от −1% до −5,2%. Сыграли снова — штраф уменьшается.</p>
+              <span class="howto__f">Рейтинг ÷ (0,0001·x² + 0,0052·x + 0,9934)</span>
+            </li>
+          </ol>
+          <div class="howto__example" id="ratingHowtoExample" hidden></div>
+          <div class="howto__rules">
+            <p><b>Где что видно.</b> В карточке игрока — рейтинг после каждой игры и каждого сезона, без штрафа. В таблице ниже — рейтинг со штрафом: по нему расставлены места.</p>
+          </div>
+        </div>
+      </details>
 
       <div class="podium" id="ratingPodium"></div>
 
       <figure class="chart" id="ratingLines" hidden>
         <figcaption class="chart__cap">
-          <h3 class="chart__title">Рейтинг топ-10 по пакетам</h3>
+          <h3 class="chart__title">Рейтинг топ-10: пакеты и турнир</h3>
           <p class="chart__hint" id="rlHint"></p>
         </figcaption>
         <div class="chart__layout">
@@ -1465,6 +1510,24 @@ html.bg-ready body::before{
           <p class="chart__hint">Пересчитываются после каждой игры · нажмите на имя или игру</p>
         </div>
         <div class="bento records__grid" id="recordsGrid" role="list"></div>
+      </section>
+
+      <section class="records h2h" id="h2h" aria-labelledby="h2hTitle">
+        <div class="chart__cap">
+          <h3 class="chart__title" id="h2hTitle">Личные встречи</h3>
+          <p class="chart__hint">Выберите двух игроков: сколько раз они играли в одной игре и кто чаще оказывался выше</p>
+        </div>
+        <div class="toolbar">
+          <div class="field field--grow">
+            <label class="field__label" for="h2hA">Игрок 1</label>
+            <select class="select" id="h2hA"></select>
+          </div>
+          <div class="field field--grow">
+            <label class="field__label" for="h2hB">Игрок 2</label>
+            <select class="select" id="h2hB"></select>
+          </div>
+        </div>
+        <div id="h2hBody" aria-live="polite"></div>
       </section>
 
       <div class="toolbar">
@@ -1513,8 +1576,8 @@ html.bg-ready body::before{
     <div class="foot-links">
       <a class="foot-social" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-telegram"/></svg>Telegram</a>
       <a class="foot-social" href="https://www.youtube.com/@KinOlega_quiz/" target="_blank" rel="noopener"><svg width="17" height="17" aria-hidden="true"><use href="#i-youtube"/></svg>YouTube</a>
-      <a href="https://docs.google.com/spreadsheets/d/1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280/edit" target="_blank" rel="noopener">Таблица рейтинга</a>
-      <a href="https://docs.google.com/spreadsheets/d/1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU/edit" target="_blank" rel="noopener">Таблица игр</a>
+      <a href="https://docs.google.com/spreadsheets/d/1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU/edit" target="_blank" rel="noopener">Таблица игр и рейтинга</a>
+      <a href="https://docs.google.com/spreadsheets/d/1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280/edit" target="_blank" rel="noopener">Годовой зачёт</a>
     </div>
   </div>
 </footer>
@@ -1549,7 +1612,7 @@ html.bg-ready body::before{
     <div class="modal__body" id="modalBody"></div>
   </div>
 </div>
-<script src="assets/data.js?v=202609131404"></script>
+<script src="assets/data.js?v=202609131436"></script>
 <script>
 /* ============================================================
    KinOlega Quiz — data + app
@@ -1570,7 +1633,8 @@ const PLAYER_PHOTOS = {};
 /* Главная таблица: игры, Rating и сезоны — сюда пишет Apps Script. Годовой зачёт — пока только во второй таблице. */
 const SHEET_ID = '1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU';
 const YEAR_SHEET_ID = '1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280';
-const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026', log:'Рейтинг_турниры',
+const SEASON_COL = /^(Зима|Весна|Лето|Осень)_\d{4}$/;   // колонки сезонов в листе Rating
+const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026', log:'Рейтинг_турниры', schedule:'Расписание',
                  seasons:['Зима_2026','Весна_2026','Лето_2026'] };
 
 /* ---------------- helpers ---------------- */
@@ -1698,7 +1762,8 @@ function buildDB(raw){
 
   // rating
   const R = raw.rating, ri = n => col(R.head, n);
-  const pakCols = R.head.map((h,i) => ({h,i})).filter(x => /^KinOlega#/.test(x.h));
+  // история: пакеты и турнирные сезоны — в порядке колонок листа (он хронологический)
+  const pakCols = R.head.map((h,i) => ({h,i})).filter(x => /^KinOlega#/.test(x.h) || SEASON_COL.test(x.h));
   const rating = R.rows.filter(r => (r[ri('PLAYER')] || '').trim()).map(r => ({
     rank: num(r[ri('RANK')]), p: r[ri('PLAYER')].trim(), r: num(r[ri('RATING')]),
     w: num(r[ri('WINS')]), g: num(r[ri('GAMES')]), avgP: num(r[ri('avg_P')]),
@@ -1738,7 +1803,21 @@ function buildDB(raw){
     });
   }
 
-  return {updated:new Date().toISOString().slice(0,10), games, rating, year, seasons, seasonRating};
+  // расписание: необязательный лист «Расписание» (Дата, Время, Название, Место, Примечание, Ссылка)
+  const schedule = [];
+  const S = raw.schedule, sc = n => S ? col(S.head, n) : -1;
+  if(S && sc('Дата') >= 0 && sc('Название') >= 0){   // если листа нет, gviz отдаёт первый лист — его не берём
+    const cell = (r, n) => sc(n) >= 0 ? (r[sc(n)] || '').trim() : '';
+    S.rows.forEach(r => {
+      const date = isoDate(cell(r, 'Дата'));
+      if(!date) return;
+      const url = cell(r, 'Ссылка');
+      schedule.push({date, time:cell(r, 'Время'), title:cell(r, 'Название'), place:cell(r, 'Место'),
+        note:cell(r, 'Примечание'), url:/^https?:\/\//.test(url) ? url : ''});
+    });
+  }
+
+  return {updated:new Date().toISOString().slice(0,10), games, rating, histCols:pakCols.map(c => c.h), year, seasons, seasonRating, schedule};
 }
 
 /* ---------------- state ---------------- */
@@ -1796,7 +1875,7 @@ function observeTickers(root){
 
 /* ---------------- HERO ---------------- */
 function renderHero(){
-  const games = DB.games.length;
+  const games = allGames().length;
   const players = DB.rating.filter(r => r.r != null).length;
   const seasons = DB.seasons.length;
   $('#ctaGames').innerHTML = `${tickerHTML(games)} ${plural(games,'игра','игры','игр')} в архиве`;
@@ -1804,13 +1883,76 @@ function renderHero(){
   $('#ctaRating').innerHTML = `${tickerHTML(players)} ${plural(players,'игрок','игрока','игроков')}`;
   observeTickers($('.intro__nav'));
   const today = new Date().toISOString().slice(0,10);
-  const next = SCHEDULE.filter(x => (x.date || '') >= today).sort((a,b) => a.date.localeCompare(b.date))[0];
+  const next = scheduleList().filter(x => (x.date || '') >= today).sort((a,b) => a.date.localeCompare(b.date))[0];
   $('#ctaSchedule').textContent = next ? `Ближайшая ${fmtDate(next.date)}` : 'Скоро';
 
   $('#cntGames').textContent = games;
   $('#cntRating').textContent = players;
   $('#footUpdated').textContent = fmtDate(DB.updated, true);
 }
+
+/* ---------------- турнирные игры, история рейтинга, штраф ---------------- */
+const nCmp = (a, b) => String(a ?? '').localeCompare(String(b ?? ''), 'ru', {numeric:true});
+// событие истории рейтинга: «#15» / «KinOlega#15» для пакета, «Лето» / «Турнир · Лето 2026» для сезона
+const histLabel = h => SEASON_COL.test(h) ? h.split('_')[0] : String(h).replace('KinOlega', '');
+const histName  = h => SEASON_COL.test(h) ? 'Турнир · ' + h.replace('_', ' ') : h;
+// порядок событий — как колонки листа Rating; у старой копии данных без histCols — пакеты по номеру
+function histOrder(){
+  if(DB.histCols?.length) return DB.histCols;
+  const pn = p => +(String(p).match(/\d+/)?.[0] ?? 0);
+  return [...new Set(DB.rating.flatMap(r => (r.hist || []).map(h => h.paket)))].sort((a,b) => pn(a) - pn(b));
+}
+function histSorted(r){
+  const order = histOrder();
+  return (r?.hist || []).slice().sort((a,b) => order.indexOf(a.paket) - order.indexOf(b.paket));
+}
+
+// Игры турнирных сезонов в том же виде, что игры пакетов. Место в игре — по игровому рейтингу турнира (fОчки),
+// рейтинг до/после — за весь сезон (лист «Рейтинг_турниры»)
+let tourCache = null;
+function tourGames(){
+  if(tourCache?.db === DB) return tourCache.list;
+  const list = [], stats = new Map();
+  DB.seasons.forEach(se => {
+    const byGame = new Map();
+    se.items.forEach(it => { const k = it.game || '—'; if(!byGame.has(k)) byGame.set(k, []); byGame.get(k).push(it); });
+    byGame.forEach((items, code) => {
+      const players = items.slice().sort((a,b) => (b.f ?? -Infinity) - (a.f ?? -Infinity)).map(it => {
+        const sr = DB.seasonRating?.[se.key]?.[it.p];
+        return {p:it.p, pts:it.pts, f:it.f, ans:it.ans, r: sr ? sr[0] : null, nr: sr ? sr[1] : null};
+      });
+      players.forEach((p, i) => { p.pos = i && players[i - 1].f === p.f ? players[i - 1].pos : i + 1; });
+      const date = items.map(i => i.date).filter(Boolean).sort()[0] || null;
+      const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, date, players};
+      list.push(g);
+      players.forEach(p => {
+        const s = stats.get(p.p) || {g:0, w:0};
+        s.g++; if(p.pos === 1 && players.length > 1) s.w++;
+        stats.set(p.p, s);
+      });
+    });
+  });
+  tourCache = {db:DB, list, stats};
+  return list;
+}
+const tourStats = name => (tourGames(), tourCache.stats.get(name) || {g:0, w:0});
+const allGames  = () => DB.games.concat(tourGames());
+const gameKey   = g => g.tour ? `tour|${g.season}|${g.n}` : `${g.paket}|${g.n}`;
+// игры и победы в рейтинге — вместе с турнирными играми
+const gamesAll  = r => r.g == null ? null : r.g + tourStats(r.p).g;
+const winsAll   = r => r.w == null ? null : r.w + tourStats(r.p).w;
+const ratingVal = (r, k) => k === 'g' ? gamesAll(r) : k === 'w' ? winsAll(r) : r[k];
+
+// штраф за пропуски (как в Apps Script): от 3 пропусков рейтинг делится на коэффициент, после 10 не растёт
+function missFactor(m){
+  if(!(m > 2)) return 1;
+  const x = Math.min(m, 10);
+  return 0.0001 * x * x + 0.0052 * x + 0.9934;
+}
+const missPct = m => (1 - 1 / missFactor(m)) * 100;
+
+// расписание: лист «Расписание» в таблице, иначе — список SCHEDULE в коде
+const scheduleList = () => (DB?.schedule?.length ? DB.schedule : SCHEDULE);
 
 /* ---------------- ИГРЫ ---------------- */
 function paketOrder(a,b){
@@ -1820,13 +1962,15 @@ function paketOrder(a,b){
 function renderPaketChips(){
   const pakets = Array.from(new Set(DB.games.map(g => g.paket))).sort(paketOrder);
   $('#paketChips').innerHTML =
-    `<button class="chip" type="button" data-paket="all" aria-pressed="${state.paket==='all'}">Все пакеты</button>` +
+    `<button class="chip" type="button" data-paket="all" aria-pressed="${state.paket==='all'}">Все игры</button>` +
+    (tourGames().length ? `<button class="chip" type="button" data-paket="tour" aria-pressed="${state.paket==='tour'}">Турнир</button>` : '') +
     pakets.map(p => `<button class="chip" type="button" data-paket="${esc(p)}" aria-pressed="${state.paket===p}">${esc(p)}</button>`).join('');
 }
 function filteredGames(){
   const q = state.gq.trim().toLowerCase();
-  let list = DB.games.filter(g => {
-    if(state.paket !== 'all' && g.paket !== state.paket) return false;
+  let list = allGames().filter(g => {
+    if(state.paket === 'tour'){ if(!g.tour) return false; }
+    else if(state.paket !== 'all' && g.paket !== state.paket) return false;
     if(state.gmonth && !(g.date || '').startsWith(state.gmonth)) return false;
     if(!q) return true;
     if(g.paket.toLowerCase().includes(q)) return true;
@@ -1834,8 +1978,8 @@ function filteredGames(){
     return g.players.some(p => p.p.toLowerCase().includes(q));
   });
   const by = {
-    'date-desc':  (a,b) => (b.date||'').localeCompare(a.date||'') || b.n - a.n,
-    'date-asc':   (a,b) => (a.date||'').localeCompare(b.date||'') || a.n - b.n,
+    'date-desc':  (a,b) => (b.date||'').localeCompare(a.date||'') || nCmp(b.n, a.n),
+    'date-asc':   (a,b) => (a.date||'').localeCompare(b.date||'') || nCmp(a.n, b.n),
     'players-desc':(a,b) => b.players.length - a.players.length || (b.date||'').localeCompare(a.date||''),
     'points-desc':(a,b) => (b.players[0]?.pts ?? 0) - (a.players[0]?.pts ?? 0)
   }[state.gsort];
@@ -1850,7 +1994,7 @@ function renderGames(){
   const list = filteredGames();
   const grid = $('#gamesGrid'), empty = $('#gamesEmpty');
   renderChron();
-  $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${DB.games.length}</b> игр` + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
+  $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${allGames().length}</b> игр` + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
   empty.hidden = list.length > 0;
   grid.innerHTML = list.map((g,i) => {
     const w = g.players[0];
@@ -1858,14 +2002,14 @@ function renderGames(){
     const faces = g.players.slice(0,4).map(p =>
       `<span class="face" title="${esc(p.p)}">${esc(initials(p.p))}</span>`).join('');
     const extra = g.players.length > 4 ? `<span class="face face--more">+${g.players.length-4}</span>` : '';
-    return `<button class="ticket${featured ? ' ticket--featured' : ''}" type="button" aria-haspopup="dialog" data-game="${esc(g.paket)}|${g.n}">
+    return `<button class="ticket${featured ? ' ticket--featured' : ''}" type="button" aria-haspopup="dialog" data-game="${esc(gameKey(g))}">
       <span class="ticket__ring" aria-hidden="true"></span>
       <span class="ticket__top">
-        <span class="badge"><svg width="11" height="11" aria-hidden="true"><use href="#i-film"/></svg>${esc(g.paket)}</span>
+        <span class="badge"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
         <span class="ticket__date">${fmtDate(g.date)}</span>
       </span>
       ${featured ? '<span class="ticket__eyebrow">Последняя игра</span>' : ''}
-      <span class="ticket__title">Игра №${g.n}</span>
+      <span class="ticket__title">${g.tour ? esc(g.n) : `Игра №${g.n}`}</span>
       ${featured ? top3HTML(g) : `<span class="ticket__winner">
         <svg width="17" height="17" aria-hidden="true"><use href="#i-trophy"/></svg>
         <span class="ticket__wname">${esc(w ? w.p : '—')}</span>
@@ -1878,7 +2022,43 @@ function renderGames(){
     </button>`;
   }).join('');
 }
+function openTourGame(seasonKey, code, {push = true} = {}){
+  const g = tourGames().find(x => x.season === seasonKey && String(x.n) === String(code));
+  if(!g) return;
+  const hasR = g.players.some(p => p.nr != null);
+  const body = `
+    <div class="kpis">
+      <div class="kpi"><div class="kpi__v">${g.players.length}</div><div class="kpi__l">Участников</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(g.players[0]?.f)}</div><div class="kpi__l">Лучший игровой рейтинг</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(Math.max(0, ...g.players.map(p => p.pts || 0)))}</div><div class="kpi__l">Лучший номинал</div></div>
+      <div class="kpi"><div class="kpi__v">${fmtDate(g.date)}</div><div class="kpi__l">Дата</div></div>
+    </div>
+    <div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr>
+        <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th>
+        <th scope="col">fОчки</th><th scope="col" class="hide-sm">Номинал</th><th scope="col" class="hide-sm">Ответы</th>
+        <th scope="col" class="hide-sm">Рейтинг</th><th scope="col">Δ за сезон</th>
+      </tr></thead>
+      <tbody>${g.players.map(p => `<tr>
+        <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
+        <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(p.p)}" aria-haspopup="dialog">${esc(p.p)}</button><span class="row-meta num">номинал ${n0(p.pts)}</span></td>
+        <td class="num">${n0(p.f)}</td>
+        <td class="num tmuted hide-sm">${n0(p.pts)}</td>
+        <td class="num tmuted hide-sm">${n0(p.ans)}</td>
+        <td class="num hide-sm">${n0(p.nr)}</td>
+        <td>${deltaHTML(p.r, p.nr)}</td>
+      </tr>`).join('')}</tbody>
+    </table></div></div>
+    <p class="result-count" style="margin-top:14px">Место — по игровому рейтингу турнира (fОчки).${hasR ? ' Рейтинг пересчитывается один раз за сезон, после его последней игры, поэтому Δ — за весь сезон.' : ''}
+      <a href="#tournament/${encodeURIComponent(g.season)}">Вся таблица сезона</a></p>`;
+  openModal(`${g.paket} · ${g.n}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')}`, body,
+    {route:`tgame/${encodeURIComponent(g.season)}/${encodeURIComponent(g.n)}`, push, shareText:`${g.paket} · ${g.n} — результаты KinOlega Quiz`});
+}
 function openGame(key, {push = true} = {}){
+  if(key.startsWith('tour|')){
+    const [, season, ...code] = key.split('|');
+    return openTourGame(season, code.join('|'), {push});
+  }
   const [paket, n] = key.split('|');
   const g = DB.games.find(x => x.paket === paket && String(x.n) === n);
   if(!g) return;
@@ -1955,12 +2135,19 @@ function renderTournament(){
     podium.innerHTML = podiumHTML(rows.map(r => ({name:r.p, value:n0(r.pts), meta:r.pen ? `штраф ${n0(r.pen)}` : 'без штрафов'})));
     head.innerHTML = `<tr>
       <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th>
-      <th scope="col" class="col-bar">Турнирный рейтинг <span class="th-src">tОчки</span></th><th scope="col" class="hide-sm">Штраф</th></tr>`;
-    body.innerHTML = rows.map(r => `<tr>
+      <th scope="col" class="col-bar">Турнирный рейтинг <span class="th-src">tОчки</span></th><th scope="col" class="hide-sm">Штраф</th>
+      <th scope="col" class="hide-sm" title="Запас над ${PLAYOFF_SPOTS + 1}-м местом или отставание от ${PLAYOFF_SPOTS}-го">До плей-офф</th></tr>`;
+    // запас над первым непроходящим местом или отставание от последнего проходящего
+    const edgeIn = rows[PLAYOFF_SPOTS - 1], edgeOut = rows[PLAYOFF_SPOTS];
+    const gapHTML = (r, i) => i < PLAYOFF_SPOTS
+      ? (edgeOut ? `<span class="delta delta--up">+${n0((r.pts || 0) - (edgeOut.pts || 0))}</span>` : '—')
+      : (edgeIn ? `<span class="delta delta--down">−${n0((edgeIn.pts || 0) - (r.pts || 0))}</span>` : '—');
+    body.innerHTML = rows.map((r, i) => `<tr>
       <td><span class="rank ${r.pos<=3?'rank--'+r.pos:''}">${r.pos ?? '—'}</span></td>
       <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(r.p)}" aria-haspopup="dialog">${esc(r.p)}</button>${r.pen ? `<span class="row-meta">штраф ${n0(r.pen)}</span>` : ''}</td>
       <td class="num bar-cell"><i class="bar" data-sx="${((r.pts||0)/max).toFixed(3)}"></i><span>${n0(r.pts)}</span></td>
-      <td class="num tmuted hide-sm">${r.pen ? n0(r.pen) : '—'}</td></tr>${r.pos === PLAYOFF_SPOTS && rows.length > PLAYOFF_SPOTS ? `<tr class="cutline"><td colspan="4"><span class="cutline__label">Граница плей-офф · выходят ${PLAYOFF_SPOTS} лучших</span></td></tr>` : ''}`).join('');
+      <td class="num tmuted hide-sm">${r.pen ? n0(r.pen) : '—'}</td>
+      <td class="num hide-sm">${gapHTML(r, i)}</td></tr>${r.pos === PLAYOFF_SPOTS && rows.length > PLAYOFF_SPOTS ? `<tr class="cutline"><td colspan="5"><span class="cutline__label">Граница плей-офф · выходят ${PLAYOFF_SPOTS} лучших</span></td></tr>` : ''}`).join('');
     note.innerHTML = `Годовой зачёт · <b>${rows.length}</b> ${plural(rows.length,'участник','участника','участников')}. Турнирный рейтинг — среднее игровых рейтингов за сезоны с учётом числа участников минус штраф за пропуски.`;
   } else {
     const s = DB.seasons.find(x => x.key === state.tour);
@@ -2205,11 +2392,13 @@ function monthLabel(key){
 function renderChron(){
   const bars = $('#chronBars');
   if(!bars) return;
-  const dates = DB.games.map(g => g.date).filter(Boolean).sort();
+  const every = allGames();
+  const dates = every.map(g => g.date).filter(Boolean).sort();
   if(!dates.length){ $('#gamesChron').hidden = true; return; }
   const counts = {};
-  DB.games.forEach(g => {
-    if(!g.date || (state.paket !== 'all' && g.paket !== state.paket)) return;
+  every.forEach(g => {
+    if(!g.date) return;
+    if(state.paket === 'tour' ? !g.tour : (state.paket !== 'all' && g.paket !== state.paket)) return;
     const k = g.date.slice(0, 7);
     counts[k] = (counts[k] || 0) + 1;
   });
@@ -2310,7 +2499,7 @@ function renderRatingLines(){
   const top = DB.rating.filter(r => r.r != null && (r.hist || []).length > 1).slice().sort((a,b) => b.r - a.r).slice(0, 10);
   if(top.length < 2){ fig.hidden = true; return; }
   fig.hidden = false;
-  const pakets = [...new Set(top.flatMap(r => r.hist.map(h => h.paket)))].sort((a,b) => pnum(a) - pnum(b));
+  const pakets = histOrder().filter(p => top.some(r => r.hist.some(h => h.paket === p)));
   const vals = top.flatMap(r => r.hist.map(h => h.r));
   const vmin = Math.min(...vals), vmax = Math.max(...vals), pad = (vmax - vmin) * .08 || 10;
   const lo = vmin - pad, hi = vmax + pad;
@@ -2319,7 +2508,7 @@ function renderRatingLines(){
   const yv = v => T + (hi - v) * (H - T - B) / (hi - lo);
   const grid = [0, .25, .5, .75, 1].map(f => `<line class="chart__grid" x1="${L}" x2="${W - R}" y1="${(T + f * (H - T - B)).toFixed(1)}" y2="${(T + f * (H - T - B)).toFixed(1)}"/>`).join('');
   const lines = top.map((r, i) => {
-    const pts = r.hist.slice().sort((a,b) => pnum(a.paket) - pnum(b.paket)).map(h => [x(h.paket), yv(h.r)]);
+    const pts = histSorted(r).map(h => [x(h.paket), yv(h.r)]);
     const d = pts.map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
     const last = pts[pts.length - 1];
     return `<g class="series${i === 0 ? ' is-leader' : ''}" data-series="${i}"><path class="hit" d="${d}"/><path d="${d}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="5"/></g>`;
@@ -2330,16 +2519,16 @@ function renderRatingLines(){
     <svg class="chart__svg" viewBox="0 0 ${W} ${H}" aria-hidden="true">${grid}${lines}</svg>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmax) / H * 100).toFixed(2)}%">${n0(vmax)}</span>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmin) / H * 100).toFixed(2)}%">${n0(vmin)}</span>
-    ${xl.map(p => `<span class="chart__xl" style="left:${(x(p) / W * 100).toFixed(2)}%">${esc(p.replace('KinOlega', ''))}</span>`).join('')}`;
+    ${xl.map(p => `<span class="chart__xl" style="left:${(x(p) / W * 100).toFixed(2)}%">${esc(histLabel(p))}</span>`).join('')}`;
   $('#rlLegend').innerHTML = top.map((r, i) => {
-    const first = r.hist.slice().sort((a,b) => pnum(a.paket) - pnum(b.paket))[0].r;
+    const first = histSorted(r)[0].r;
     return `<li><button type="button" class="chart__item" data-series="${i}" aria-pressed="false"
         aria-label="${esc(r.p)}: рейтинг ${n0(r.r)}, с ${esc(pakets[0])} ${r.r >= first ? 'рост' : 'снижение'} на ${n0(Math.abs(r.r - first))}">
       <span class="chart__pos">${i + 1}</span><span class="chart__name">${esc(r.p)}</span>
       <span class="chart__val"><b>${n0(r.r)}</b>${deltaHTML(first, r.r)}</span>
     </button></li>`;
   }).join('');
-  $('#rlHint').textContent = `Пакеты ${pakets[0].replace('KinOlega', '')}–${pakets[pakets.length - 1].replace('KinOlega', '')} · рейтинг от ${n0(vmin)} до ${n0(vmax)}`;
+  $('#rlHint').textContent = `${histLabel(pakets[0])} — ${histLabel(pakets[pakets.length - 1])} · пакеты и турнирные сезоны · рейтинг от ${n0(vmin)} до ${n0(vmax)}`;
   fig.dispatchEvent(new CustomEvent('chart:reset'));
 }
 
@@ -2348,10 +2537,12 @@ function renderRecords(){
   const grid = $('#recordsGrid');
   if(!grid) return;
   const who = n => `<button class="row-btn" type="button" data-open-player="${esc(n)}" aria-haspopup="dialog">${esc(n)}</button>`;
-  const gameBtn = g => `<button class="rec__game" type="button" data-game="${esc(g.paket)}|${g.n}" aria-haspopup="dialog">${esc(g.paket)} · №${g.n}</button>`;
-  const games = DB.games.slice().sort((a,b) => (a.date||'').localeCompare(b.date||'') || a.paket.localeCompare(b.paket) || a.n - b.n);
+  const gameBtn = g => `<button class="rec__game" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${esc(g.paket)} · ${g.tour ? esc(g.n) : '№' + g.n}</button>`;
+  const byDate = (a,b) => (a.date||'').localeCompare(b.date||'') || a.paket.localeCompare(b.paket) || nCmp(a.n, b.n);
+  const games = DB.games.slice().sort(byDate);     // очки, взлёт и финиш — по пакетам: у турнира другой номинал
+  const every = allGames().slice().sort(byDate);   // серии, победы и число игр — вместе с турнирными играми
   const byPlayer = new Map();
-  games.forEach(g => g.players.forEach(p => {
+  every.forEach(g => g.players.forEach(p => {
     if(!byPlayer.has(p.p)) byPlayer.set(p.p, []);
     byPlayer.get(p.p).push({g, me:p});
   }));
@@ -2404,16 +2595,15 @@ function renderRecords(){
     sub:`в ${wins.games} ${plural(wins.games, 'игре', 'играх', 'играх')}`});
   if(most) recs.push({icon:'i-users', label:'Больше всего игр', value:tickerHTML(most.n), name:most.name, sub:`первая — ${fmtDate(most.first.date)}`});
 
-  const pnum = p => +(String(p).match(/\d+/)?.[0] ?? 0);
   let grow = null;
   DB.rating.forEach(r => {
-    const h = (r.hist || []).slice().sort((a,b) => pnum(a.paket) - pnum(b.paket));
+    const h = histSorted(r);
     if(h.length < 3) return;
     const d = h[h.length - 1].r - h[0].r;
     if(!grow || d > grow.d) grow = {d, name:r.p, first:h[0], last:h[h.length - 1]};
   });
   if(grow && grow.d > 0) recs.push({icon:'i-chart', label:'Рост рейтинга за всё время', value:`+${n0(grow.d)}`, name:grow.name,
-    sub:`${esc(grow.first.paket.replace('KinOlega', ''))} → ${esc(grow.last.paket.replace('KinOlega', ''))}: ${n0(grow.first.r)} → ${n0(grow.last.r)}`});
+    sub:`${esc(histLabel(grow.first.paket))} → ${esc(histLabel(grow.last.paket))}: ${n0(grow.first.r)} → ${n0(grow.last.r)}`});
 
   const solo = new Map();
   DB.seasons.forEach(se => {
@@ -2447,9 +2637,10 @@ function renderRecords(){
 /* ---------------- РАСПИСАНИЕ ---------------- */
 function renderSchedule(){
   const list = $('#scheduleList'), empty = $('#scheduleEmpty');
-  if(!SCHEDULE.length){ list.innerHTML = ''; list.hidden = true; empty.hidden = false; return; }
+  const today = new Date().toISOString().slice(0,10);
+  const upcoming = scheduleList().filter(s => (s.date || '') >= today).sort((a,b) => (a.date||'').localeCompare(b.date||'') || (a.time||'').localeCompare(b.time||''));
+  if(!upcoming.length){ list.innerHTML = ''; list.hidden = true; empty.hidden = false; return; }
   list.hidden = false; empty.hidden = true;
-  const upcoming = SCHEDULE.slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
   list.innerHTML = upcoming.map(s => `
     <article class="ticket" style="cursor:default">
       <span class="ticket__top">
@@ -2463,7 +2654,7 @@ function renderSchedule(){
       </span>
       <span class="ticket__foot">
         <span>${esc(s.note || '')}</span>
-        ${s.url ? `<a class="ticket__more" href="${esc(s.url)}" target="_blank" rel="noopener">Регистрация <svg width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>` : ''}
+        ${/^https?:\/\//.test(s.url || '') ? `<a class="ticket__more" href="${esc(s.url)}" target="_blank" rel="noopener">Регистрация <svg width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>` : ''}
       </span>
     </article>`).join('');
 }
@@ -2477,7 +2668,7 @@ function ratingRows(){
   });
   const k = state.rsort, dir = state.rdir;
   list.sort((a,b) => {
-    let va = a[k], vb = b[k];
+    let va = ratingVal(a, k), vb = ratingVal(b, k);
     if(k === 'p') return dir * String(va).localeCompare(String(vb), 'ru');
     va = va ?? -Infinity; vb = vb ?? -Infinity;
     return dir * (va - vb);
@@ -2492,18 +2683,19 @@ function renderRating(){
   const top = DB.rating.filter(r => r.r != null).slice().sort((a,b) => b.r - a.r).slice(0,3);
   $('#ratingPodium').innerHTML = podiumHTML(top.map(r => ({
     name: r.p, value: n0(r.r),
-    meta: `${n0(r.g)} ${plural(Math.round(r.g||0),'игра','игры','игр')} · ${n0(r.w)} ${plural(Math.round(r.w||0),'победа','победы','побед')}`
+    meta: `${n0(gamesAll(r))} ${plural(Math.round(gamesAll(r)||0),'игра','игры','игр')} · ${n0(winsAll(r))} ${plural(Math.round(winsAll(r)||0),'победа','победы','побед')}`
   })));
 
   $('#ratingBody').innerHTML = rows.map((r,i) => {
     const pos = r.rank ?? i+1;
-    const vals = r.hist.map(h => h.r);
+    const vals = histSorted(r).map(h => h.r);
+    const G = gamesAll(r), W = winsAll(r);
     return `<tr class="clickable" data-player="${esc(r.p)}">
       <td><span class="rank ${pos<=3?'rank--'+pos:''}">${pos}</span></td>
-      <td class="tname"><button class="row-btn" type="button" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(r.g)} ${plural(Math.round(r.g||0),'игра','игры','игр')} · ${n0(r.w)} ${plural(Math.round(r.w||0),'победа','победы','побед')}</span></td>
+      <td class="tname"><button class="row-btn" type="button" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span></td>
       <td class="num" style="color:var(--gold);font-weight:700">${n0(r.r)}</td>
-      <td class="num hide-sm">${n0(r.w)}</td>
-      <td class="num hide-sm">${n0(r.g)}</td>
+      <td class="num hide-sm">${n0(W)}</td>
+      <td class="num hide-sm">${n0(G)}</td>
       <td class="num tmuted hide-md">${n0(r.avgP)}</td>
       <td class="hide-md col-spark">${vals.length>1 ? sparkline(vals,120,34) : '<span class="tmuted">—</span>'}</td>
     </tr>`;
@@ -2539,15 +2731,15 @@ function openPlayer(name, {push = true} = {}){
     <div class="kpi"><div class="kpi__v">${n0(r?.avgP)}</div><div class="kpi__l">Средние очки</div></div>
   </div>`;
 
-  const hist = (r?.hist ?? []);
+  const hist = histSorted(r);
   const chart = hist.length > 1 ? `
     <section style="margin-bottom:24px">
-      <p class="field__label" style="margin-bottom:10px">Динамика рейтинга по пакетам</p>
+      <p class="field__label" style="margin-bottom:10px">Динамика рейтинга · пакеты и турнир</p>
       <div style="border:1px solid var(--line-soft);border-radius:12px;padding:18px 16px 12px;background:rgba(246,236,214,.03)">
         ${sparkline(hist.map(h => h.r), 600, 90)}
         <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted-2)" class="num">
-          <span>${esc(hist[0].paket)} · ${n0(hist[0].r)}</span>
-          <span>${esc(hist[hist.length-1].paket)} · ${n0(hist[hist.length-1].r)}</span>
+          <span>${esc(histName(hist[0].paket))} · ${n0(hist[0].r)}</span>
+          <span>${esc(histName(hist[hist.length-1].paket))} · ${n0(hist[hist.length-1].r)}</span>
         </div>
       </div>
     </section>` : '';
@@ -2560,7 +2752,7 @@ function openPlayer(name, {push = true} = {}){
       <tbody>${played.map(x => `<tr>
         <td class="num tmuted hide-sm">${fmtDate(x.g.date)}</td>
         <td>${x.season
-          ? `<a href="#tournament/${encodeURIComponent(x.season.key)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${esc(x.g.n || '')}</span>`
+          ? `<a href="#tgame/${encodeURIComponent(x.season.key)}/${encodeURIComponent(x.g.n)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${esc(x.g.n || '')}</span>`
           : `${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span>`}<span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
         <td class="num">${n0(x.me.pts)}</td>
@@ -2568,8 +2760,9 @@ function openPlayer(name, {push = true} = {}){
         <td>${deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
-  const actions = r ? `<div class="modal__actions"><button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка с результатом</button></div>` : '';
-  openModal(name, r ? `Место ${r.rank ?? '—'} в сквозном рейтинге · пропущено игр: ${n0(r.miss)}` : 'Карточка игрока', `<div class="phero">${avatarHTML(name)}${actions}</div>` + kpis + chart + table,
+  const actions = `<div class="modal__actions">${r ? `<button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка с результатом</button>` : ''}${played.length ? `<button class="btn btn--ghost btn--sm" type="button" data-h2h="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Личные встречи</button>` : ''}</div>`;
+  const penalty = r && r.miss > 2 ? ` · штраф −${nf1.format(missPct(r.miss))}%` : '';
+  openModal(name, r ? `Место ${r.rank ?? '—'} в сквозном рейтинге · пропусков: ${n0(r.miss)}${penalty}` : 'Карточка игрока', `<div class="phero">${avatarHTML(name)}${actions}</div>` + kpis + chart + table,
     {route:`player/${encodeURIComponent(name)}`, push, shareText:`${name} — ${r ? `${r.rank ?? '—'} место, рейтинг ${n0(r.r)}` : 'карточка игрока'} · KinOlega Quiz`});
 }
 
@@ -2805,6 +2998,11 @@ function applyRoute({scroll = true} = {}){
     openPlayer(a, {push:false});
     return true;
   }
+  if(kind === 'tgame' && a && b && tourGames().some(g => g.season === a && String(g.n) === b)){
+    if(state.tab !== 'games') setTab('games', {scroll, push:false});
+    openTourGame(a, b, {push:false});
+    return true;
+  }
   if(kind === 'game' && a && b && DB.games.some(g => g.paket === a && String(g.n) === b)){
     if(state.tab !== 'games') setTab('games', {scroll, push:false});
     openGame(`${a}|${b}`, {push:false});
@@ -2889,6 +3087,22 @@ $('#ratingSearch').addEventListener('input', e => {
   rt = setTimeout(() => { state.rq = v; renderRating(); }, 160);
 });
 $('#ratingFilter').addEventListener('change', e => { state.rfilter = e.target.value; renderRating(); });
+$('#h2hA').addEventListener('change', e => { state.h2hA = e.target.value; renderH2HBody(); });
+$('#h2hB').addEventListener('change', e => { state.h2hB = e.target.value; renderH2HBody(); });
+document.addEventListener('click', e => {
+  const h = e.target.closest('[data-h2h]');
+  if(!h) return;
+  const name = h.dataset.h2h;
+  if(state.h2hB === name) state.h2hB = state.h2hA;
+  state.h2hA = name;
+  closeModal();   // закрытие окна возвращает адрес назад — вкладку переключаем, когда браузер это сделает
+  setTimeout(() => {
+    setTab('rating', {scroll:false});
+    renderH2H();
+    $('#h2h').scrollIntoView({behavior: RM.matches ? 'auto' : 'smooth', block:'start'});
+    $('#h2hB').focus({preventScroll:true});
+  }, 150);
+});
 $('#fullStats').addEventListener('toggle', () => { if(!$('#fullStats').open) setFullStatsMax(false); renderFullStats(); });
 $('#fullStatsBody').addEventListener('click', e => {
   const mode = e.target.closest('[data-fs-mode]');
@@ -2945,17 +3159,18 @@ async function loadLive({silent=false} = {}){
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 15000);
   try{
-    const [games, rating, year, log, ...seasonData] = await Promise.all([
+    const [games, rating, year, log, schedule, ...seasonData] = await Promise.all([
       fetchSheet(SHEETS.games, ctl.signal),
       fetchSheet(SHEETS.rating, ctl.signal),
       fetchSheet(SHEETS.year, ctl.signal, YEAR_SHEET_ID),
-      fetchSheet(SHEETS.log, ctl.signal).catch(() => null),   // без лога сайт работает, просто без Δ у турнирных игр
+      fetchSheet(SHEETS.log, ctl.signal).catch(() => null),        // без лога сайт работает, просто без Δ у турнирных игр
+      fetchSheet(SHEETS.schedule, ctl.signal).catch(() => null),   // листа расписания может не быть
       ...SHEETS.seasons.map(s => fetchSheet(s, ctl.signal))
     ]);
-    const db = buildDB({games, rating, year, log,
+    const db = buildDB({games, rating, year, log, schedule,
       seasons: SHEETS.seasons.map((name,i) => ({name, data:seasonData[i]}))});
     if(!db.games.length || !db.rating.length) throw new Error('пустые данные');
-    const sig = d => JSON.stringify([d.games, d.rating, d.year, d.seasons, d.seasonRating]);
+    const sig = d => JSON.stringify([d.games, d.rating, d.histCols, d.year, d.seasons, d.seasonRating, d.schedule]);
     if(!DB || sig(db) !== sig(DB)){
       const first = !DB;
       DB = db; renderAll();
@@ -3147,7 +3362,80 @@ function renderAll(){
   renderTournament();
   renderSchedule();
   renderRating();
+  renderRatingHowto();
+  renderH2H();
   moveInk();
+}
+
+/* ---------------- как считается рейтинг: живой пример штрафа ---------------- */
+function renderRatingHowto(){
+  const box = $('#ratingHowtoExample');
+  if(!box) return;
+  // игрок со штрафом, у которого рейтинг в таблице сходится с «последнее значение истории ÷ коэффициент»
+  const sample = DB.rating.filter(r => r.r != null && r.miss > 2 && r.hist?.length).sort((a,b) => b.r - a.r)
+    .map(r => ({r, last: histSorted(r).at(-1)})).find(x => Math.abs(x.last.r / missFactor(x.r.miss) - x.r.r) < 1);
+  if(!sample){ box.hidden = true; box.innerHTML = ''; return; }
+  const {r, last} = sample, k = missFactor(r.miss);
+  const k4 = k.toLocaleString('ru-RU', {minimumFractionDigits:4, maximumFractionDigits:4});
+  const x = Math.min(r.miss, 10);
+  box.hidden = false;
+  box.innerHTML = `
+    <p class="howto__ex-title">На примере — ${esc(r.p)}</p>
+    <p><span class="tmuted">Рейтинг после последнего события (${esc(histName(last.paket))}):</span> <b>${n0(last.r)}</b></p>
+    <p><span class="tmuted">Пропусков:</span> ${n0(r.miss)} <span class="tmuted">→ коэффициент</span> 0,0001·${x}² + 0,0052·${x} + 0,9934 = ${k4} <span class="tmuted">(−${nf1.format(missPct(r.miss))}%)</span></p>
+    <p><span class="tmuted">В таблице:</span> ${n0(last.r)} ÷ ${k4} ≈ <b>${n1(r.r)}</b> <span class="tmuted">· ${r.rank ?? '—'} место</span></p>`;
+}
+
+/* ---------------- личные встречи ---------------- */
+function renderH2H(){
+  const selA = $('#h2hA'), selB = $('#h2hB');
+  if(!selA) return;
+  const rated = DB.rating.filter(r => r.r != null).sort((a,b) => b.r - a.r).map(r => r.p);
+  const others = [...new Set(allGames().flatMap(g => g.players.map(p => p.p)))].filter(n => !rated.includes(n)).sort((a,b) => a.localeCompare(b, 'ru'));
+  const names = rated.concat(others);
+  if(!names.includes(state.h2hA)) state.h2hA = names[0];
+  if(!names.includes(state.h2hB) || state.h2hB === state.h2hA){
+    // по умолчанию — соперник, с которым первый игрок встречался чаще всего
+    const met = new Map();
+    allGames().forEach(g => { if(g.players.some(p => p.p === state.h2hA)) g.players.forEach(p => { if(p.p !== state.h2hA) met.set(p.p, (met.get(p.p) || 0) + 1); }); });
+    const best = [...met].sort((a,b) => b[1] - a[1])[0];
+    state.h2hB = best ? best[0] : names.find(n => n !== state.h2hA);
+  }
+  const opts = val => names.map(n => `<option value="${esc(n)}"${n === val ? ' selected' : ''}>${esc(n)}</option>`).join('');
+  selA.innerHTML = opts(state.h2hA);
+  selB.innerHTML = opts(state.h2hB);
+  renderH2HBody();
+}
+function renderH2HBody(){
+  const A = state.h2hA, B = state.h2hB, body = $('#h2hBody');
+  if(!body) return;
+  if(!A || !B || A === B){ body.innerHTML = '<p class="result-count">Выберите двух разных игроков.</p>'; return; }
+  const meet = allGames().map(g => ({g, a:g.players.find(p => p.p === A), b:g.players.find(p => p.p === B)}))
+    .filter(x => x.a && x.b).sort((x,y) => (y.g.date||'').localeCompare(x.g.date||''));
+  if(!meet.length){ body.innerHTML = `<p class="result-count">${esc(A)} и ${esc(B)} ещё не играли в одной игре.</p>`; return; }
+  const aUp = meet.filter(x => x.a.pos < x.b.pos).length, bUp = meet.filter(x => x.b.pos < x.a.pos).length;
+  const pk = meet.filter(x => !x.g.tour);
+  const avg = side => pk.length ? pk.reduce((s,x) => s + (x[side].pts || 0), 0) / pk.length : null;
+  const cell = (me, other) => `<span class="rank ${me.pos<=3?'rank--'+me.pos:''}">${me.pos}</span> <span class="num${me.pos < other.pos ? ' h2h__win' : ''}">${n0(me.f ?? me.pts)}</span>`;
+  body.innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="kpi__v">${meet.length}</div><div class="kpi__l">${plural(meet.length,'Встреча','Встречи','Встреч')}</div></div>
+      <div class="kpi"><div class="kpi__v">${aUp}</div><div class="kpi__l">Выше — ${esc(A)}</div></div>
+      <div class="kpi"><div class="kpi__v">${bUp}</div><div class="kpi__l">Выше — ${esc(B)}</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(avg('a'))}</div><div class="kpi__l">Ср. очки в пакетах — ${esc(A)}</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(avg('b'))}</div><div class="kpi__l">Ср. очки в пакетах — ${esc(B)}</div></div>
+    </div>
+    <div class="table-wrap"><div class="table-scroll"><table>
+      <caption class="sr-only">Игры, где встречались ${esc(A)} и ${esc(B)}</caption>
+      <thead><tr><th scope="col" class="hide-sm">Дата</th><th scope="col">Игра</th>
+        <th scope="col">${esc(A)}</th><th scope="col">${esc(B)}</th></tr></thead>
+      <tbody>${meet.map(x => `<tr>
+        <td class="num tmuted hide-sm">${fmtDate(x.g.date)}</td>
+        <td><button class="row-btn" type="button" data-game="${esc(gameKey(x.g))}" aria-haspopup="dialog">${esc(x.g.paket)} ${x.g.tour ? esc(x.g.n) : '№' + x.g.n}</button><span class="row-meta num">${fmtDate(x.g.date)}</span></td>
+        <td>${cell(x.a, x.b)}</td>
+        <td>${cell(x.b, x.a)}</td></tr>`).join('')}</tbody>
+    </table></div></div>
+    <p class="result-count" style="margin-top:12px">Место — в этой игре; в турнирных играх рядом fОчки, в пакетах — очки.</p>`;
 }
 function boot(){
   if(!DB){
