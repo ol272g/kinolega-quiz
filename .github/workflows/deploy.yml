@@ -1,0 +1,66 @@
+name: Публикация и обновление данных
+
+on:
+  push:
+    branches: [main]            # изменили сайт — сразу публикуем
+  schedule:
+    - cron: "17 */4 * * *"      # каждые 4 часа (время UTC) — свежие данные из Google Таблицы
+  workflow_dispatch:            # кнопка «Run workflow» — обновить вручную
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Обновить данные из Google Таблицы
+        if: github.event_name != 'push'
+        run: python update-data.py
+
+      - name: Сохранить новые данные в репозиторий
+        if: github.event_name != 'push'
+        run: |
+          if git diff --quiet -- assets/data.js index.html; then
+            echo "Данные не изменились"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/data.js index.html
+            git commit -m "Обновление данных из Google Таблицы"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Собрать сайт
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp -r assets _site/
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
