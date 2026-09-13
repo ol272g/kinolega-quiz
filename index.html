@@ -1033,6 +1033,29 @@ tbody tr.clickable{cursor:pointer}
 .badge-ach--teal svg{color:var(--teal)}
 .kpis--compact{grid-template-columns:repeat(4,minmax(0,1fr))}
 
+/* участие в пакетах и турнире */
+.miss{margin:0 0 22px; padding:14px 16px 12px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background:rgba(246,236,214,.025)}
+.miss__head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 16px; margin-bottom:12px}
+.miss__sum{font-size:13px; color:var(--muted)}
+.miss__sum b{color:var(--cream)}
+.evs{list-style:none; margin:0; padding:0 0 4px; display:flex; flex-wrap:wrap; gap:12px 6px}
+.ev{position:relative; min-width:42px; height:32px; padding:0 9px; border-radius:8px; display:grid; place-items:center; font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums; cursor:default}
+.ev--on{background:rgba(236,176,36,.17); color:var(--gold-300); box-shadow:inset 0 0 0 1px rgba(236,176,36,.5)}
+.ev--on.ev--season{background:rgba(111,168,168,.2); color:#B6D3D0; box-shadow:inset 0 0 0 1px rgba(111,168,168,.6)}
+.ev--off{color:var(--muted-2); background:transparent; border:1px dashed rgba(246,236,214,.28); text-decoration:line-through; text-decoration-thickness:1.5px; text-decoration-color:rgba(246,236,214,.55)}
+.ev--off.ev--recent{color:var(--cream); border-color:rgba(246,236,214,.6); background:rgba(246,236,214,.05)}
+.ev--before{opacity:.45}
+.ev--recent::after{content:''; position:absolute; left:4px; right:4px; bottom:-7px; height:2px; border-radius:2px; background:rgba(236,176,36,.75)}
+.miss__legend{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; margin:10px 0 0; font-size:12px; color:var(--muted-2)}
+.ev-key{display:inline-block; width:12px; height:12px; border-radius:4px; margin-left:8px}
+.ev-key:first-child{margin-left:0}
+.ev-key--on{background:rgba(236,176,36,.35); box-shadow:inset 0 0 0 1px rgba(236,176,36,.7)}
+.ev-key--season{background:rgba(111,168,168,.4); box-shadow:inset 0 0 0 1px rgba(111,168,168,.8)}
+.ev-key--off{box-shadow:inset 0 0 0 1px rgba(246,236,214,.35)}
+.ev-key--before{box-shadow:inset 0 0 0 1px rgba(246,236,214,.35); opacity:.45}
+.miss__note{margin:6px 0 0; font-size:12.5px; color:var(--muted)}
+@media (max-width:560px){.miss{padding:12px 12px 10px} .ev{min-width:38px; height:30px; padding:0 7px; font-size:12px}}
+
 .pchart{position:relative; margin:0; padding:14px 14px 10px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background:linear-gradient(180deg, rgba(236,176,36,.05), rgba(246,236,214,.012))}
 .pchart svg{display:block; width:100%; height:auto; overflow:visible; touch-action:pan-y}
 .pchart__grid{stroke:rgba(246,236,214,.08); stroke-width:1; stroke-dasharray:3 5}
@@ -2990,6 +3013,44 @@ function badgesHTML(name, r, played, hist){
     `<li class="badge-ach${tone ? ' badge-ach--' + tone : ''}"><svg width="15" height="15" aria-hidden="true"><use href="#${icon}"/></svg>${esc(text)}</li>`).join('')}</ul>`;
 }
 
+// участие: все пакеты и турнирные сезоны по порядку — что сыграно, что пропущено и какие события попадают в штраф
+const MISS_WINDOW = 10;   // как MISSED_WINDOW в Apps Script (Rating.gs)
+function participationHTML(name, played, r){
+  const pkgNames = [...new Set(DB.games.map(g => g.paket))];
+  const seasonKeys = DB.seasons.map(se => se.key);
+  const known = new Set(pkgNames.concat(seasonKeys));
+  const events = (DB.histCols?.length ? DB.histCols : pkgNames.slice().sort(paketOrder).concat(seasonKeys)).filter(e => known.has(e));
+  known.forEach(e => { if(!events.includes(e)) events.push(e); });   // новый пакет, которого ещё нет в листе Rating, — в конец
+  if(!events.length) return '';
+  const playedSet = new Set(played.map(x => x.season ? x.season.key : x.g.paket));
+  const first = events.findIndex(e => playedSet.has(e));
+  const recentFrom = Math.max(0, events.length - MISS_WINDOW);
+  const recentMissed = events.slice(recentFrom).filter(e => !playedSet.has(e)).length;
+  const showWindow = r?.miss != null && r.miss === recentMissed;   // подчёркиваем окно, только если оно совпадает с MISSED из таблицы
+  const missed = events.filter(e => !playedSet.has(e));
+  const short = e => SEASON_COL.test(e) ? e.split('_')[0] : e.replace('KinOlega', '');
+  const full = e => SEASON_COL.test(e) ? 'Турнир · ' + e.replace('_', ' ') : e;
+  const chips = events.map((e, i) => {
+    const on = playedSet.has(e);
+    const cls = ['ev', on ? 'ev--on' : 'ev--off', SEASON_COL.test(e) ? 'ev--season' : '', first >= 0 && i < first ? 'ev--before' : '', showWindow && i >= recentFrom ? 'ev--recent' : ''].filter(Boolean).join(' ');
+    const state = on ? 'играл' : (first >= 0 && i < first ? 'не играл — ещё не пришёл' : 'не играл');
+    return `<li class="${cls}" title="${esc(full(e))} — ${state}"><span class="sr-only">${esc(full(e))} — ${state}</span><span aria-hidden="true">${esc(short(e))}</span></li>`;
+  }).join('');
+  const list = missed.length && missed.length <= 8 ? `: ${missed.map(e => esc(full(e))).join(', ')}` : '';
+  const note = showWindow
+    ? `В штрафе учитываются последние ${MISS_WINDOW} событий (подчёркнуты): пропусков ${recentMissed}${r.miss > 2 ? ` → −${nf1.format(missPct(r.miss))}% к рейтингу` : ' — штрафа нет'}.`
+    : '';
+  return `<section class="miss" aria-label="Участие в пакетах и турнире">
+      <div class="miss__head">
+        <p class="field__label" style="margin:0">Участие · пакеты и турнир</p>
+        <span class="miss__sum">Сыграно <b>${events.length - missed.length}</b> из <b>${events.length}</b>${missed.length ? ` · не играл <b>${missed.length}</b>${list}` : ' · без единого пропуска'}</span>
+      </div>
+      <ul class="evs">${chips}</ul>
+      <p class="miss__legend"><i class="ev-key ev-key--on"></i>играл <i class="ev-key ev-key--season"></i>турнир <i class="ev-key ev-key--off"></i>не играл${first > 0 ? ' <i class="ev-key ev-key--before"></i>до первой игры' : ''}</p>
+      ${note ? `<p class="miss__note">${note}</p>` : ''}
+    </section>`;
+}
+
 function openPlayer(name, {push = true} = {}){
   const r = DB.rating.find(x => x.p === name);
   const played = [];
@@ -3027,7 +3088,8 @@ function openPlayer(name, {push = true} = {}){
       <div class="kpi"><div class="kpi__v">${wins || n0(r?.w)}</div><div class="kpi__l">Побед</div></div>
       <div class="kpi"><div class="kpi__v">${n0(best)}</div><div class="kpi__l">Лучший результат</div></div>
       <div class="kpi"><div class="kpi__v">${n0(r?.avgP)}</div><div class="kpi__l">Средние очки</div></div>
-    </div>`;
+    </div>
+    ${participationHTML(name, played, r)}`;
 
   const chart = hist.length > 1 ? `
     <section class="pro__chart">
