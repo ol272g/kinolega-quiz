@@ -512,7 +512,7 @@ h2.sec-head__title{
   background:linear-gradient(to bottom, rgba(246,236,214,.045), rgba(246,236,214,.015));
 }
 .field{display:flex; flex-direction:column; gap:7px; min-width:0}
-.field__label{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted-2); font-weight:600}
+.field__label{font-size:12.5px; letter-spacing:.01em; color:var(--muted-2); font-weight:600}
 .field--grow{flex:1 1 240px}
 .input,.select{
   min-height:46px; padding:0 14px; border-radius:var(--r-md); width:100%;
@@ -536,6 +536,15 @@ h2.sec-head__title{
 }
 .chip:hover{border-color:var(--line); color:var(--cream)}
 .chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--gold-300),var(--gold)); color:var(--night); border-color:transparent; box-shadow:var(--shadow-glow)}
+/* пакеты одной строкой и на компьютере: прокрутка колесом, край затухает */
+@media (min-width:701px){
+  #paketChips{
+    flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; padding:4px 2px 8px;
+    -webkit-mask-image:linear-gradient(90deg, #000 calc(100% - 56px), transparent);
+            mask-image:linear-gradient(90deg, #000 calc(100% - 56px), transparent);
+  }
+  #paketChips::-webkit-scrollbar{display:none}
+}
 .result-count{font-size:13px; color:var(--muted-2); margin-bottom:var(--space-4)}
 .result-count b{color:var(--cream); font-variant-numeric:tabular-nums}
 
@@ -609,6 +618,46 @@ h2.sec-head__title{
 }
 .ticket:hover .ticket__ring,.ticket:focus-visible .ticket__ring{opacity:1}
 
+/* турнир — бирюзовый акцент (золото остаётся за пакетами и лидерами) */
+.badge--tour{background:rgba(111,168,168,.14); color:#B6D3D0; border-color:rgba(111,168,168,.4)}
+.ticket--tour .ticket__winner{background:rgba(111,168,168,.08); border-color:rgba(111,168,168,.24)}
+.ticket--tour .ticket__winner svg{color:var(--teal)}
+.ticket--tour .ticket__eyebrow{color:var(--teal)}
+.ticket--tour::after{background:radial-gradient(420px 240px at var(--cx,50%) var(--cy,0%), rgba(111,168,168,.17), transparent 72%)}
+.ticket--tour .ticket__ring{background:radial-gradient(240px circle at var(--cx,50%) var(--cy,0%), rgba(111,168,168,.95), rgba(111,168,168,.25) 40%, transparent 65%)}
+.ticket--tour:hover{border-color:rgba(111,168,168,.45); box-shadow:var(--shadow-2), 0 0 0 1px rgba(111,168,168,.32)}
+.ticket--tour.ticket--featured{border-color:rgba(111,168,168,.42); background:linear-gradient(150deg, rgba(111,168,168,.13), rgba(246,236,214,.02) 55%)}
+.chip[data-paket="tour"]{border-color:rgba(111,168,168,.42); color:#B6D3D0}
+.chip[data-paket="tour"][aria-pressed="true"]{background:linear-gradient(135deg,#A3C8C6,var(--teal)); color:var(--night); border-color:transparent; box-shadow:0 12px 30px -12px rgba(111,168,168,.95)}
+
+/* ---------- лента свежих событий на главной ---------- */
+.intro__ticker{
+  position:relative; width:100%; max-width:1120px; margin:14px auto 0; overflow:hidden; border-radius:999px;
+  border:1px solid var(--line-soft); background:rgba(0,10,32,.58); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.intro__ticker[hidden]{display:none}
+.ticker-track{display:flex; width:max-content; animation:tickerMove 70s linear infinite}
+.intro__ticker:hover .ticker-track,.intro__ticker:focus-within .ticker-track{animation-play-state:paused}
+.ticker-group{display:flex; align-items:center; flex:none; padding-right:26px}
+.ticker-item{display:inline-flex; align-items:center; gap:8px; min-height:42px; padding:0 12px; white-space:nowrap; font-size:13.5px; color:var(--muted); cursor:pointer}
+.ticker-item svg{flex:none; color:var(--gold)}
+.ticker-item b{color:var(--cream); font-weight:600}
+.ticker-item:hover{color:var(--cream)}
+.ticker-sep{flex:none; color:rgba(236,176,36,.5); font-size:10px; padding:0 8px}
+@keyframes tickerMove{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none} .intro__ticker{overflow-x:auto}}
+@media (max-width:560px){.intro__ticker{margin-top:10px} .ticker-item{font-size:12.5px; min-height:38px; padding:0 10px}}
+
+/* ---------- подсказка на графике «Рейтинг топ-10» ---------- */
+.chart__tip{
+  position:absolute; z-index:3; transform:translate(-50%, calc(-100% - 14px)); padding:6px 10px; border-radius:8px; white-space:nowrap; pointer-events:none;
+  background:rgba(0,10,32,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
+}
+.chart__marker{position:absolute; z-index:2; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%; pointer-events:none; background:var(--gold); box-shadow:0 0 0 3px var(--night), 0 0 16px rgba(236,176,36,.8)}
+.chart__tip[hidden],.chart__marker[hidden]{display:none}
+
 /* ---------- number ticker ---------- */
 .ticker{display:inline-block; font-variant-numeric:tabular-nums lining-nums}
 
@@ -623,14 +672,17 @@ h2.sec-head__title{
 .bento__tile--wide{grid-column:span 2}
 .bento__tile--accent{border-color:var(--line); background:linear-gradient(150deg, rgba(236,176,36,.14), rgba(246,236,214,.02) 60%)}
 .bento__icon{position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:var(--r-md); display:grid; place-items:center; color:var(--gold); background:rgba(236,176,36,.10)}
-.bento__label{margin:0; padding-right:42px; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-2)}
+.bento__label{margin:0; padding-right:42px; font-size:13.5px; font-weight:600; letter-spacing:.01em; color:var(--muted)}
 .bento__value{margin:auto 0 0; font-family:var(--font-display); font-weight:600; font-size:clamp(30px,3.6vw,44px); line-height:1; color:var(--cream); font-variant-numeric:tabular-nums lining-nums}
 .bento__tile--accent .bento__value{color:var(--gold)}
 .bento__sub{margin:6px 0 0; font-size:13px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bento__bar{position:relative; display:block; height:6px; margin-top:12px; border-radius:999px; overflow:hidden; background:rgba(246,236,214,.08)}
+.bento__bar .bar{position:absolute; inset:0; height:auto; border-radius:inherit; transform-origin:left; transform:scaleX(0);
+  background:linear-gradient(90deg,var(--gold-600),var(--gold-300)); transition:transform 1.1s var(--ease-out)}
 @media (max-width:720px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px}
   .bento__tile{min-height:106px; padding:12px 14px; border-radius:var(--r-lg)}
-  .bento__label{font-size:11px; letter-spacing:.1em; padding-right:34px}
+  .bento__label{font-size:12.5px; letter-spacing:0; padding-right:34px}
   .bento__value{font-size:28px}
   .bento__icon{top:10px; right:10px; width:28px; height:28px}
   /* на телефоне на всю ширину только главная плитка — остальные по две в ряд */
@@ -640,11 +692,18 @@ h2.sec-head__title{
 
 .faces{display:flex; align-items:center}
 .face{
-  width:26px; height:26px; border-radius:50%; margin-left:-8px; flex:none;
-  display:grid; place-items:center; font-size:11px; font-weight:700;
+  width:30px; height:30px; border-radius:50%; margin-left:-7px; flex:none;
+  display:grid; place-items:center; font-size:10px; font-weight:700; letter-spacing:-.03em; line-height:1;
   background:var(--navy); color:var(--gold); border:2px solid var(--night);
   box-shadow:inset 0 0 0 1px rgba(236,176,36,.45); font-family:var(--font-body);
 }
+/* оттенки кружков — смеси фирменных цветов, непрозрачные: кружки лежат друг на друге */
+.face--0{background:#3A2E10; color:var(--gold-300); box-shadow:inset 0 0 0 1px rgba(236,176,36,.55)}
+.face--1{background:#123032; color:#B6D3D0; box-shadow:inset 0 0 0 1px rgba(111,168,168,.65)}
+.face--2{background:#2A2A33; color:var(--cream); box-shadow:inset 0 0 0 1px rgba(246,236,214,.4)}
+.face--3{background:var(--navy); color:var(--gold); box-shadow:inset 0 0 0 1px rgba(236,176,36,.45)}
+.face--4{background:#1C2A3A; color:#9FC0C0; box-shadow:inset 0 0 0 1px rgba(111,168,168,.45)}
+.rt-step{margin-left:8px; font-family:var(--font-body); font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap}
 .face--more{color:var(--cream); box-shadow:inset 0 0 0 1px rgba(246,236,214,.25)}
 .face:first-child{margin-left:0}
 
@@ -937,6 +996,100 @@ tbody tr.clickable{cursor:pointer}
 .phero .modal__actions{margin:0}
 .ava{flex:none; display:grid; place-items:center; border-radius:50%; object-fit:cover; background:var(--navy); color:var(--gold); font-family:var(--font-display); font-weight:600; box-shadow:0 0 0 2px var(--gold)}
 .ava--lg{width:84px; height:84px; font-size:28px}
+.ava--md{width:56px; height:56px; font-size:19px}
+
+/* ---------- профиль игрока ---------- */
+.pro{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:14px 22px; margin:0 0 16px}
+.pro__ava{position:relative}
+.pro__rank{
+  position:absolute; right:-6px; bottom:-4px; min-width:30px; height:30px; padding:0 8px; border-radius:999px; display:grid; place-items:center;
+  background:var(--navy); color:var(--cream); border:2px solid var(--night); box-shadow:inset 0 0 0 1px var(--line-soft);
+  font-family:var(--font-display); font-weight:700; font-size:14px; font-variant-numeric:tabular-nums;
+}
+.pro__rank--1{background:var(--gold); color:var(--night); box-shadow:0 0 16px -2px rgba(236,176,36,.8)}
+.pro__rank--2{background:var(--cream); color:var(--night); box-shadow:none}
+.pro__rank--3{background:var(--night); color:var(--teal); box-shadow:inset 0 0 0 1.5px var(--teal)}
+.pro__label{margin:0; font-size:12.5px; color:var(--muted-2)}
+.pro__rating{margin:2px 0 10px; display:flex; align-items:baseline; font-family:var(--font-display); font-weight:600; font-size:clamp(36px,5vw,48px); line-height:1; color:var(--gold); font-variant-numeric:tabular-nums lining-nums}
+.pro__rating .rt-step{font-size:14px; margin-left:10px}
+.pro .modal__actions{margin:0; align-self:start; justify-content:flex-end}
+.pro__chart{margin:0 0 24px}
+.form{display:flex; align-items:center; gap:6px}
+.form::before{content:'Форма'; margin-right:4px; font-size:12.5px; color:var(--muted-2)}
+.form__chip{
+  width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-size:12px; font-weight:700; font-variant-numeric:tabular-nums;
+  background:rgba(246,236,214,.06); color:var(--muted); box-shadow:inset 0 0 0 1px var(--line-soft); cursor:default;
+}
+.form__chip--1{background:var(--gold); color:var(--night); box-shadow:0 0 14px -3px rgba(236,176,36,.75)}
+.form__chip--2{background:var(--cream); color:var(--night); box-shadow:none}
+.form__chip--3{background:transparent; color:var(--teal); box-shadow:inset 0 0 0 1.5px var(--teal)}
+.badges{list-style:none; display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px; padding:0}
+.badge-ach{
+  display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 9px; border-radius:999px; font-size:13px; font-weight:600; color:var(--cream);
+  background:linear-gradient(135deg, rgba(236,176,36,.17), rgba(236,176,36,.04)); border:1px solid rgba(236,176,36,.3);
+}
+.badge-ach svg{flex:none; color:var(--gold)}
+.badge-ach--teal{background:linear-gradient(135deg, rgba(111,168,168,.2), rgba(111,168,168,.04)); border-color:rgba(111,168,168,.4)}
+.badge-ach--teal svg{color:var(--teal)}
+.kpis--compact{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.pchart{position:relative; margin:0; padding:14px 14px 10px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background:linear-gradient(180deg, rgba(236,176,36,.05), rgba(246,236,214,.012))}
+.pchart svg{display:block; width:100%; height:auto; overflow:visible; touch-action:pan-y}
+.pchart__grid{stroke:rgba(246,236,214,.08); stroke-width:1; stroke-dasharray:3 5}
+.pchart__line{fill:none; stroke:var(--gold); stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round}
+.pchart__dot{fill:var(--night); stroke:var(--gold-300); stroke-width:1.8}
+.pchart__dot.is-season{stroke:var(--teal); stroke-width:2.4}
+.pchart__dot.is-last{fill:var(--gold); stroke:var(--cream)}
+.pchart__dot.is-active{fill:var(--gold-300); stroke:var(--cream); stroke-width:2.6}
+.pchart__tip{
+  position:absolute; z-index:2; transform:translate(-50%, calc(-100% - 12px)); padding:6px 10px; border-radius:8px; white-space:nowrap; pointer-events:none;
+  background:rgba(0,10,32,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
+}
+.pchart__cap{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; font-size:11.5px; color:var(--muted-2)}
+.pchart__legend{display:inline-flex; align-items:center; gap:5px}
+.pchart__legend i{display:inline-block; width:10px; height:10px; border-radius:50%; border:2px solid var(--gold-300); margin-left:8px}
+.pchart__legend i.lg-season{border-color:var(--teal)}
+@media (max-width:560px){
+  .pro{grid-template-columns:auto 1fr; gap:12px 16px}
+  .pro .modal__actions{grid-column:1 / -1; justify-content:stretch}
+  .pro .modal__actions .btn{flex:1 1 0; justify-content:center; padding-inline:10px; font-size:13px}
+  .pro .ava--lg{width:68px; height:68px; font-size:23px}
+  .pro .btn__more{display:none}
+  .kpis--compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .badges{gap:6px; margin-bottom:14px}
+  .badge-ach{padding:4px 10px 4px 7px; font-size:12px; gap:5px}
+  .badge-ach svg{width:13px; height:13px}
+  .pchart__legend{display:none}
+}
+
+/* ---------- личные встречи: табло ---------- */
+.vs{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:14px 18px; margin:0 0 16px; padding:24px 20px 18px;
+  border:1px solid var(--line); border-radius:var(--r-lg);
+  background:radial-gradient(120% 140% at 50% 0%, rgba(236,176,36,.15), rgba(0,10,32,.25) 62%);
+}
+.vs__side{display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; min-width:0}
+.vs__side--b .ava{box-shadow:0 0 0 2px var(--teal); color:var(--teal)}
+.vs__name{font-family:var(--font-display); font-weight:600; font-size:clamp(17px,2.2vw,22px); text-transform:uppercase; color:var(--cream); line-height:1.15}
+.vs__meta{font-size:12.5px; color:var(--muted-2)}
+.vs__score{display:grid; grid-template-columns:auto auto auto; align-items:center; justify-items:center; column-gap:12px}
+.vs__num{font-family:var(--font-display); font-weight:700; font-size:clamp(48px,7vw,76px); line-height:1; color:var(--muted); font-variant-numeric:tabular-nums lining-nums}
+.vs__num.is-lead{color:var(--gold); text-shadow:0 0 30px rgba(236,176,36,.45)}
+.vs__colon{font-family:var(--font-display); font-size:clamp(34px,5vw,54px); color:var(--muted-2); line-height:1}
+.vs__caption{grid-column:1 / -1; margin-top:6px; font-size:12.5px; color:var(--muted-2); white-space:nowrap}
+.vs__bar{grid-column:1 / -1; height:6px; border-radius:999px; background:rgba(111,168,168,.45); overflow:hidden}
+.vs__bar i{display:block; height:100%; background:linear-gradient(90deg,var(--gold-600),var(--gold)); border-radius:inherit}
+.vs__stats{grid-column:1 / -1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:4px 0 0}
+.vs__stats div{padding:10px 12px; border-radius:var(--r-md); background:rgba(246,236,214,.04); border:1px solid var(--line-soft); text-align:center}
+.vs__stats dt{font-size:12.5px; color:var(--muted-2)}
+.vs__stats dd{margin:4px 0 0; display:flex; justify-content:center; align-items:baseline; gap:8px; font-weight:700; color:var(--cream); font-variant-numeric:tabular-nums}
+.vs__stats dd span{color:var(--muted-2); font-weight:400}
+@media (max-width:560px){
+  .vs{grid-template-columns:1fr 1fr; padding:16px 12px 14px; gap:12px}
+  .vs__score{grid-column:1 / -1; order:-1}
+  .vs__stats{grid-template-columns:1fr}
+  .vs .ava--md{width:46px; height:46px; font-size:16px}
+}
 
 /* ---------- курсоры разделов: попкорн, статуэтка, калькулятор, календарь (только мышь) ---------- */
 .intro__sound[hidden]{display:none}
@@ -1005,6 +1158,14 @@ tbody tr.clickable{cursor:pointer}
   animation:panelIn 380ms var(--ease-out) both;
 }
 @keyframes panelIn{from{opacity:0; transform:translateY(18px) scale(.96)}to{opacity:1; transform:none}}
+/* телефон: окно выезжает снизу листом, сверху «ручка» — за шапку можно смахнуть вниз */
+@media (max-width:560px){
+  .modal{place-items:end stretch; padding:0 !important}
+  .modal__panel{width:100%; max-height:92dvh; border-radius:22px 22px 0 0; border-bottom:0; animation:sheetUp 380ms var(--ease-out) both}
+  .modal__panel::before{content:''; position:absolute; z-index:3; top:8px; left:50%; width:42px; height:4px; margin-left:-21px; border-radius:4px; background:rgba(246,236,214,.3)}
+  .modal__head{padding-top:24px !important}
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
 .modal__head{display:flex; align-items:flex-start; gap:var(--space-4); padding:var(--space-5); border-bottom:1px solid var(--line-soft); flex:none}
 .modal__title{font-family:var(--font-display); font-weight:600; text-transform:uppercase; font-size:clamp(24px,3.2vw,34px); margin:0; color:var(--cream); line-height:1.14}
 .modal__sub{margin:8px 0 0; color:var(--muted); font-size:14px}
@@ -1019,7 +1180,7 @@ tbody tr.clickable{cursor:pointer}
 .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:var(--space-3); margin-bottom:var(--space-5)}
 .kpi{border:1px solid var(--line-soft); border-radius:var(--r-md); padding:var(--space-4); background:rgba(246,236,214,.035)}
 .kpi__v{font-family:var(--font-body); font-weight:700; font-size:20px; color:var(--gold); font-variant-numeric:tabular-nums}
-.kpi__l{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted-2); margin-top:6px}
+.kpi__l{font-size:12.5px; letter-spacing:.01em; color:var(--muted-2); margin-top:6px; line-height:1.35}
 
 /* ---------- фон разделов: закреплён за окном, главный экран с видео его перекрывает ---------- */
 body::before{
@@ -1239,6 +1400,7 @@ html.bg-ready body::before{
           </span>
         </a>
       </nav>
+      <div class="intro__ticker" id="introTicker" role="region" aria-label="Свежие события" hidden></div>
     </div>
   </section>
 
@@ -1665,6 +1827,12 @@ function avatarHTML(name, size = 'lg'){
     ? `<img class="ava ava--${size}" src="${esc(src)}" alt="Фото: ${esc(name)}" width="96" height="96" decoding="async">`
     : `<span class="ava ava--${size}" aria-hidden="true">${esc(initials(name))}</span>`;
 }
+// оттенок кружка игрока — постоянный для имени (одно имя всегда одного цвета)
+function faceTone(name){
+  let h = 0;
+  for(const ch of String(name)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h % 5;
+}
 function initials(name){
   const p = String(name).trim().split(/\s+/);
   return ((p[0]?.[0] ?? '') + (p[1]?.[0] ?? '')).toUpperCase();
@@ -1909,6 +2077,22 @@ function histSorted(r){
 
 // Игры турнирных сезонов в том же виде, что игры пакетов. Место в игре — по игровому рейтингу турнира (fОчки),
 // рейтинг до/после — за весь сезон (лист «Рейтинг_турниры»)
+// номер игры из кода сезона: «Winter_07_2026» → 7, «Весна#01_05» → 5, «Лето#2026_04» → 4 (год пропускаем)
+function tourNum(code){
+  const n = String(code ?? '').match(/\d+/g)?.filter(x => x.length < 4).pop();
+  return n ? parseInt(n, 10) : null;
+}
+const gameTitle = g => g.tour ? (g.num ? `Игра №${g.num}` : String(g.n)) : `Игра №${g.n}`;
+
+// изменение рейтинга за последнее событие игрока (история — без штрафа)
+function lastStepHTML(r){
+  const h = histSorted(r);
+  if(h.length < 2) return '';
+  const d = h[h.length - 1].r - h[h.length - 2].r;
+  if(Math.abs(d) < .5) return '';
+  return `<span class="rt-step ${d > 0 ? 'delta--up' : 'delta--down'}" title="За последнее событие — ${esc(histName(h[h.length - 1].paket))}">${d > 0 ? '▲' : '▼'}${n0(Math.abs(d))}</span>`;
+}
+
 let tourCache = null;
 function tourGames(){
   if(tourCache?.db === DB) return tourCache.list;
@@ -1923,7 +2107,7 @@ function tourGames(){
       });
       players.forEach((p, i) => { p.pos = i && players[i - 1].f === p.f ? players[i - 1].pos : i + 1; });
       const date = items.map(i => i.date).filter(Boolean).sort()[0] || null;
-      const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, date, players};
+      const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, num:tourNum(code), date, players};
       list.push(g);
       players.forEach(p => {
         const s = stats.get(p.p) || {g:0, w:0};
@@ -1953,6 +2137,41 @@ const missPct = m => (1 - 1 / missFactor(m)) * 100;
 
 // расписание: лист «Расписание» в таблице, иначе — список SCHEDULE в коде
 const scheduleList = () => (DB?.schedule?.length ? DB.schedule : SCHEDULE);
+
+/* ---------------- главная: лента свежих событий ---------------- */
+function renderTicker(){
+  const box = $('#introTicker');
+  if(!box) return;
+  const items = [];
+  const every = allGames().filter(g => g.date).sort((a,b) => a.date.localeCompare(b.date) || nCmp(a.n, b.n));
+  const last = every[every.length - 1];
+  if(last?.players[0]) items.push({icon: last.tour ? 'i-trophy' : 'i-film', game: gameKey(last),
+    html:`Последняя игра · ${esc(last.paket)} · ${esc(gameTitle(last))} — победа: <b>${esc(last.players[0].p)}</b>`});
+  const leader = DB.rating.filter(r => r.r != null).sort((a,b) => b.r - a.r)[0];
+  if(leader) items.push({icon:'i-chart', player:leader.p, html:`Лидер рейтинга — <b>${esc(leader.p)}</b> · ${n0(leader.r)}`});
+  const yl = DB.year.slice().sort((a,b) => (a.pos ?? 999) - (b.pos ?? 999))[0];
+  if(yl) items.push({icon:'i-trophy', player:yl.p, html:`Турнир 2026 — впереди <b>${esc(yl.p)}</b> · ${n0(yl.pts)}`});
+  // действующая серия побед: подряд с последней игры игрока
+  const byPlayer = new Map();
+  every.forEach(g => g.players.forEach(p => { if(!byPlayer.has(p.p)) byPlayer.set(p.p, []); byPlayer.get(p.p).push(p.pos === 1 && g.players.length > 1); }));
+  let streak = null;
+  byPlayer.forEach((wins, name) => { let n = 0; for(let i = wins.length - 1; i >= 0 && wins[i]; i--) n++; if(n >= 2 && (!streak || n > streak.n)) streak = {n, name}; });
+  if(streak) items.push({icon:'i-star', player:streak.name, html:`Идёт серия побед — <b>${esc(streak.name)}</b> · ${streak.n} подряд`});
+  // взлёт за последнее событие рейтинга
+  const order = histOrder(), lastEvent = order[order.length - 1];
+  let jump = null;
+  DB.rating.forEach(r => { const h = histSorted(r); if(h.length < 2 || h[h.length - 1].paket !== lastEvent) return;
+    const d = h[h.length - 1].r - h[h.length - 2].r; if(!jump || d > jump.d) jump = {d, name:r.p}; });
+  if(jump && jump.d >= 1) items.push({icon:'i-chart', player:jump.name, html:`Взлёт за ${esc(histName(lastEvent))} — <b>${esc(jump.name)}</b> ▲${n0(jump.d)}`});
+  const today = new Date().toISOString().slice(0,10);
+  const next = scheduleList().filter(x => (x.date || '') >= today).sort((a,b) => a.date.localeCompare(b.date))[0];
+  if(next) items.push({icon:'i-calendar', goto:'schedule', html:`Ближайшая игра — <b>${fmtDate(next.date)}${next.time ? ' · ' + esc(next.time) : ''}</b> ${esc(next.title || '')}`});
+  if(!items.length){ box.hidden = true; box.innerHTML = ''; return; }
+  const group = copy => items.map(it => `<button type="button" class="ticker-item"${copy ? ' tabindex="-1"' : ''} ${it.game ? `data-game="${esc(it.game)}"` : it.player ? `data-open-player="${esc(it.player)}"` : `data-goto="${it.goto}"`}><svg width="15" height="15" aria-hidden="true"><use href="#${it.icon}"/></svg><span>${it.html}</span></button>`)
+    .join('<span class="ticker-sep" aria-hidden="true">✦</span>');
+  box.hidden = false;
+  box.innerHTML = `<div class="ticker-track"><div class="ticker-group">${group(false)}</div><div class="ticker-group" aria-hidden="true">${group(true)}</div></div>`;
+}
 
 /* ---------------- ИГРЫ ---------------- */
 function paketOrder(a,b){
@@ -2000,16 +2219,16 @@ function renderGames(){
     const w = g.players[0];
     const featured = i === 0 && state.paket === 'all' && !state.gq.trim() && state.gsort === 'date-desc';
     const faces = g.players.slice(0,4).map(p =>
-      `<span class="face" title="${esc(p.p)}">${esc(initials(p.p))}</span>`).join('');
+      `<span class="face face--${faceTone(p.p)}" title="${esc(p.p)}">${esc(initials(p.p))}</span>`).join('');
     const extra = g.players.length > 4 ? `<span class="face face--more">+${g.players.length-4}</span>` : '';
-    return `<button class="ticket${featured ? ' ticket--featured' : ''}" type="button" aria-haspopup="dialog" data-game="${esc(gameKey(g))}">
+    return `<button class="ticket${featured ? ' ticket--featured' : ''}${g.tour ? ' ticket--tour' : ''}" type="button" aria-haspopup="dialog" data-game="${esc(gameKey(g))}">
       <span class="ticket__ring" aria-hidden="true"></span>
       <span class="ticket__top">
-        <span class="badge"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
+        <span class="badge${g.tour ? ' badge--tour' : ''}"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
         <span class="ticket__date">${fmtDate(g.date)}</span>
       </span>
       ${featured ? '<span class="ticket__eyebrow">Последняя игра</span>' : ''}
-      <span class="ticket__title">${g.tour ? esc(g.n) : `Игра №${g.n}`}</span>
+      <span class="ticket__title"${g.tour ? ` title="${esc(g.n)}"` : ''}>${esc(gameTitle(g))}</span>
       ${featured ? top3HTML(g) : `<span class="ticket__winner">
         <svg width="17" height="17" aria-hidden="true"><use href="#i-trophy"/></svg>
         <span class="ticket__wname">${esc(w ? w.p : '—')}</span>
@@ -2051,8 +2270,8 @@ function openTourGame(seasonKey, code, {push = true} = {}){
     </table></div></div>
     <p class="result-count" style="margin-top:14px">Место — по игровому рейтингу турнира (fОчки).${hasR ? ' Рейтинг пересчитывается один раз за сезон, после его последней игры, поэтому Δ — за весь сезон.' : ''}
       <a href="#tournament/${encodeURIComponent(g.season)}">Вся таблица сезона</a></p>`;
-  openModal(`${g.paket} · ${g.n}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')}`, body,
-    {route:`tgame/${encodeURIComponent(g.season)}/${encodeURIComponent(g.n)}`, push, shareText:`${g.paket} · ${g.n} — результаты KinOlega Quiz`});
+  openModal(`${g.paket} · ${gameTitle(g)}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')} · ${g.n}`, body,
+    {route:`tgame/${encodeURIComponent(g.season)}/${encodeURIComponent(g.n)}`, push, shareText:`${g.paket} · ${gameTitle(g)} — результаты KinOlega Quiz`});
 }
 function openGame(key, {push = true} = {}){
   if(key.startsWith('tour|')){
@@ -2325,11 +2544,15 @@ function setFullStatsMax(on){
 let fsReturnFocus = null;
 
 /* ---------------- бенто-сводка турнира ---------------- */
-function bentoTile({label, value, sub = '', icon, wide = false, accent = false}){
+function bentoTile({label, value, sub = '', icon, wide = false, accent = false, progress = null}){
+  // progress (0…1) — тонкая шкала под числом, чтобы плитка показывала долю, а не только цифру
+  const bar = progress == null ? '' :
+    `<span class="bento__bar" aria-hidden="true"><i class="bar" data-sx="${Math.max(0, Math.min(1, progress)).toFixed(3)}"></i></span>`;
   return `<article class="bento__tile${wide ? ' bento__tile--wide' : ''}${accent ? ' bento__tile--accent' : ''}" role="listitem">
     <span class="bento__icon" aria-hidden="true"><svg width="18" height="18"><use href="#${icon}"/></svg></span>
     <p class="bento__label">${label}</p>
     <p class="bento__value">${value}</p>
+    ${bar}
     ${sub ? `<p class="bento__sub" title="${sub}">${sub}</p>` : ''}
   </article>`;
 }
@@ -2344,10 +2567,10 @@ function renderTourBento(){
       const avg = rows.reduce((sum, r) => sum + (r.pts || 0), 0) / rows.length;
       tiles = [
         {label:'Участников', value:tickerHTML(rows.length), icon:'i-users'},
-        {label:'Сезонов сыграно', value:tickerHTML(DB.seasons.length), sub:'из четырёх', icon:'i-calendar'},
+        {label:'Сезонов сыграно', value:tickerHTML(DB.seasons.length), sub:'из четырёх', icon:'i-calendar', progress:DB.seasons.length / 4},
         {label:'Отрыв лидера', value:tickerHTML(Math.max(0, (first.pts || 0) - ((second && second.pts) || 0))),
          sub: second ? `${esc(first.p)} впереди ${esc(second.p)}` : esc(first.p), icon:'i-trophy', wide:true, accent:true},
-        {label:'Без штрафов', value:tickerHTML(clean), sub:`${Math.round(clean / rows.length * 100)}% участников`, icon:'i-star', wide:true},
+        {label:'Без штрафов', value:tickerHTML(clean), sub:`${Math.round(clean / rows.length * 100)}% участников`, icon:'i-star', wide:true, progress:clean / rows.length},
         {label:'Средние турнирные очки', value:tickerHTML(Math.round(avg)), sub:'на участника', icon:'i-chart', wide:true},
       ];
     }
@@ -2370,7 +2593,7 @@ function renderTourBento(){
         {label:'Рекорд номинальных очков', value:tickerHTML(record.pts || 0), sub:`${esc(record.p)} · ${esc(record.game || '')}`, icon:'i-trophy', wide:true, accent:true},
         hard ? {label:'Самый сложный вопрос', value:`№${hard.q + 1}`,
                 sub: hard.took ? `взяли ${hard.took} из ${items.length} · ${Math.round(hard.took / items.length * 100)}%` : 'никто не взял',
-                icon:'i-star', wide:true}
+                icon:'i-star', wide:true, progress:hard.took / items.length}
              : {label:'Вопросов', value:'—', icon:'i-star', wide:true},
         {label:'Больше всего ответов', value:tickerHTML(mostAns.ans || 0), sub:esc(mostAns.p), icon:'i-chart', wide:true},
       ];
@@ -2378,6 +2601,7 @@ function renderTourBento(){
   }
   box.innerHTML = tiles.map(bentoTile).join('');
   observeTickers(box);
+  $$('.bar', box).forEach(b => barIO.observe(b));
 }
 
 /* ---------------- графики разделов ---------------- */
@@ -2513,10 +2737,14 @@ function renderRatingLines(){
     const last = pts[pts.length - 1];
     return `<g class="series${i === 0 ? ' is-leader' : ''}" data-series="${i}"><path class="hit" d="${d}"/><path d="${d}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="5"/></g>`;
   }).join('');
+  // точки для подсказки: координаты в системе viewBox
+  fig._vb = [W, H];
+  fig._pts = top.flatMap((r, i) => histSorted(r).map(h => ({x:x(h.paket), y:yv(h.r), s:i, text:`${r.p} · ${histName(h.paket)} · ${n0(h.r)}`})));
   const mid = pakets[Math.floor((pakets.length - 1) / 2)];
   const xl = [...new Set([pakets[0], mid, pakets[pakets.length - 1]])];
   $('#rlPlot').innerHTML = `
     <svg class="chart__svg" viewBox="0 0 ${W} ${H}" aria-hidden="true">${grid}${lines}</svg>
+    <span class="chart__marker" hidden></span><div class="chart__tip" hidden></div>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmax) / H * 100).toFixed(2)}%">${n0(vmax)}</span>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmin) / H * 100).toFixed(2)}%">${n0(vmin)}</span>
     ${xl.map(p => `<span class="chart__xl" style="left:${(x(p) / W * 100).toFixed(2)}%">${esc(histLabel(p))}</span>`).join('')}`;
@@ -2537,7 +2765,7 @@ function renderRecords(){
   const grid = $('#recordsGrid');
   if(!grid) return;
   const who = n => `<button class="row-btn" type="button" data-open-player="${esc(n)}" aria-haspopup="dialog">${esc(n)}</button>`;
-  const gameBtn = g => `<button class="rec__game" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${esc(g.paket)} · ${g.tour ? esc(g.n) : '№' + g.n}</button>`;
+  const gameBtn = g => `<button class="rec__game" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${esc(g.paket)} · ${g.tour ? esc(gameTitle(g)) : '№' + g.n}</button>`;
   const byDate = (a,b) => (a.date||'').localeCompare(b.date||'') || a.paket.localeCompare(b.paket) || nCmp(a.n, b.n);
   const games = DB.games.slice().sort(byDate);     // очки, взлёт и финиш — по пакетам: у турнира другой номинал
   const every = allGames().slice().sort(byDate);   // серии, победы и число игр — вместе с турнирными играми
@@ -2693,7 +2921,7 @@ function renderRating(){
     return `<tr class="clickable" data-player="${esc(r.p)}">
       <td><span class="rank ${pos<=3?'rank--'+pos:''}">${pos}</span></td>
       <td class="tname"><button class="row-btn" type="button" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span></td>
-      <td class="num" style="color:var(--gold);font-weight:700">${n0(r.r)}</td>
+      <td class="num" style="color:var(--gold);font-weight:700">${n0(r.r)}${lastStepHTML(r)}</td>
       <td class="num hide-sm">${n0(W)}</td>
       <td class="num hide-sm">${n0(G)}</td>
       <td class="num tmuted hide-md">${n0(r.avgP)}</td>
@@ -2703,6 +2931,65 @@ function renderRating(){
   renderRatingLines();
   renderRecords();
 }
+/* ---------------- профиль игрока: график, форма, достижения ---------------- */
+function profileChartHTML(hist){
+  if(hist.length < 2) return '';
+  const W = 640, H = 180, L = 10, R = 10, T = 18, B = 14;
+  const vals = hist.map(h => h.r), vmin = Math.min(...vals), vmax = Math.max(...vals), pad = (vmax - vmin) * .14 || 10;
+  const lo = vmin - pad, hi = vmax + pad;
+  const x = i => L + i * (W - L - R) / (hist.length - 1);
+  const y = v => T + (hi - v) * (H - T - B) / (hi - lo);
+  const pts = hist.map((h, i) => [x(i), y(h.r)]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const area = `${line} L${pts[pts.length - 1][0].toFixed(1)} ${H} L${pts[0][0].toFixed(1)} ${H} Z`;
+  const grid = [vmax, (vmax + vmin) / 2, vmin].map(v => `<line class="pchart__grid" x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`).join('');
+  const dots = hist.map((h, i) => {
+    const season = SEASON_COL.test(h.paket), prev = i ? hist[i - 1].r : null;
+    const d = prev == null ? '' : ` · ${h.r - prev >= 0 ? '▲' : '▼'} ${n0(Math.abs(h.r - prev))}`;
+    return `<circle class="pchart__dot${season ? ' is-season' : ''}${i === hist.length - 1 ? ' is-last' : ''}" cx="${pts[i][0].toFixed(1)}" cy="${pts[i][1].toFixed(1)}" r="${season ? 5.5 : 4}" data-tip="${esc(histName(h.paket))} · ${n0(h.r)}${d}"/>`;
+  }).join('');
+  return `<figure class="pchart">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Рейтинг: с ${n0(vals[0])} до ${n0(vals[vals.length - 1])}, пик ${n0(vmax)}">
+        <defs><linearGradient id="pcFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ECB024" stop-opacity=".30"/><stop offset="1" stop-color="#ECB024" stop-opacity="0"/></linearGradient></defs>
+        ${grid}<path d="${area}" fill="url(#pcFill)"/><path class="pchart__line" d="${line}"/>${dots}
+      </svg>
+      <div class="pchart__tip" hidden></div>
+      <figcaption class="pchart__cap num">
+        <span>${esc(histName(hist[0].paket))} · ${n0(vals[0])}</span>
+        <span class="pchart__legend"><i></i>пакет<i class="lg-season"></i>турнир · пик ${n0(vmax)}</span>
+        <span>${esc(histName(hist[hist.length - 1].paket))} · ${n0(vals[vals.length - 1])}</span>
+      </figcaption>
+    </figure>`;
+}
+// форма: места в последних 5 играх, свежие справа
+function formHTML(played){
+  const last = played.slice(0, 5).reverse();
+  if(!last.length) return '';
+  const label = x => x.season ? `Турнир · ${x.g.paket}${tourNum(x.g.n) ? ' · Игра №' + tourNum(x.g.n) : ''}` : `${x.g.paket} · Игра №${x.g.n}`;
+  return `<div class="form" role="list" aria-label="Места в последних играх">${last.map(x =>
+    `<span class="form__chip form__chip--${x.me.pos <= 3 ? x.me.pos : 'x'}" role="listitem" title="${esc(label(x))} · ${fmtDate(x.g.date)} · ${x.me.pos} место">${x.me.pos}</span>`).join('')}</div>`;
+}
+// достижения — только то, что честно следует из данных
+function badgesHTML(name, r, played, hist){
+  const out = [];
+  if(r?.rank === 1) out.push(['i-trophy', 'Лидер рейтинга']);
+  else if(r?.rank <= 3) out.push(['i-trophy', 'Топ-3 рейтинга']);
+  else if(r?.rank <= 10) out.push(['i-star', 'Топ-10 рейтинга']);
+  let cur = 0, streak = 0;
+  played.slice().reverse().forEach(x => { if(x.me.pos === 1){ cur++; streak = Math.max(streak, cur); } else cur = 0; });
+  if(streak >= 3) out.push(['i-trophy', `Серия побед: ${streak}`]);
+  const top = DB.games.reduce((m, g) => Math.max(m, ...g.players.map(p => p.pts || 0)), 0);
+  if(top > 0 && played.some(x => !x.season && x.me.pts === top)) out.push(['i-star', 'Рекорд очков за игру']);
+  if(DB.seasons.length && DB.seasons.every(se => se.items.some(i => i.p === name))) out.push(['i-calendar', `Все сезоны турнира (${DB.seasons.length})`, 'teal']);
+  if(r && r.miss === 0) out.push(['i-calendar', 'Без пропусков', 'teal']);
+  if(played.length >= 20) out.push(['i-ticket', `${played.length} игр в архиве`]);
+  else if(played.length >= 10) out.push(['i-ticket', '10+ игр']);
+  if(hist.length >= 3 && hist[hist.length - 1].r >= Math.max(...hist.map(h => h.r)) - .5) out.push(['i-chart', 'На пике рейтинга', 'teal']);
+  if(!out.length) return '';
+  return `<ul class="badges" aria-label="Достижения">${out.map(([icon, text, tone]) =>
+    `<li class="badge-ach${tone ? ' badge-ach--' + tone : ''}"><svg width="15" height="15" aria-hidden="true"><use href="#${icon}"/></svg>${esc(text)}</li>`).join('')}</ul>`;
+}
+
 function openPlayer(name, {push = true} = {}){
   const r = DB.rating.find(x => x.p === name);
   const played = [];
@@ -2722,26 +3009,30 @@ function openPlayer(name, {push = true} = {}){
   const pkgPlayed = played.filter(x => !x.season);
   const best = pkgPlayed.length ? pkgPlayed.reduce((m,x) => Math.max(m, x.me.pts || 0), 0) : null;
 
-  const kpis = `<div class="kpis">
-    <div class="kpi"><div class="kpi__v">${r ? n0(r.r) : '—'}</div><div class="kpi__l">Рейтинг</div></div>
-    <div class="kpi"><div class="kpi__v">${r?.rank ?? '—'}</div><div class="kpi__l">Место</div></div>
-    <div class="kpi"><div class="kpi__v">${played.length || n0(r?.g)}</div><div class="kpi__l">Игр</div></div>
-    <div class="kpi"><div class="kpi__v">${wins || n0(r?.w)}</div><div class="kpi__l">Побед</div></div>
-    <div class="kpi"><div class="kpi__v">${n0(best)}</div><div class="kpi__l">Лучший результат</div></div>
-    <div class="kpi"><div class="kpi__v">${n0(r?.avgP)}</div><div class="kpi__l">Средние очки</div></div>
-  </div>`;
-
   const hist = histSorted(r);
-  const chart = hist.length > 1 ? `
-    <section style="margin-bottom:24px">
-      <p class="field__label" style="margin-bottom:10px">Динамика рейтинга · пакеты и турнир</p>
-      <div style="border:1px solid var(--line-soft);border-radius:12px;padding:18px 16px 12px;background:rgba(246,236,214,.03)">
-        ${sparkline(hist.map(h => h.r), 600, 90)}
-        <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--muted-2)" class="num">
-          <span>${esc(histName(hist[0].paket))} · ${n0(hist[0].r)}</span>
-          <span>${esc(histName(hist[hist.length-1].paket))} · ${n0(hist[hist.length-1].r)}</span>
-        </div>
+  // шапка профиля: аватар с местом, рейтинг с изменением за последнее событие, форма, достижения, короткая сводка
+  const profileHead = actions => `
+    <div class="pro">
+      <div class="pro__ava">${avatarHTML(name)}${r?.rank ? `<span class="pro__rank${r.rank <= 3 ? ' pro__rank--' + r.rank : ''}" title="Место в сквозном рейтинге">${r.rank}</span>` : ''}</div>
+      <div class="pro__main">
+        <p class="pro__label">${r ? 'Сквозной рейтинг' : 'Сквозного рейтинга пока нет — только турнир'}</p>
+        ${r ? `<p class="pro__rating">${n0(r.r)}${lastStepHTML(r)}</p>` : ''}
+        ${formHTML(played)}
       </div>
+      ${actions}
+    </div>
+    ${badgesHTML(name, r, played, hist)}
+    <div class="kpis kpis--compact">
+      <div class="kpi"><div class="kpi__v">${played.length || n0(r?.g)}</div><div class="kpi__l">Игр</div></div>
+      <div class="kpi"><div class="kpi__v">${wins || n0(r?.w)}</div><div class="kpi__l">Побед</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(best)}</div><div class="kpi__l">Лучший результат</div></div>
+      <div class="kpi"><div class="kpi__v">${n0(r?.avgP)}</div><div class="kpi__l">Средние очки</div></div>
+    </div>`;
+
+  const chart = hist.length > 1 ? `
+    <section class="pro__chart">
+      <p class="field__label" style="margin-bottom:10px">Динамика рейтинга · пакеты и турнир</p>
+      ${profileChartHTML(hist)}
     </section>` : '';
 
   const table = played.length ? `
@@ -2752,7 +3043,7 @@ function openPlayer(name, {push = true} = {}){
       <tbody>${played.map(x => `<tr>
         <td class="num tmuted hide-sm">${fmtDate(x.g.date)}</td>
         <td>${x.season
-          ? `<a href="#tgame/${encodeURIComponent(x.season.key)}/${encodeURIComponent(x.g.n)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${esc(x.g.n || '')}</span>`
+          ? `<a href="#tgame/${encodeURIComponent(x.season.key)}/${encodeURIComponent(x.g.n)}">Турнир · ${esc(x.g.paket)}</a> <span class="tmuted">${tourNum(x.g.n) ? 'Игра №' + tourNum(x.g.n) : esc(x.g.n || '')}</span>`
           : `${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span>`}<span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
         <td class="num">${n0(x.me.pts)}</td>
@@ -2760,9 +3051,9 @@ function openPlayer(name, {push = true} = {}){
         <td>${deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
-  const actions = `<div class="modal__actions">${r ? `<button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка с результатом</button>` : ''}${played.length ? `<button class="btn btn--ghost btn--sm" type="button" data-h2h="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Личные встречи</button>` : ''}</div>`;
+  const actions = `<div class="modal__actions">${r ? `<button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка<span class="btn__more"> с результатом</span></button>` : ''}${played.length ? `<button class="btn btn--ghost btn--sm" type="button" data-h2h="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Личные встречи</button>` : ''}</div>`;
   const penalty = r && r.miss > 2 ? ` · штраф −${nf1.format(missPct(r.miss))}%` : '';
-  openModal(name, r ? `Место ${r.rank ?? '—'} в сквозном рейтинге · пропусков: ${n0(r.miss)}${penalty}` : 'Карточка игрока', `<div class="phero">${avatarHTML(name)}${actions}</div>` + kpis + chart + table,
+  openModal(name, r ? `Место ${r.rank ?? '—'} в сквозном рейтинге · пропусков: ${n0(r.miss)}${penalty}` : 'Карточка игрока', profileHead(actions) + chart + table,
     {route:`player/${encodeURIComponent(name)}`, push, shareText:`${name} — ${r ? `${r.rank ?? '—'} место, рейтинг ${n0(r.r)}` : 'карточка игрока'} · KinOlega Quiz`});
 }
 
@@ -3077,6 +3368,15 @@ $('#gameSearch').addEventListener('input', e => {
   gt = setTimeout(() => { state.gq = v; renderGames(); }, 160);
 });
 $('#gameSort').addEventListener('change', e => { state.gsort = e.target.value; renderGames(); });
+// строка пакетов на компьютере крутится обычным колесом мыши
+$('#paketChips').addEventListener('wheel', e => {
+  const el = e.currentTarget;
+  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX) || el.scrollWidth <= el.clientWidth) return;
+  const atStart = el.scrollLeft <= 0 && e.deltaY < 0, atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1 && e.deltaY > 0;
+  if(atStart || atEnd) return;   // у края — отдаём прокрутку странице
+  el.scrollLeft += e.deltaY;
+  e.preventDefault();
+}, {passive:false});
 $('#gamesReset').addEventListener('click', () => {
   state.gq = ''; state.paket = 'all'; state.gmonth = ''; $('#gameSearch').value = '';
   renderPaketChips(); renderGames();
@@ -3089,6 +3389,89 @@ $('#ratingSearch').addEventListener('input', e => {
 $('#ratingFilter').addEventListener('change', e => { state.rfilter = e.target.value; renderRating(); });
 $('#h2hA').addEventListener('change', e => { state.h2hA = e.target.value; renderH2HBody(); });
 $('#h2hB').addEventListener('change', e => { state.h2hB = e.target.value; renderH2HBody(); });
+// подсказка на графике рейтинга в профиле: ближайшая по горизонтали точка (мышь и палец)
+function pchartTip(e){
+  const fig = e.target.closest?.('.pchart');
+  if(!fig) return;
+  let best = null, bd = Infinity;
+  fig.querySelectorAll('.pchart__dot').forEach(d => {
+    const b = d.getBoundingClientRect(), dx = Math.abs(b.left + b.width / 2 - e.clientX);
+    if(dx < bd){ bd = dx; best = d; }
+  });
+  if(!best) return;
+  const tip = fig.querySelector('.pchart__tip'), fb = fig.getBoundingClientRect(), b = best.getBoundingClientRect();
+  fig.querySelectorAll('.pchart__dot.is-active').forEach(d => d.classList.remove('is-active'));
+  best.classList.add('is-active');
+  tip.textContent = best.dataset.tip;
+  tip.hidden = false;
+  const half = tip.offsetWidth / 2 + 4;
+  tip.style.left = Math.min(Math.max(b.left + b.width / 2 - fb.left, half), fb.width - half) + 'px';
+  tip.style.top = (b.top + b.height / 2 - fb.top) + 'px';
+}
+document.addEventListener('pointermove', pchartTip, {passive:true});
+
+// «Рейтинг топ-10»: подсказка у ближайшей к курсору точки и подсветка линии этого игрока
+function rlTip(e){
+  const fig = $('#ratingLines'), plot = $('#rlPlot'), svg = $('svg', plot), tip = $('.chart__tip', plot), mark = $('.chart__marker', plot);
+  if(!fig?._pts?.length || !svg || !tip) return;
+  const b = svg.getBoundingClientRect(), [W, H] = fig._vb;
+  const px = (e.clientX - b.left) * W / b.width, py = (e.clientY - b.top) * H / b.height;
+  let best = null, bd = Infinity;
+  fig._pts.forEach(p => { const d = (p.x - px) ** 2 + ((p.y - py) * .7) ** 2; if(d < bd){ bd = d; best = p; } });
+  if(!best) return;
+  const pb = plot.getBoundingClientRect(), cx = b.left - pb.left + best.x * b.width / W, cy = b.top - pb.top + best.y * b.height / H;
+  tip.textContent = best.text; tip.hidden = false; mark.hidden = false;
+  const half = tip.offsetWidth / 2 + 4;
+  tip.style.left = Math.min(Math.max(cx, half), pb.width - half) + 'px'; tip.style.top = cy + 'px';
+  mark.style.left = cx + 'px'; mark.style.top = cy + 'px';
+  if(!$('#rlLegend [aria-pressed="true"]')){
+    fig.classList.add('has-focus');
+    $$('[data-series]', fig).forEach(el => el.classList.toggle('is-focus', el.dataset.series === String(best.s)));
+  }
+}
+$('#rlPlot').addEventListener('pointermove', rlTip, {passive:true});
+$('#rlPlot').addEventListener('pointerdown', rlTip, {passive:true});
+$('#rlPlot').addEventListener('pointerleave', () => {
+  const plot = $('#rlPlot');
+  $('.chart__tip', plot)?.setAttribute('hidden', '');
+  $('.chart__marker', plot)?.setAttribute('hidden', '');
+  if(!$('#rlLegend [aria-pressed="true"]')) $('#ratingLines').dispatchEvent(new CustomEvent('chart:reset'));
+});
+
+// телефон: окно — лист снизу; смахнуть вниз за шапку — закрыть
+(() => {
+  const panel = $('.modal__panel'), head = $('.modal__head');
+  if(!panel || !head) return;
+  let y0 = null, dy = 0;
+  head.addEventListener('touchstart', e => {
+    if(innerWidth > 560) return;
+    y0 = e.touches[0].clientY; dy = 0; panel.style.transition = 'none';
+  }, {passive:true});
+  head.addEventListener('touchmove', e => {
+    if(y0 == null) return;
+    dy = Math.max(0, e.touches[0].clientY - y0);
+    panel.style.transform = `translateY(${dy}px)`;
+  }, {passive:true});
+  head.addEventListener('touchend', () => {
+    if(y0 == null) return;
+    y0 = null;
+    panel.style.transition = 'transform .22s ease';
+    if(dy > 90){
+      panel.style.transform = 'translateY(100%)';
+      setTimeout(() => { closeModal(); panel.style.transform = ''; panel.style.transition = ''; }, 210);
+    } else {
+      panel.style.transform = '';
+      setTimeout(() => { panel.style.transition = ''; }, 240);
+    }
+  });
+})();
+document.addEventListener('pointerdown', pchartTip, {passive:true});
+document.addEventListener('pointerout', e => {
+  const fig = e.target.closest?.('.pchart');
+  if(!fig || fig.contains(e.relatedTarget) || e.pointerType === 'touch') return;
+  fig.querySelector('.pchart__tip').hidden = true;
+  fig.querySelectorAll('.pchart__dot.is-active').forEach(d => d.classList.remove('is-active'));
+});
 document.addEventListener('click', e => {
   const h = e.target.closest('[data-h2h]');
   if(!h) return;
@@ -3356,6 +3739,7 @@ async function filmTo(name){
 /* ---------------- boot ---------------- */
 function renderAll(){
   renderHero();
+  renderTicker();
   renderPaketChips();
   renderGames();
   renderTourSeg();
@@ -3417,13 +3801,27 @@ function renderH2HBody(){
   const pk = meet.filter(x => !x.g.tour);
   const avg = side => pk.length ? pk.reduce((s,x) => s + (x[side].pts || 0), 0) / pk.length : null;
   const cell = (me, other) => `<span class="rank ${me.pos<=3?'rank--'+me.pos:''}">${me.pos}</span> <span class="num${me.pos < other.pos ? ' h2h__win' : ''}">${n0(me.f ?? me.pts)}</span>`;
+  const ra = DB.rating.find(x => x.p === A), rb = DB.rating.find(x => x.p === B);
+  const share = aUp + bUp ? aUp / (aUp + bUp) : .5;
+  const side = (n, rr, cls) => `<div class="vs__side ${cls}">
+      ${avatarHTML(n, 'md')}
+      <button class="row-btn vs__name" type="button" data-open-player="${esc(n)}" aria-haspopup="dialog">${esc(n)}</button>
+      <span class="vs__meta">${rr?.r != null ? `${rr.rank ?? '—'} место · ${n0(rr.r)}` : 'без сквозного рейтинга'}</span>
+    </div>`;
   body.innerHTML = `
-    <div class="kpis">
-      <div class="kpi"><div class="kpi__v">${meet.length}</div><div class="kpi__l">${plural(meet.length,'Встреча','Встречи','Встреч')}</div></div>
-      <div class="kpi"><div class="kpi__v">${aUp}</div><div class="kpi__l">Выше — ${esc(A)}</div></div>
-      <div class="kpi"><div class="kpi__v">${bUp}</div><div class="kpi__l">Выше — ${esc(B)}</div></div>
-      <div class="kpi"><div class="kpi__v">${n0(avg('a'))}</div><div class="kpi__l">Ср. очки в пакетах — ${esc(A)}</div></div>
-      <div class="kpi"><div class="kpi__v">${n0(avg('b'))}</div><div class="kpi__l">Ср. очки в пакетах — ${esc(B)}</div></div>
+    <div class="vs">
+      ${side(A, ra, 'vs__side--a')}
+      <div class="vs__score" role="img" aria-label="${esc(A)} выше в ${aUp}, ${esc(B)} — в ${bUp} из ${meet.length}">
+        <span class="vs__num${aUp > bUp ? ' is-lead' : ''}">${aUp}</span><span class="vs__colon" aria-hidden="true">:</span><span class="vs__num${bUp > aUp ? ' is-lead' : ''}">${bUp}</span>
+        <span class="vs__caption">${meet.length} ${plural(meet.length,'встреча','встречи','встреч')} · кто выше в игре</span>
+      </div>
+      ${side(B, rb, 'vs__side--b')}
+      <div class="vs__bar" aria-hidden="true"><i style="width:${(share * 100).toFixed(1)}%"></i></div>
+      <dl class="vs__stats">
+        <div><dt>Средние очки в пакетах</dt><dd><b>${n0(avg('a'))}</b><span>—</span><b>${n0(avg('b'))}</b></dd></div>
+        <div><dt>Победы в общих играх</dt><dd><b>${meet.filter(x => x.a.pos === 1).length}</b><span>—</span><b>${meet.filter(x => x.b.pos === 1).length}</b></dd></div>
+        <div><dt>Последняя встреча</dt><dd>${fmtDate(meet[0].g.date)}</dd></div>
+      </dl>
     </div>
     <div class="table-wrap"><div class="table-scroll"><table>
       <caption class="sr-only">Игры, где встречались ${esc(A)} и ${esc(B)}</caption>
@@ -3431,7 +3829,7 @@ function renderH2HBody(){
         <th scope="col">${esc(A)}</th><th scope="col">${esc(B)}</th></tr></thead>
       <tbody>${meet.map(x => `<tr>
         <td class="num tmuted hide-sm">${fmtDate(x.g.date)}</td>
-        <td><button class="row-btn" type="button" data-game="${esc(gameKey(x.g))}" aria-haspopup="dialog">${esc(x.g.paket)} ${x.g.tour ? esc(x.g.n) : '№' + x.g.n}</button><span class="row-meta num">${fmtDate(x.g.date)}</span></td>
+        <td><button class="row-btn" type="button" data-game="${esc(gameKey(x.g))}" aria-haspopup="dialog">${esc(x.g.paket)} · ${esc(gameTitle(x.g))}</button><span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td>${cell(x.a, x.b)}</td>
         <td>${cell(x.b, x.a)}</td></tr>`).join('')}</tbody>
     </table></div></div>
