@@ -31,7 +31,7 @@
    ============================================================ */
 :root{
   /* палитра — 5 цветов */
-  --night:#000A20; --navy:#0B1A40; --gold:#ECB024; --cream:#F6ECD6; --teal:#6FA8A8;
+  --night:#030E2E; --navy:#0E2358; --gold:#ECB024; --cream:#F6ECD6; --teal:#6FA8A8;
   /* производные — только смеси этих пяти (посчитаны заранее, чтобы работать и в старых браузерах) */
   --gold-300:#F1CB74;   /* золото 55% + крем */
   --gold-400:var(--gold);
@@ -39,15 +39,15 @@
   --ink:var(--cream);
   --muted:#C0BAAE;      /* крем 78% + ночь */
   --muted-2:#999691;    /* крем 62% + ночь */
-  --line:rgba(236,176,36,.22);
+  --line:rgba(214,168,90,.30);
   --line-soft:rgba(246,236,214,.13);
 
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px;
   --space-6:32px; --space-7:48px; --space-8:64px; --space-9:96px;
 
   --r-sm:6px; --r-md:10px; --r-lg:16px; --r-xl:24px;
-  --shadow-1:0 6px 18px -8px rgba(0,10,32,.8);
-  --shadow-2:0 24px 50px -24px rgba(0,10,32,.95);
+  --shadow-1:0 6px 18px -8px rgba(4,15,48,.8);
+  --shadow-2:0 24px 50px -24px rgba(4,15,48,.95);
   --shadow-glow:0 10px 30px -12px rgba(236,176,36,.8);
 
   --t-fast:140ms; --t-mid:280ms; --t-slow:620ms;
@@ -96,7 +96,7 @@ input,select{font:inherit}
 /* ---------- header ---------- */
 .site-header{
   position:sticky; top:0; z-index:60; height:var(--nav-h); display:flex; align-items:center;
-  background:linear-gradient(to bottom, rgba(0,10,32,.95), rgba(0,10,32,.74));
+  background:linear-gradient(to bottom, rgba(7,22,64,.94), rgba(8,24,70,.76));
   backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
   border-bottom:1px solid var(--line-soft);
 }
@@ -111,7 +111,7 @@ input,select{font:inherit}
 }
 .brand__mark::before,.brand__mark::after{
   content:''; position:absolute; top:0; bottom:0; width:4px; opacity:.5;
-  background:repeating-linear-gradient(to bottom, rgba(0,10,32,.9) 0 3px, transparent 3px 7px);
+  background:repeating-linear-gradient(to bottom, rgba(4,15,48,.9) 0 3px, transparent 3px 7px);
 }
 .brand__mark::before{left:2px}
 .brand__mark::after{right:2px}
@@ -144,7 +144,7 @@ input,select{font:inherit}
 /* ---------- intro: видео-заставка ---------- */
 .site-header{transition:background var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease)}
 .site-header.is-clear{
-  background:linear-gradient(to bottom, rgba(0,10,32,.62), rgba(0,10,32,0));
+  background:linear-gradient(to bottom, rgba(4,15,48,.62), rgba(4,15,48,0));
   border-bottom-color:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;
 }
 .intro{
@@ -160,8 +160,8 @@ input,select{font:inherit}
 .intro__shade{
   position:absolute; inset:0; z-index:-2; pointer-events:none;
   background:
-    radial-gradient(62% 42% at 50% 36%, rgba(0,10,32,.66), rgba(0,10,32,0) 72%),
-    linear-gradient(to bottom, rgba(0,10,32,.74) 0%, rgba(0,10,32,.20) 24%, rgba(0,10,32,.12) 46%, rgba(0,10,32,.70) 76%, var(--night) 100%);
+    radial-gradient(62% 42% at 50% 36%, rgba(4,15,48,.66), rgba(4,15,48,0) 72%),
+    linear-gradient(to bottom, rgba(4,15,48,.74) 0%, rgba(4,15,48,.20) 24%, rgba(4,15,48,.12) 46%, rgba(4,15,48,.70) 76%, var(--night) 100%);
 }
 .intro__inner{
   position:relative; min-height:100vh; min-height:100svh;
@@ -173,7 +173,7 @@ input,select{font:inherit}
 .intro__kicker{
   display:inline-flex; align-items:center; gap:10px; margin:0 0 var(--space-5);
   padding:8px 15px; border-radius:999px; border:1px solid rgba(236,176,36,.34);
-  background:rgba(0,10,32,.42); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  background:rgba(4,15,48,.42); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
   color:var(--gold-300); font-size:12px; letter-spacing:.2em; text-transform:uppercase; font-weight:600;
   opacity:0; animation:introIn .6s var(--ease) .05s forwards;
 }
@@ -185,17 +185,17 @@ h1.intro__title{
   display:block;
   background:linear-gradient(175deg,var(--cream) 4%,var(--gold-300) 30%,var(--gold) 70%,var(--gold) 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  filter:drop-shadow(0 8px 28px rgba(0,10,32,.6)) drop-shadow(0 0 42px rgba(236,176,36,.22));
+  filter:drop-shadow(0 8px 28px rgba(4,15,48,.6)) drop-shadow(0 0 42px rgba(236,176,36,.22));
   opacity:0; animation:introIn .9s var(--ease) .1s forwards;
 }
 .intro__title .l2{
   display:block; font-size:.2em; letter-spacing:.9em; text-indent:.9em; margin-top:.5em;
-  color:var(--cream); font-weight:500; text-shadow:0 2px 18px rgba(0,10,32,.8);
+  color:var(--cream); font-weight:500; text-shadow:0 2px 18px rgba(4,15,48,.8);
   opacity:0; animation:introIn .9s var(--ease) .25s forwards;
 }
 .intro__tag{
   margin:var(--space-5) auto 0; max-width:44ch; color:var(--cream);
-  font-size:clamp(14px,1.5vw,17px); text-shadow:0 2px 14px rgba(0,10,32,.85);
+  font-size:clamp(14px,1.5vw,17px); text-shadow:0 2px 14px rgba(4,15,48,.85);
   opacity:0; animation:introIn .7s var(--ease) .35s forwards;
 }
 @keyframes introIn{from{opacity:0} to{opacity:1}}
@@ -210,11 +210,11 @@ h1.intro__title{
   display:flex; flex-direction:column; gap:14px; min-height:152px; padding:16px 16px 16px 18px;
   border-radius:var(--r-xl); color:var(--cream); text-decoration:none;
   background:
-    linear-gradient(180deg, rgba(246,236,214,.07), rgba(246,236,214,.015) 45%, rgba(0,10,32,.30)),
-    rgba(0,10,32,.46);
+    linear-gradient(180deg, rgba(246,236,214,.07), rgba(246,236,214,.015) 45%, rgba(4,15,48,.30)),
+    rgba(4,15,48,.46);
   border:1px solid rgba(246,236,214,.12);
   backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:0 24px 50px -28px rgba(0,10,32,.95), inset 0 1px 0 rgba(246,236,214,.10);
+  box-shadow:0 24px 50px -28px rgba(4,15,48,.95), inset 0 1px 0 rgba(246,236,214,.10);
   opacity:0; animation:introIn .6s var(--ease) forwards; animation-delay:calc(.45s + var(--i) * 60ms);
   transition:transform var(--t-mid) var(--ease-out), border-color var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease);
 }
@@ -273,11 +273,11 @@ h1.intro__title{
 .intro__pause{
   position:absolute; z-index:2; top:calc(var(--nav-h) + 14px); right:clamp(14px,3vw,28px);
   width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
-  color:var(--cream); background:rgba(0,10,32,.46); border:1px solid rgba(246,236,214,.2);
+  color:var(--cream); background:rgba(4,15,48,.46); border:1px solid rgba(246,236,214,.2);
   backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
   transition:color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 }
-.intro__pause:hover{color:var(--gold-300); border-color:rgba(236,176,36,.6); background:rgba(0,10,32,.72)}
+.intro__pause:hover{color:var(--gold-300); border-color:rgba(236,176,36,.6); background:rgba(4,15,48,.72)}
 
 @media (max-width:900px){
   .intro__nav{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -322,7 +322,7 @@ h1.intro__title{
 }
 .filmstrip::before{
   content:''; position:absolute; inset:5px 0;
-  background-image:radial-gradient(circle at 9px 50%, rgba(0,10,32,.95) 3.4px, transparent 3.8px);
+  background-image:radial-gradient(circle at 9px 50%, rgba(4,15,48,.95) 3.4px, transparent 3.8px);
   background-size:22px 100%;
 }
 
@@ -351,7 +351,7 @@ h1.intro__title{
 
 /* ---------- tabs ---------- */
 .tabs-outer{
-  position:sticky; top:var(--nav-h); z-index:55; background:rgba(0,10,32,.92);
+  position:sticky; top:var(--nav-h); z-index:55; background:rgba(8,24,70,.88);
   backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--line-soft);
 }
 .tablist{display:flex; gap:2px; position:relative; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none}
@@ -440,7 +440,7 @@ tbody tr.cutline:hover{background:transparent}
 .howto{margin:0 0 var(--space-5)}
 .howto__body{padding:4px 18px 18px}
 .howto__steps{list-style:none; margin:0 0 14px; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
-.howto__step{padding:14px 14px 12px; border-radius:var(--r-lg); border:1px solid var(--line-soft); background:rgba(0,10,32,.5)}
+.howto__step{padding:14px 14px 12px; border-radius:var(--r-lg); border:1px solid var(--line-soft); background:rgba(4,15,48,.5)}
 .howto__n{display:grid; place-items:center; width:26px; height:26px; margin-bottom:8px; border-radius:var(--r-md); background:var(--gold); color:var(--night); font-weight:700; font-size:13px}
 .howto__step h3{margin:0 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:.02em; text-transform:uppercase; color:var(--cream)}
 .howto__step p{margin:0; font-size:14px; line-height:1.5; color:var(--muted)}
@@ -465,7 +465,7 @@ tbody tr.cutline:hover{background:transparent}
 @media (max-width:560px){
   .tabs-outer{
     position:fixed; top:auto; left:0; right:0; bottom:0; z-index:90;
-    border-bottom:0; border-top:1px solid var(--line-soft); background:rgba(0,10,32,.94);
+    border-bottom:0; border-top:1px solid var(--line-soft); background:rgba(8,24,70,.94);
     transform:translateY(110%); transition:transform var(--t-mid) var(--ease-out);
   }
   body.dock-on .tabs-outer{transform:none}
@@ -505,7 +505,7 @@ h2.sec-head__title{
 .field--grow{flex:1 1 240px}
 .input,.select{
   min-height:46px; padding:0 14px; border-radius:var(--r-md); width:100%;
-  border:1px solid var(--line-soft); background:rgba(0,10,32,.6); color:var(--ink);
+  border:1px solid var(--line-soft); background:rgba(4,15,48,.6); color:var(--ink);
   transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
 }
 .input::placeholder{color:var(--muted-2)}
@@ -527,7 +527,7 @@ h2.sec-head__title{
 .chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--gold-300),var(--gold)); color:var(--night); border-color:transparent; box-shadow:var(--shadow-glow)}
 /* ---------- фильтр игр: вид + строка пакетов/сезонов с бегунком ---------- */
 .gfilter{display:flex; align-items:flex-start; gap:12px; min-width:0}
-.gkind{flex:none; display:flex; gap:4px; padding:4px; border-radius:999px; border:1px solid var(--line-soft); background:rgba(0,10,32,.5)}
+.gkind{flex:none; display:flex; gap:4px; padding:4px; border-radius:999px; border:1px solid var(--line-soft); background:rgba(4,15,48,.5)}
 .gkind[hidden]{display:none}
 .gkind button{min-height:34px; padding:0 16px; border-radius:999px; font-size:13px; font-weight:700; color:var(--muted); white-space:nowrap; transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease)}
 .gkind button:hover{color:var(--cream)}
@@ -547,6 +547,159 @@ h2.sec-head__title{
 .gscroll:hover .gscroll__thumb,.gscroll.is-drag .gscroll__thumb{top:3px; height:8px}
 .gstrip.is-tour .gscroll__thumb{background:linear-gradient(90deg,#4E8686,#A3C8C6); box-shadow:0 0 10px rgba(111,168,168,.4)}
 /* игры таблицей */
+/* ---------- игры колодой: веер карточек, под активной — результаты ---------- */
+.gstack{--gs-w:460px; --gs-h:312px; margin-top:4px}
+.gstack[hidden]{display:none}
+.gstack__stage{
+  position:relative; height:calc(var(--gs-h) + 150px); outline:none; touch-action:pan-y; overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.gstack__glow{position:absolute; left:50%; bottom:4px; width:70%; height:120px; transform:translateX(-50%); border-radius:50%;
+  background:radial-gradient(closest-side, rgba(236,176,36,.24), transparent); filter:blur(18px); pointer-events:none}
+.gstack__track{position:absolute; inset:0; perspective:1200px; perspective-origin:50% 72%}
+.gcard{
+  position:absolute; left:50%; bottom:92px; width:var(--gs-w); height:var(--gs-h); margin-left:calc(var(--gs-w) / -2);
+  transform-origin:50% 100%; border-radius:24px; overflow:hidden; color:var(--cream); cursor:pointer; user-select:none; -webkit-user-select:none;
+  background:
+    radial-gradient(120% 90% at 88% -10%, rgba(236,176,36,.26), transparent 55%),
+    linear-gradient(160deg, #16296a 0%, #0B1A40 48%, #040d27 100%);
+  border:1px solid rgba(236,176,36,.26);
+  box-shadow:0 34px 60px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(246,236,214,.12);
+  filter:brightness(.6) saturate(.85);
+  transition:transform .62s cubic-bezier(.2,1.18,.32,1), opacity .45s ease, filter .45s ease, border-color .45s ease, box-shadow .45s ease;
+  will-change:transform;
+}
+/* перфорация киноплёнки */
+.gcard::before{content:''; position:absolute; left:0; top:0; bottom:0; width:18px; z-index:2;
+  background-image:radial-gradient(circle at 9px 11px, rgba(4,15,48,.95) 4.4px, transparent 4.9px); background-size:18px 22px;
+  border-right:1px dashed rgba(246,236,214,.18)}
+/* блик */
+.gcard::after{content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:linear-gradient(115deg, transparent 35%, rgba(246,236,214,.08) 48%, transparent 60%)}
+.gcard.is-active{filter:none; cursor:grab; border-color:rgba(236,176,36,.8);
+  box-shadow:0 46px 90px -34px rgba(236,176,36,.5), 0 0 0 1px rgba(236,176,36,.4), inset 0 1px 0 rgba(246,236,214,.22)}
+.gcard.is-active:active{cursor:grabbing}
+.gcard--tour{
+  background:
+    radial-gradient(120% 90% at 88% -10%, rgba(111,168,168,.32), transparent 55%),
+    linear-gradient(160deg, #123a55 0%, #0B1A40 48%, #040d27 100%);
+  border-color:rgba(111,168,168,.32);
+}
+.gcard--tour.is-active{border-color:rgba(111,168,168,.9);
+  box-shadow:0 46px 90px -34px rgba(111,168,168,.55), 0 0 0 1px rgba(111,168,168,.45), inset 0 1px 0 rgba(246,236,214,.22)}
+.gstack__stage:focus-visible .gcard.is-active{outline:3px solid var(--gold); outline-offset:4px}
+.gcard__inner{position:relative; z-index:1; height:100%; display:flex; flex-direction:column; gap:8px; padding:20px 22px 18px 38px}
+.gcard__num{position:absolute; right:-8px; bottom:-46px; z-index:-1; pointer-events:none;
+  font-family:var(--font-display); font-weight:700; font-size:210px; line-height:1; color:transparent; -webkit-text-stroke:1.5px rgba(246,236,214,.09)}
+.gcard__top{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.gcard__date{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums}
+.gcard__eyebrow{margin-top:4px; font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold)}
+.gcard--tour .gcard__eyebrow{color:var(--teal)}
+.gcard__title{margin:0; font-family:var(--font-display); font-weight:600; text-transform:uppercase; font-size:44px; line-height:1; letter-spacing:.02em; text-shadow:0 4px 24px rgba(4,15,48,.6)}
+/* тройка лучших на карточке */
+.gcard__top3{list-style:none; margin:auto 0 0; padding:0; display:flex; flex-direction:column; gap:4px}
+.gcard__row{display:flex; align-items:center; gap:10px; padding:5px 12px 5px 6px; border-radius:11px;
+  background:rgba(4,15,48,.42); border:1px solid rgba(246,236,214,.07)}
+.gcard__row:first-child{background:linear-gradient(90deg, rgba(236,176,36,.18), rgba(4,15,48,.38)); border-color:rgba(236,176,36,.3)}
+.gcard--tour .gcard__row:first-child{background:linear-gradient(90deg, rgba(111,168,168,.22), rgba(4,15,48,.38)); border-color:rgba(111,168,168,.34)}
+.gcard__row .rank{width:22px; height:22px; font-size:11px; border-radius:7px; flex:none}
+.gcard__pname{min-width:0; font-weight:600; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.gcard__ppts{margin-left:auto; font-weight:700; font-size:13.5px; color:var(--cream); font-variant-numeric:tabular-nums; white-space:nowrap}
+.gcard__row:first-child .gcard__ppts{color:var(--gold)}
+.gcard--tour .gcard__row:first-child .gcard__ppts{color:#9FD3CC}
+.gcard__foot{display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--muted)}
+.gcard__open{
+  display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 14px 0 12px; border-radius:999px; cursor:pointer;
+  border:1px solid rgba(236,176,36,.55); background:rgba(236,176,36,.12); color:var(--gold-300); font:600 13px/1 var(--font-body);
+  transition:background .2s ease, color .2s ease, opacity .3s ease, box-shadow .2s ease;
+}
+.gcard__open:hover{background:var(--gold); color:var(--night); box-shadow:0 10px 24px -10px rgba(236,176,36,.8)}
+.gcard__open:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.gcard:not(.is-active) .gcard__open{opacity:0; pointer-events:none}
+.gcard--tour .gcard__open{border-color:rgba(111,168,168,.6); background:rgba(111,168,168,.14); color:#B6D3D0}
+.gcard--tour .gcard__open:hover{background:var(--teal); color:var(--night); box-shadow:0 10px 24px -10px rgba(111,168,168,.8)}
+.gstack__bar{display:flex; align-items:center; justify-content:center; gap:14px; max-width:640px; margin:0 auto 28px}
+.gstack__nav{flex:none; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; color:var(--gold);
+  background:rgba(4,15,48,.6); border:1px solid rgba(236,176,36,.35); transition:background .2s, color .2s, opacity .2s}
+.gstack__nav:hover:not(:disabled){background:var(--gold); color:var(--night)}
+.gstack__nav:disabled{opacity:.3; cursor:default}
+.gstack__nav--prev svg{transform:rotate(180deg)}
+.gstack__pos{flex:none; min-width:120px; text-align:center; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums}
+.gstack__pos b{color:var(--cream)}
+.gstack__range{
+  flex:1 1 auto; min-width:80px; height:6px; margin:0; border-radius:6px; cursor:pointer; -webkit-appearance:none; appearance:none;
+  background:linear-gradient(90deg, var(--gold-600), var(--gold-300)) 0 0 / var(--p, 0%) 100% no-repeat, rgba(246,236,214,.1);
+}
+.gstack__range::-webkit-slider-thumb{-webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--gold);
+  border:3px solid var(--night); box-shadow:0 0 0 1px rgba(236,176,36,.6), 0 4px 12px rgba(0,0,0,.5)}
+.gstack__range::-moz-range-thumb{width:13px; height:13px; border-radius:50%; background:var(--gold); border:3px solid var(--night)}
+.gstack__range:disabled{opacity:.4; cursor:default}
+/* раскрытая карточка */
+.gx{position:fixed; inset:0; z-index:95; display:grid; place-items:center; padding:clamp(12px, 3vw, 36px)}
+.gx[hidden]{display:none}
+.gx__scrim{position:absolute; inset:0; background:rgba(3,10,32,.8); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); opacity:0; transition:opacity .45s ease}
+.gx.is-open .gx__scrim{opacity:1}
+.gx__panel{
+  position:relative; width:min(980px, 100%); max-height:min(90vh, 940px); overflow-y:auto; overscroll-behavior:contain;
+  border-radius:28px; border:1px solid rgba(236,176,36,.6); color:var(--cream); outline:none;
+  background:
+    radial-gradient(80% 50% at 94% -4%, rgba(236,176,36,.22), transparent 62%),
+    linear-gradient(165deg, #16296a 0%, #0C1D4A 40%, #051030 100%);
+  box-shadow:0 70px 130px -40px rgba(0,0,0,.95), 0 0 0 1px rgba(236,176,36,.2), inset 0 1px 0 rgba(246,236,214,.18);
+  scrollbar-width:thin; scrollbar-color:rgba(236,176,36,.4) transparent;
+}
+.gx__panel--tour{
+  border-color:rgba(111,168,168,.75);
+  background:
+    radial-gradient(80% 50% at 94% -4%, rgba(111,168,168,.28), transparent 62%),
+    linear-gradient(165deg, #123a55 0%, #0C1D4A 40%, #051030 100%);
+}
+.gx__inner{position:relative; padding:20px 26px 28px 38px; overflow:hidden}
+.gx__inner::before{content:''; position:absolute; left:0; top:0; bottom:0; width:18px;
+  background-image:radial-gradient(circle at 9px 11px, rgba(4,15,48,.95) 4.4px, transparent 4.9px); background-size:18px 22px;
+  border-right:1px dashed rgba(246,236,214,.18)}
+.gx__head{position:relative; isolation:isolate; display:flex; flex-direction:column; gap:8px; padding-bottom:24px; margin-bottom:22px;
+  border-bottom:1px solid rgba(214,168,90,.22)}
+.gx__head .gcard__num{top:-34px; bottom:auto; right:-14px; font-size:240px}
+.gx__head .gcard__title{font-size:clamp(40px, 5vw, 58px)}
+.gx__tools{display:flex; gap:8px}
+.gx__btn{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; cursor:pointer; color:var(--cream);
+  background:rgba(4,15,48,.55); border:1px solid rgba(246,236,214,.16); transition:background .2s, color .2s, border-color .2s}
+.gx__btn:hover{background:var(--gold); border-color:var(--gold); color:var(--night)}
+.gx__panel--tour .gx__btn:hover{background:var(--teal); border-color:var(--teal)}
+.gx__btn:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.gx__sub{margin:0; color:var(--muted); font-size:14px}
+.gx__body{animation:gxBody .5s .18s var(--ease) both}
+@keyframes gxBody{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+.gx__body .kpi{background-color:rgba(4,15,48,.45)}
+.gx__body .table-wrap{background:linear-gradient(180deg, rgba(4,15,48,.55), rgba(4,15,48,.35))}
+.gx__body .result-count{margin-bottom:0}
+@media (max-width:700px){
+  .gx{padding:0}
+  .gx__panel{width:100%; height:100%; max-height:none; border-radius:0; border:0}
+  .gx__inner{padding:14px 14px 32px 28px}
+  .gx__inner::before{width:14px; background-size:14px 18px; background-image:radial-gradient(circle at 7px 9px, rgba(4,15,48,.95) 3.4px, transparent 3.9px)}
+  .gx__head .gcard__num{font-size:170px; top:-20px}
+  .gx__head .gcard__title{font-size:38px}
+}
+@media (max-width:700px){
+  .gstack{--gs-w:min(82vw, 330px); --gs-h:262px}
+  .gcard__row{padding:3px 9px 3px 5px; gap:8px}
+  .gcard__pname{font-size:13px}
+  .gcard__ppts{font-size:12.5px}
+  .gcard__open{height:30px; padding:0 11px 0 9px; font-size:12px; gap:6px}
+  .gstack__stage{height:calc(var(--gs-h) + 104px); -webkit-mask-image:none; mask-image:none}
+  .gcard{bottom:56px; border-radius:20px}
+  .gcard__inner{padding:16px 16px 14px 30px; gap:6px}
+  .gcard::before{width:14px; background-size:14px 18px; background-image:radial-gradient(circle at 7px 9px, rgba(4,15,48,.95) 3.4px, transparent 3.9px)}
+  .gcard__title{font-size:32px}
+  .gcard__num{font-size:160px; bottom:-36px}
+  .gcard__wname{font-size:14px}
+  .gstack__bar{gap:10px; margin-bottom:22px}
+  .gstack__pos{min-width:92px; font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){.gcard{transition:none} .gstack__detail.is-in{animation:none}}
 .gview{align-self:flex-start}
 .games-table tbody td{padding-block:10px}
 .games-table .gt-first td{border-top:2px solid rgba(236,176,36,.22)}
@@ -562,7 +715,7 @@ h2.sec-head__title{
 .gt-h{display:block; margin-bottom:7px}
 .gt-f{
   display:block; width:100%; min-width:60px; height:30px; padding:0 8px; border-radius:8px;
-  border:1px solid var(--line-soft); background:rgba(0,10,32,.7); color:var(--cream);
+  border:1px solid var(--line-soft); background:rgba(4,15,48,.7); color:var(--cream);
   font:500 12.5px/1 var(--font-body); letter-spacing:0; text-transform:none; transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 }
 select.gt-f{
@@ -701,7 +854,7 @@ input.gt-f::-webkit-search-cancel-button{filter:invert(.7)}
 /* ---------- лента свежих событий на главной ---------- */
 .intro__ticker{
   position:relative; width:100%; max-width:1120px; margin:14px auto 0; overflow:hidden; border-radius:999px;
-  border:1px solid var(--line-soft); background:rgba(0,10,32,.58); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--line-soft); background:rgba(4,15,48,.58); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
   -webkit-mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
           mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
@@ -721,7 +874,7 @@ input.gt-f::-webkit-search-cancel-button{filter:invert(.7)}
 /* ---------- подсказка на графике «Рейтинг топ-10» ---------- */
 .chart__tip{
   position:absolute; z-index:3; transform:translate(-50%, calc(-100% - 14px)); padding:6px 10px; border-radius:8px; white-space:nowrap; pointer-events:none;
-  background:rgba(0,10,32,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
+  background:rgba(4,15,48,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
 }
 .chart__marker{position:absolute; z-index:2; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%; pointer-events:none; background:var(--gold); box-shadow:0 0 0 3px var(--night), 0 0 16px rgba(236,176,36,.8)}
 .chart__tip[hidden],.chart__marker[hidden]{display:none}
@@ -914,7 +1067,7 @@ tbody tr.clickable{cursor:pointer}
 /* ---------- полная статистика: панель инструментов, вид «как в таблице», весь экран ---------- */
 .fs-toolbar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:4px 6px 10px}
 .fs-maxtitle{display:none; margin:0 auto 0 0; font-family:var(--font-display); font-weight:600; font-size:20px; letter-spacing:.03em; text-transform:uppercase; color:var(--cream)}
-.fs-modes{display:inline-flex; padding:3px; gap:2px; border-radius:var(--r-md); border:1px solid var(--line-soft); background:rgba(0,10,32,.6)}
+.fs-modes{display:inline-flex; padding:3px; gap:2px; border-radius:var(--r-md); border:1px solid var(--line-soft); background:rgba(4,15,48,.6)}
 .fs-modes button{min-height:38px; padding:0 14px; border-radius:var(--r-md); font-size:13px; font-weight:600; color:var(--muted); transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease)}
 .fs-modes button:hover{color:var(--cream)}
 .fs-modes button[aria-pressed="true"]{background:var(--gold); color:var(--night)}
@@ -949,7 +1102,7 @@ tbody tr.clickable{cursor:pointer}
 }
 
 /* ---------- графики разделов ---------- */
-.chart{margin:0 0 var(--space-6); padding:18px 18px 16px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background-color:rgba(0,10,32,.72)}
+.chart{margin:0 0 var(--space-6); padding:18px 18px 16px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background-color:rgba(4,15,48,.72)}
 .chart[hidden]{display:none}
 .chart__cap{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 16px; margin:0 0 14px}
 .chart__title{margin:0; font-family:var(--font-display); font-weight:600; font-size:20px; letter-spacing:.03em; text-transform:uppercase; color:var(--cream)}
@@ -963,7 +1116,7 @@ tbody tr.clickable{cursor:pointer}
 .chart__xl--future{color:var(--muted-2)}
 .chart__plot > .chart__xl:last-child{transform:translateX(-100%)}
 .chart__yl{position:absolute; left:0; transform:translateY(-50%); font-size:11px; color:var(--muted-2); font-variant-numeric:tabular-nums}
-.chart__yl--in{left:auto; right:0; padding:1px 6px; border-radius:var(--r-sm); background:rgba(0,10,32,.8)}
+.chart__yl--in{left:auto; right:0; padding:1px 6px; border-radius:var(--r-sm); background:rgba(4,15,48,.8)}
 .series path{fill:none; stroke:rgba(246,236,214,.32); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; transition:stroke var(--t-fast) var(--ease)}
 .series circle{fill:rgba(246,236,214,.55); transition:fill var(--t-fast) var(--ease)}
 .series .gap{stroke-dasharray:4 6}
@@ -1020,7 +1173,7 @@ tbody tr.clickable{cursor:pointer}
 .intro__sound{right:calc(clamp(14px,3vw,28px) + 54px)}
 .reel{position:fixed; inset:0; z-index:300; visibility:hidden; overflow:hidden; background:var(--night); pointer-events:none}
 .reel.is-run{visibility:visible; pointer-events:auto}
-.reel::after{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; background:radial-gradient(ellipse at center, transparent 50%, rgba(0,10,32,.75))}
+.reel::after{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; background:radial-gradient(ellipse at center, transparent 50%, rgba(4,15,48,.75))}
 .reel__strip{position:absolute; left:0; right:0; top:0; height:400%; will-change:transform; background:#050608}
 .reel__strip::before,.reel__strip::after{
   content:''; position:absolute; top:0; bottom:0; z-index:2; width:clamp(26px,5vw,56px); background-color:#050608;
@@ -1110,7 +1263,7 @@ tbody tr.clickable{cursor:pointer}
 .ev{position:relative; min-width:42px; height:32px; padding:0 9px; border-radius:8px; display:grid; place-items:center; font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums; cursor:default}
 .ev--on{background:rgba(236,176,36,.17); color:var(--gold-300); box-shadow:inset 0 0 0 1px rgba(236,176,36,.5)}
 .ev--on.ev--season{background:rgba(111,168,168,.2); color:#B6D3D0; box-shadow:inset 0 0 0 1px rgba(111,168,168,.6)}
-.ev--off{color:rgba(246,236,214,.38); background:rgba(0,10,32,.55); box-shadow:inset 0 0 0 1px rgba(246,236,214,.1)}
+.ev--off{color:rgba(246,236,214,.38); background:rgba(4,15,48,.55); box-shadow:inset 0 0 0 1px rgba(246,236,214,.1)}
 .ev--before{opacity:.45}
 .miss__legend{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; margin:10px 0 0; font-size:12px; color:var(--muted-2)}
 .ev-key{display:inline-block; width:12px; height:12px; border-radius:4px; margin-left:8px}
@@ -1132,7 +1285,7 @@ tbody tr.clickable{cursor:pointer}
 .pchart__dot.is-active{fill:var(--gold-300); stroke:var(--cream); stroke-width:2.6}
 .pchart__tip{
   position:absolute; z-index:2; transform:translate(-50%, calc(-100% - 12px)); padding:6px 10px; border-radius:8px; white-space:nowrap; pointer-events:none;
-  background:rgba(0,10,32,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
+  background:rgba(4,15,48,.95); border:1px solid var(--line); color:var(--cream); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; box-shadow:var(--shadow-2);
 }
 .pchart__cap{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; font-size:11.5px; color:var(--muted-2)}
 .pchart__legend{display:inline-flex; align-items:center; gap:5px}
@@ -1155,7 +1308,7 @@ tbody tr.clickable{cursor:pointer}
 .vs{
   display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:14px 18px; margin:0 0 16px; padding:24px 20px 18px;
   border:1px solid var(--line); border-radius:var(--r-lg);
-  background:radial-gradient(120% 140% at 50% 0%, rgba(236,176,36,.15), rgba(0,10,32,.25) 62%);
+  background:radial-gradient(120% 140% at 50% 0%, rgba(236,176,36,.15), rgba(4,15,48,.25) 62%);
 }
 .vs__side{display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; min-width:0}
 .vs__side--b .ava{box-shadow:0 0 0 2px var(--teal); color:var(--teal)}
@@ -1190,14 +1343,14 @@ tbody tr.clickable{cursor:pointer}
 }
 
 /* ---------- логотип ---------- */
-.brand__logo{display:block; height:44px; width:auto; filter:drop-shadow(0 2px 8px rgba(0,10,32,.6))}
+.brand__logo{display:block; height:44px; width:auto; filter:drop-shadow(0 2px 8px rgba(4,15,48,.6))}
 @media (max-width:380px){.brand__logo{height:38px}}
 .reel__logo{display:block; width:clamp(160px,26vw,320px); height:auto; margin:0 auto 6px}
 
 /* ---------- segmented ---------- */
 .seg{
   display:inline-flex; padding:4px; gap:2px; border-radius:var(--r-md); border:1px solid var(--line-soft);
-  background:rgba(0,10,32,.55); margin-bottom:var(--space-5); flex-wrap:wrap; max-width:100%;
+  background:rgba(4,15,48,.55); margin-bottom:var(--space-5); flex-wrap:wrap; max-width:100%;
 }
 .seg button{
   min-height:40px; padding:0 16px; border-radius:var(--r-md); font-size:14px; font-weight:600; color:var(--muted);
@@ -1237,7 +1390,7 @@ tbody tr.clickable{cursor:pointer}
 /* ---------- modal ---------- */
 .modal{position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:var(--space-4)}
 .modal[hidden]{display:none}
-.modal__scrim{position:absolute; inset:0; background:rgba(0,10,32,.82); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); animation:scrimIn var(--t-mid) var(--ease) both}
+.modal__scrim{position:absolute; inset:0; background:rgba(4,15,48,.82); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); animation:scrimIn var(--t-mid) var(--ease) both}
 @keyframes scrimIn{from{opacity:0}to{opacity:1}}
 .modal__panel{
   position:relative; width:min(880px,100%); max-height:min(86dvh,920px); display:flex; flex-direction:column;
@@ -1274,19 +1427,273 @@ tbody tr.clickable{cursor:pointer}
 /* ---------- фон разделов: закреплён за окном, главный экран с видео его перекрывает ---------- */
 body::before{
   content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,10,32,0.63), rgba(0,10,32,0.55) 45%, rgba(0,10,32,0.63)), var(--night);
+  background:radial-gradient(1100px 460px at 50% -8%, rgba(240,172,70,.14), transparent 70%), linear-gradient(180deg, rgba(4,15,48,0.50), rgba(4,15,48,0.38) 45%, rgba(4,15,48,0.52)), var(--navy);
 }
 html.bg-ready body::before{
   background:
-    linear-gradient(180deg, rgba(0,10,32,0.63), rgba(0,10,32,0.55) 45%, rgba(0,10,32,0.63)),
+    radial-gradient(1100px 460px at 50% -8%, rgba(240,172,70,.16), transparent 70%),
+    radial-gradient(1300px 520px at 50% 112%, rgba(176,104,64,.12), transparent 70%),
+    linear-gradient(180deg, rgba(4,15,48,0.50), rgba(4,15,48,0.38) 45%, rgba(4,15,48,0.52)),
     url("assets/kinolega-bg.jpg") center / cover no-repeat,
     var(--night);
 }
 /* поверх фона карточкам и таблицам нужна плотная подложка — иначе сквозь них проступает перфорация кадра */
-.table-wrap,.toolbar,.ticket,.pod,.bento__tile,.fullstats,.empty,.seg,.kpi{background-color:rgba(0,10,32,.72)}
+.table-wrap,.toolbar,.ticket,.pod,.bento__tile,.fullstats,.empty,.seg,.kpi{background-color:rgba(8,24,70,.68)}
+
+/* ---------- таблицы: стеклянная панель, латунная кромка, медали, строки с воздухом ---------- */
+.table-wrap{
+  position:relative; border-radius:22px; border:1px solid rgba(214,168,90,.24);
+  background:linear-gradient(180deg, rgba(16,38,96,.82), rgba(6,20,60,.78));
+  box-shadow:0 34px 70px -46px rgba(0,0,0,.95), inset 0 1px 0 rgba(246,236,214,.08);
+}
+.table-wrap::after{content:''; position:absolute; left:10%; right:10%; top:0; height:1px; z-index:6; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(240,196,120,.6), transparent)}
+thead th{
+  background:rgba(11,30,80,.96); color:rgba(226,200,150,.8);
+  font-size:10.5px; letter-spacing:.17em; font-weight:700; padding-block:16px 14px;
+  border-bottom:0; box-shadow:inset 0 -1px 0 rgba(214,168,90,.32);
+}
+.table-wrap.table-wrap--stick thead th{box-shadow:inset 0 -1px 0 rgba(214,168,90,.32), 0 12px 22px -16px rgba(0,0,0,.95)}
+tbody td{border-bottom:0; box-shadow:inset 0 1px 0 rgba(246,236,214,.065); padding-block:14px; vertical-align:middle}
+tbody tr:first-child td{box-shadow:none}
+tbody td.num{color:var(--cream)}
+tbody td.num.tmuted{color:var(--muted-2)}
+tbody tr:hover{background:transparent}
+tbody td{transition:background-color .18s ease}
+tbody tr:hover td{background-color:rgba(236,176,36,.065)}
+tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--gold), inset 0 1px 0 rgba(246,236,214,.065)}
+/* тройка лучших: тонкая полоса медального цвета слева и лёгкий отсвет строки */
+:where(table:not(.games-table):not(.fs-table)) tbody tr:has(.rank--1) td{background-color:rgba(236,176,36,.05)}
+:where(table:not(.games-table):not(.fs-table)) tbody tr:has(.rank--1) td:first-child{box-shadow:inset 3px 0 0 #F2BE3C}
+:where(table:not(.games-table):not(.fs-table)) tbody tr:has(.rank--2) td:first-child{box-shadow:inset 3px 0 0 #D8DDE6, inset 0 1px 0 rgba(246,236,214,.065)}
+:where(table:not(.games-table):not(.fs-table)) tbody tr:has(.rank--3) td:first-child{box-shadow:inset 3px 0 0 #CD8E5C, inset 0 1px 0 rgba(246,236,214,.065)}
+tbody tr.cutline td,tbody tr.cutline:hover td{box-shadow:none; background:none}
+/* медали мест */
+.rank{border-radius:10px; background:rgba(246,236,214,.06); color:var(--muted); box-shadow:inset 0 0 0 1px rgba(246,236,214,.1)}
+.rank--1{background:linear-gradient(150deg, #FFE9A8 0%, #F2BE3C 42%, #B67B10 100%); color:#1B1203; box-shadow:0 6px 16px -6px rgba(236,176,36,.75), inset 0 1px 0 rgba(255,255,255,.6)}
+.rank--2{background:linear-gradient(150deg, #FFFFFF 0%, #D8DDE6 45%, #98A0AE 100%); color:#131A28; box-shadow:0 6px 16px -8px rgba(200,208,222,.55), inset 0 1px 0 #fff}
+.rank--3{background:linear-gradient(150deg, #F6CFA8 0%, #CD8E5C 45%, #8B5230 100%); color:#1F1006; box-shadow:0 6px 16px -8px rgba(205,142,92,.65), inset 0 1px 0 rgba(255,255,255,.45)}
+.pod--3::before{background:#CD8E5C}
+.pod--1 .pod__medal{background:linear-gradient(150deg, #FFE9A8 0%, #F2BE3C 42%, #B67B10 100%)}
+.pod--2 .pod__medal{background:linear-gradient(150deg, #FFFFFF 0%, #D8DDE6 45%, #98A0AE 100%)}
+.pod--3 .pod__medal{background:linear-gradient(150deg, #F6CFA8 0%, #CD8E5C 45%, #8B5230 100%); color:#1F1006; box-shadow:0 8px 20px -8px rgba(205,142,92,.7)}
+/* изменение рейтинга — пилюли: рост бирюзовый, снижение коралловый */
+.delta{display:inline-flex; align-items:center; gap:5px; padding:4px 9px 4px 7px; border-radius:999px; font-size:12.5px; font-weight:700; line-height:1.1; white-space:nowrap}
+.delta__ic{font-size:8.5px; line-height:1}
+.delta--up{color:#8ED9CB; background:rgba(111,190,176,.14); box-shadow:inset 0 0 0 1px rgba(111,190,176,.32)}
+.delta--down{color:#F2A08F; background:rgba(232,120,98,.12); box-shadow:inset 0 0 0 1px rgba(232,120,98,.3)}
+.delta--flat{color:var(--muted); background:rgba(246,236,214,.06); box-shadow:inset 0 0 0 1px rgba(246,236,214,.1)}
+.delta--none{padding-inline:0; background:none; box-shadow:none; color:var(--muted-2); font-weight:500}
+.rt-step{margin-left:10px; padding:3px 7px 3px 6px; font-size:11.5px; vertical-align:2px}
+/* игрок: кружок с инициалами и имя */
+.pcell{display:flex; align-items:center; gap:12px; min-width:0}
+.pcell .face{width:34px; height:34px; margin:0; border:0; font-size:11px}
+.pcell__txt{display:flex; flex-direction:column; align-items:flex-start; min-width:0}
+tbody tr:has(.rank--1) .pcell .face{box-shadow:0 0 0 2px #F2BE3C}
+tbody tr:has(.rank--2) .pcell .face{box-shadow:0 0 0 2px #D8DDE6}
+tbody tr:has(.rank--3) .pcell .face{box-shadow:0 0 0 2px #CD8E5C}
+@media (max-width:700px){
+  .table-wrap{border-radius:18px}
+  .pcell{gap:9px}
+  .pcell .face{width:28px; height:28px; font-size:9.5px}
+  .delta{padding:3px 7px 3px 6px; font-size:12px}
+}
+@media (max-width:380px){.pcell .face{display:none}}
+
+/* ---------- плавный скролл и появление при прокрутке ---------- */
+html.ss-on{scroll-behavior:auto}
+/* заголовок раздела: слова выезжают из-под маски по очереди, надзаголовок и описание проявляются */
+.rv-w{display:inline-block; overflow:hidden; vertical-align:top; padding:.16em 0 .08em; margin:-.16em 0 -.08em}
+.rv-w > span{display:inline-block; transform:translateY(108%); transition:transform 1.05s cubic-bezier(.19,1,.22,1); transition-delay:calc(.1s + var(--i) * .075s)}
+.rv-in .rv-w > span{transform:none}
+.rv-ready .sec-head.rv .sec-head__eyebrow,.rv-ready .sec-head.rv .sec-head__desc{
+  opacity:0; transform:translateY(18px); transition:opacity .9s ease, transform 1s cubic-bezier(.19,1,.22,1)}
+.rv-ready .sec-head.rv .sec-head__desc{transition-delay:.3s}
+.rv-ready .sec-head.rv.rv-in .sec-head__eyebrow,.rv-ready .sec-head.rv.rv-in .sec-head__desc{opacity:1; transform:none}
+/* крупные блоки: мягко поднимаются */
+.rv-ready .rv:not(.sec-head){opacity:0; transform:translateY(34px); transition:opacity .9s ease, transform 1.1s cubic-bezier(.19,1,.22,1)}
+.rv-ready .rv.rv-in:not(.sec-head){opacity:1; transform:none}
+
+/* ---------- единый стиль блоков: тот же материал, что у карточки игры ----------
+   синий градиент с золотым отсветом в углу, латунная рамка, блик; у больших панелей — перфорация киноплёнки */
+:root{
+  --card-bg:
+    radial-gradient(110% 85% at 94% -14%, rgba(236,176,36,.20), transparent 56%),
+    linear-gradient(160deg, #15286a 0%, #0C1D4B 46%, #061232 100%);
+  --card-bd:rgba(236,176,36,.26);
+  --card-sh:0 34px 64px -40px rgba(0,0,0,.95), inset 0 1px 0 rgba(246,236,214,.12);
+  --card-glare:linear-gradient(115deg, transparent 38%, rgba(246,236,214,.055) 50%, transparent 62%);
+  --perf:radial-gradient(circle at 9px 11px, rgba(4,15,48,.95) 4.4px, transparent 4.9px);
+}
+/* большие панели: графики, «как считается», полная статистика, пустая афиша */
+.chart,.fullstats,.empty{
+  position:relative; isolation:isolate; border:1px solid var(--card-bd); border-radius:24px;
+  background:var(--card-bg); box-shadow:var(--card-sh);
+}
+.chart{padding:22px 24px 18px 42px}
+.fullstats{padding-left:18px}
+.empty{padding-left:calc(var(--space-6, 32px) + 18px)}
+.chart::before,.fullstats::before,.empty::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:18px; z-index:-1; pointer-events:none;
+  border-radius:24px 0 0 24px; background-image:var(--perf); background-size:18px 22px; border-right:1px dashed rgba(246,236,214,.16);
+}
+.chart::after,.fullstats::after,.empty::after{content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; background:var(--card-glare)}
+.fullstats.is-max::before,.fullstats.is-max::after{display:none}
+.chart__title,.fullstats__title{font-size:24px; letter-spacing:.035em}
+.chart__cap{padding-bottom:12px; margin-bottom:16px; border-bottom:1px solid rgba(214,168,90,.18)}
+.fullstats__icon,.bento__icon{
+  color:var(--night); background:linear-gradient(150deg, #FFE9A8 0%, #F2BE3C 45%, #B67B10 100%);
+  box-shadow:0 8px 20px -8px rgba(236,176,36,.8), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.fullstats__toggle:hover{background:rgba(236,176,36,.07)}
+.fullstats[open] .fullstats__toggle{border-radius:24px 24px 0 0}
+
+/* игры по месяцам: золотые столбики с сеткой, пик месяца подписан, выбранный месяц светится */
+.chron__bars{
+  height:150px; padding:0 4px; gap:6px;
+  background:repeating-linear-gradient(to top, rgba(246,236,214,.06) 0 1px, transparent 1px 30px);
+  background-position:0 calc(100% - 38px);
+}
+.chron__bar{width:44px; border-radius:14px; padding:4px 2px 4px}
+.chron__col{
+  width:24px; border-radius:8px 8px 3px 3px; transform-origin:50% 100%;
+  background:linear-gradient(to top, rgba(182,123,16,.55), rgba(242,190,60,.85) 70%, #FFE9A8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+  animation:chronUp .9s cubic-bezier(.19,1,.22,1) both; animation-delay:calc(var(--k, 0) * 22ms);
+  transition:filter .2s ease, box-shadow .2s ease;
+}
+@keyframes chronUp{from{transform:scaleY(0)} to{transform:none}}
+.chron__bar:disabled .chron__col{background:rgba(246,236,214,.12); box-shadow:none}
+.chron__n{font-family:var(--font-display); font-size:14px; font-weight:600; letter-spacing:.02em}
+.chron__m{font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em}
+.chron__y{padding:2px 6px; border-radius:6px; font-size:10.5px; font-weight:700}
+.chron__y:not(:empty){background:rgba(236,176,36,.12); color:var(--gold-300)}
+.chron__bar:not(:disabled):hover{background:linear-gradient(to top, rgba(236,176,36,.14), rgba(236,176,36,.03)); color:var(--cream)}
+.chron__bar:not(:disabled):hover .chron__col{background:linear-gradient(to top, rgba(182,123,16,.7), #F2BE3C 70%, #FFF1C4); filter:brightness(1.08)}
+.chron__bar.is-peak .chron__n{color:var(--gold)}
+.chron__bar.is-peak .chron__col{box-shadow:0 0 22px -2px rgba(236,176,36,.65), inset 0 1px 0 rgba(255,255,255,.45)}
+.chron__bar[aria-pressed="true"]{background:linear-gradient(to top, rgba(236,176,36,.26), rgba(236,176,36,.06)); box-shadow:inset 0 0 0 1px rgba(236,176,36,.55); color:var(--gold)}
+.chron__bar[aria-pressed="true"] .chron__col{background:linear-gradient(to top, #B67B10, #F2BE3C 60%, #FFF1C4); box-shadow:0 0 26px 0 rgba(236,176,36,.75)}
+
+/* легенда графиков: места топ-3 — медали */
+.chart__item{border-radius:12px}
+.chart__item:hover,.chart__item.is-focus,.chart__item[aria-pressed="true"]{background:linear-gradient(90deg, rgba(236,176,36,.16), rgba(236,176,36,.03))}
+/* в «Гонке сезонов» первая строка легенды — шапка, поэтому места начинаются со второй */
+#rlLegend li:nth-child(-n+3) .chart__pos,#raceLegend li:nth-child(n+2):nth-child(-n+4) .chart__pos{width:24px; height:24px; display:grid; place-items:center; border-radius:8px; font-size:12px}
+#rlLegend li:nth-child(1) .chart__pos,#raceLegend li:nth-child(2) .chart__pos{background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10); color:#1B1203}
+#rlLegend li:nth-child(2) .chart__pos,#raceLegend li:nth-child(3) .chart__pos{background:linear-gradient(150deg, #FFFFFF, #D8DDE6 45%, #98A0AE); color:#131A28}
+#rlLegend li:nth-child(3) .chart__pos,#raceLegend li:nth-child(4) .chart__pos{background:linear-gradient(150deg, #F6CFA8, #CD8E5C 45%, #8B5230); color:#1F1006}
+/* первая подпись оси X — от левого края графика, чтобы не заезжать на перфорацию */
+.chart__xl:nth-child(1 of .chart__xl){transform:none}
+
+/* панель фильтров: стекло с латунной кромкой, поля — утопленные */
+.toolbar{
+  position:relative; border:1px solid rgba(214,168,90,.24); border-radius:22px; padding:18px 20px;
+  background:linear-gradient(170deg, rgba(20,44,108,.72), rgba(8,22,62,.72));
+  box-shadow:0 28px 56px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(246,236,214,.09);
+}
+.field__label{font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(226,200,150,.75)}
+.input,.select{border-radius:14px; border-color:rgba(246,236,214,.12); background-color:rgba(3,11,34,.55); box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+.input:hover,.select:hover{border-color:rgba(236,176,36,.35)}
+.input:focus,.select:focus{border-color:var(--gold); box-shadow:inset 0 2px 6px rgba(0,0,0,.35), 0 0 0 3px rgba(236,176,36,.18)}
+.gkind{background:rgba(3,11,34,.55); border-color:rgba(246,236,214,.12); box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+
+/* переключатель сезонов: капсула с золотой «таблеткой» */
+.seg{border-radius:999px; padding:5px; border-color:rgba(214,168,90,.26); background:rgba(3,11,34,.55); box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+.seg button{border-radius:999px; padding:0 18px}
+.seg__pill{border-radius:999px; background:linear-gradient(150deg, #FFE9A8 0%, #F2BE3C 45%, #C98A14 100%); box-shadow:0 10px 26px -10px rgba(236,176,36,.9), inset 0 1px 0 rgba(255,255,255,.5)}
+
+/* плитки сводки и рекордов */
+.bento__tile{
+  isolation:isolate; border:1px solid var(--card-bd); border-radius:20px; background:var(--card-bg); box-shadow:var(--card-sh);
+  transition:transform .35s cubic-bezier(.2,1.1,.3,1), border-color .25s ease, box-shadow .25s ease;
+}
+.bento__tile::after{content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:var(--card-glare)}
+.bento__tile:hover{transform:translateY(-4px); border-color:rgba(236,176,36,.55); box-shadow:0 40px 70px -36px rgba(236,176,36,.35), inset 0 1px 0 rgba(246,236,214,.16)}
+.bento__label{font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(226,200,150,.78)}
+.bento__icon{border-radius:10px}
+.bento__value{text-shadow:0 4px 24px rgba(4,15,48,.6)}
+.bento__tile--accent{
+  border-color:rgba(236,176,36,.6);
+  background:radial-gradient(120% 100% at 100% 0%, rgba(236,176,36,.34), transparent 60%), linear-gradient(160deg, #1b2f72 0%, #0C1D4B 50%, #061232 100%);
+  box-shadow:0 40px 70px -40px rgba(236,176,36,.45), inset 0 1px 0 rgba(246,236,214,.18);
+}
+.bento__bar{background:rgba(3,11,34,.6); box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+
+/* пьедестал: карточки медального цвета с большой контурной цифрой места */
+.pod{
+  isolation:isolate; border:1px solid var(--card-bd); border-radius:24px; background:var(--card-bg); box-shadow:var(--card-sh);
+  transition:transform .4s cubic-bezier(.2,1.1,.3,1), box-shadow .3s ease, border-color .3s ease;
+}
+.pod::after{
+  position:absolute; right:-6px; bottom:-40px; z-index:-1; pointer-events:none;
+  font-family:var(--font-display); font-weight:700; font-size:180px; line-height:1; color:transparent; -webkit-text-stroke:1.5px rgba(246,236,214,.08);
+}
+.pod--1::after{content:'1'}
+.pod--2::after{content:'2'}
+.pod--3::after{content:'3'}
+.pod::before{left:18%; right:18%; height:2px; border-radius:0 0 4px 4px}
+.pod--1{border-color:rgba(242,190,60,.6); background:radial-gradient(90% 70% at 50% -10%, rgba(242,190,60,.32), transparent 62%), linear-gradient(160deg, #1b2f72 0%, #0C1D4B 50%, #061232 100%)}
+.pod--1::before{background:linear-gradient(90deg, transparent, #FFE9A8, transparent); box-shadow:0 0 18px 2px rgba(242,190,60,.8)}
+.pod--2{border-color:rgba(216,221,230,.38); background:radial-gradient(90% 70% at 50% -10%, rgba(216,221,230,.20), transparent 62%), linear-gradient(160deg, #15286a 0%, #0C1D4B 50%, #061232 100%)}
+.pod--2::before{background:linear-gradient(90deg, transparent, #fff, transparent); box-shadow:0 0 14px 1px rgba(216,221,230,.6)}
+.pod--3{border-color:rgba(205,142,92,.45); background:radial-gradient(90% 70% at 50% -10%, rgba(205,142,92,.24), transparent 62%), linear-gradient(160deg, #15286a 0%, #0C1D4B 50%, #061232 100%)}
+.pod--3::before{background:linear-gradient(90deg, transparent, #F6CFA8, transparent); box-shadow:0 0 14px 1px rgba(205,142,92,.7)}
+.pod:hover{transform:translateY(-6px)}
+.pod--1:hover{box-shadow:0 44px 80px -40px rgba(242,190,60,.55), inset 0 1px 0 rgba(246,236,214,.18)}
+.pod__medal{box-shadow:0 10px 26px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.5)}
+.pod--1 .pod__medal{box-shadow:0 0 0 6px rgba(242,190,60,.14), 0 12px 30px -8px rgba(242,190,60,.9), inset 0 1px 0 rgba(255,255,255,.6)}
+.pod__pts{font-family:var(--font-display); font-weight:600; letter-spacing:.03em; font-size:clamp(22px,3vw,32px)}
+
+/* «как считается»: шаги — мини-карточки с медалью-номером */
+.howto__step{
+  position:relative; border-radius:18px; border:1px solid rgba(214,168,90,.2);
+  background:linear-gradient(170deg, rgba(20,44,108,.6), rgba(4,14,42,.6)); box-shadow:inset 0 1px 0 rgba(246,236,214,.07);
+}
+.howto__n{border-radius:9px; background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10); box-shadow:0 6px 16px -6px rgba(236,176,36,.75), inset 0 1px 0 rgba(255,255,255,.55)}
+.howto__f{border-radius:10px; border:1px solid rgba(236,176,36,.28); background:rgba(3,11,34,.55); letter-spacing:.01em}
+.howto__example{border-radius:14px; background:rgba(3,11,34,.4)}
+
+/* мини-карточки цифр (в раскрытой карточке, в карточке игрока, личные встречи) */
+.kpi{
+  position:relative; overflow:hidden; border-radius:16px; border:1px solid rgba(214,168,90,.2);
+  background:linear-gradient(165deg, rgba(22,46,110,.7), rgba(5,16,46,.7)); box-shadow:inset 0 1px 0 rgba(246,236,214,.08);
+}
+.kpi::before{content:''; position:absolute; left:16px; top:0; width:28px; height:2px; border-radius:0 0 3px 3px; background:var(--gold); box-shadow:0 0 12px rgba(236,176,36,.8)}
+.kpi__v{font-family:var(--font-display); font-weight:600; font-size:26px; letter-spacing:.02em}
+.kpi__l{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase}
+.gx__panel--tour .kpi::before{background:var(--teal); box-shadow:0 0 12px rgba(111,168,168,.8)}
+
+/* участие игрока и пустая афиша */
+.miss{border-radius:18px; border-color:rgba(214,168,90,.22); background:linear-gradient(170deg, rgba(20,44,108,.55), rgba(4,14,42,.55)); box-shadow:inset 0 1px 0 rgba(246,236,214,.07)}
+.ev{border-radius:9px}
+.empty__icon{padding:16px; border-radius:50%; background:radial-gradient(circle, rgba(236,176,36,.18), transparent 70%); box-sizing:content-box; width:60px; height:60px}
+
+@media (max-width:700px){
+  .chart{padding:16px 14px 14px 30px}
+  .chart::before,.fullstats::before,.empty::before{width:14px; background-size:14px 18px; background-image:radial-gradient(circle at 7px 9px, rgba(4,15,48,.95) 3.4px, transparent 3.9px)}
+  .fullstats{padding-left:14px}
+  .empty{padding-left:calc(var(--space-5, 24px) + 14px)}
+  .chart__title,.fullstats__title{font-size:19px}
+  .chron__bars{height:140px; gap:4px}
+  .chron__bar{width:38px}
+  .chron__col{width:20px}
+  .toolbar{padding:14px; border-radius:18px}
+  .bento__tile{border-radius:16px}
+  .bento__tile:hover,.pod:hover{transform:none}
+  .pod{border-radius:18px}
+  .pod::after{font-size:84px; right:-2px; bottom:-14px; -webkit-text-stroke-color:rgba(246,236,214,.06)}
+  .pod__pts{font-size:17px}
+  .kpi__v{font-size:21px}
+  /* сезоны — одной строкой с прокруткой вбок, «таблетка» едет вместе с кнопками */
+  .seg{flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{padding:0 14px; flex:none}
+  .bento__label,.field__label{letter-spacing:.07em; font-size:10.5px}
+}
 
 /* ---------- footer ---------- */
-.site-footer{border-top:1px solid var(--line-soft); padding:var(--space-7) 0; background:rgba(0,10,32,.5)}
+.site-footer{border-top:1px solid var(--line-soft); padding:var(--space-7) 0; background:rgba(4,15,48,.5)}
 .site-footer .wrap{display:flex; flex-wrap:wrap; gap:var(--space-5); justify-content:space-between; align-items:center}
 .site-footer p{margin:0; color:var(--muted-2); font-size:13px}
 .foot-links{display:flex; gap:var(--space-5); flex-wrap:wrap; font-size:13px}
@@ -1347,6 +1754,114 @@ html.bg-ready body::before{
   *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important}
   .spark path.line{stroke-dashoffset:0}
 }
+
+/* ===================== черновик: главная-студия ===================== */
+.stage{min-height:100vh; min-height:100svh}
+.stage__bg{
+  position:absolute; inset:-40px; z-index:-3;
+  background:url("assets/home2-blur.jpg") center / cover no-repeat; filter:blur(26px) brightness(.5) saturate(1.2);
+}
+/* сцена сохраняет пропорции картинки и закрывает экран — трибуны всегда там же, где на картинке */
+.stage__scene{
+  position:absolute; left:50%; top:50%; aspect-ratio:2400 / 1340;
+  width:max(100vw, calc(100vh * 2400 / 1340)); width:max(100vw, calc(100svh * 2400 / 1340));
+  transform:translate(-50%, -50%);
+}
+.stage__img{position:absolute; inset:0; width:100%; height:100%; display:block; object-fit:cover;
+  animation:stageIn 1.1s var(--ease) both}
+@keyframes stageIn{from{opacity:0; transform:scale(1.04)} to{opacity:1; transform:none}}
+/* слой пролёта: ролик стартует ровно поверх картинки, на телефоне раскрывается на весь экран */
+.stage-fly{position:fixed; inset:0; z-index:130; pointer-events:none; overflow:hidden}
+.stage__video{position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover; opacity:0; background:transparent; transition:opacity .12s linear}
+.stage__video.is-on{opacity:1}
+.stage__nav{position:absolute; inset:0; z-index:2}
+
+.stand{
+  --i:0; position:absolute; left:var(--x); top:var(--y); width:var(--w); height:var(--h);
+  border-radius:14px; color:var(--cream); text-decoration:none; -webkit-tap-highlight-color:transparent; outline:none;
+}
+/* мягкий золотой свет на трибуне */
+.stand::before{
+  content:''; position:absolute; inset:-6% -10% -2%; border-radius:22px; pointer-events:none;
+  background:radial-gradient(58% 46% at 50% 34%, rgba(255,214,120,.42), rgba(236,176,36,.14) 55%, transparent 76%);
+  mix-blend-mode:screen; opacity:0; transition:opacity .35s var(--ease);
+  animation:standIdle 9s ease-in-out infinite; animation-delay:calc(1.6s + var(--i) * 2.2s);
+}
+/* тёплое пятно света на полу у трибуны */
+.stand::after{
+  content:''; position:absolute; left:50%; top:86%; width:150%; height:26%; transform:translateX(-50%); pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%, rgba(255,210,120,.55), rgba(236,176,36,.18) 55%, transparent 72%);
+  mix-blend-mode:screen; filter:blur(4px); opacity:0; transition:opacity .35s var(--ease);
+}
+.stand:hover::before,.stand:focus-visible::before,.stand:hover::after,.stand:focus-visible::after{opacity:1; animation:none}
+.stand:focus-visible{box-shadow:0 0 0 3px var(--gold)}
+@keyframes standIdle{0%, 80%, 100%{opacity:0} 88%{opacity:.7}}
+.stand__hint{
+  position:absolute; left:50%; bottom:calc(100% + 6px); transform:translate(-50%, 8px); z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:2px; white-space:nowrap; pointer-events:none;
+  padding:7px 14px 8px; border-radius:14px; background:rgba(0,10,32,.82); border:1px solid rgba(236,176,36,.5);
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.8); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  opacity:0; transition:opacity .25s var(--ease), transform .25s var(--ease-out);
+}
+.stand__hint b{font-family:var(--font-display); font-weight:600; font-size:16px; letter-spacing:.06em; text-transform:uppercase; color:var(--gold)}
+.stand__hint span{font-size:12px; color:var(--muted)}
+.stand:hover .stand__hint,.stand:focus-visible .stand__hint{opacity:1; transform:translate(-50%, 0)}
+
+/* низ студии плавно переходит в цвет разделов — без резкой границы */
+.stage::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:18vh; z-index:3; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(4,15,48,0), rgba(4,15,48,.55) 60%, rgba(4,15,48,.92));
+}
+.stage + .stage-fly + .stage-veil + .filmstrip{
+  background:linear-gradient(to bottom, rgba(214,168,90,.30), rgba(214,168,90,.10)); border-color:rgba(214,168,90,.35);
+}
+.stage__prompt,.stage__head,.stage__caps{display:none}
+.stage__bottom{position:absolute; left:0; right:0; bottom:clamp(12px,2.6vh,26px); z-index:4}
+.stage.is-flying .stage__nav,.stage.is-flying .stage__bottom,.stage.is-flying .stage__prompt,
+.stage.is-flying .stage__head,.stage.is-flying .stage__caps{opacity:0; pointer-events:none; transition:opacity .18s}
+.stage.is-flying .stage__prompt{animation:none; visibility:hidden}
+
+/* затемнение при переходе в раздел */
+.stage-veil{position:fixed; inset:0; z-index:140; background:var(--night); opacity:0; pointer-events:none; transition:opacity .28s ease}
+.stage-veil.is-on{opacity:1; pointer-events:auto}
+
+/* телефон вертикально: всё в одну колонку без пустот — шапка, студия во всю ширину (крайние трибуны у краёв),
+   цифры под трибунами, подсказка, свежие события */
+@media (max-aspect-ratio: 1/1){
+  .stage{
+    display:flex; flex-direction:column; justify-content:flex-start; gap:0; min-height:0;
+    padding-top:calc(var(--nav-h) + 22px); padding-bottom:26px;
+  }
+  .stage__bg{inset:-20px; background:url("assets/home2-1400.jpg") 50% 30% / cover no-repeat; filter:blur(9px) brightness(.4) saturate(1.1)}
+  .stage__bg::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(4,15,48,.5), rgba(4,15,48,.15) 40%, rgba(4,15,48,.15) 60%, rgba(4,15,48,.7))}
+  .stage__head{display:block; position:relative; z-index:4; padding:0 20px; margin-bottom:6px; text-align:center}
+  .stage__kicker{
+    display:inline-flex; align-items:center; gap:8px; margin:0; padding:6px 12px; border-radius:999px;
+    border:1px solid rgba(214,168,90,.4); background:rgba(4,15,48,.45);
+    color:var(--gold-300); font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:600;
+  }
+  .stage__tag{margin:10px 0 0; color:var(--cream); font-size:15px; line-height:1.35; text-shadow:0 2px 12px rgba(4,15,48,.9)}
+  .stage__scene{position:relative; left:auto; top:auto; transform:none; flex:none; width:125vw; margin-left:-12.5vw}
+  .stage__img{-webkit-mask-image:linear-gradient(to bottom, transparent, #000 10%, #000 93%, transparent); mask-image:linear-gradient(to bottom, transparent, #000 10%, #000 93%, transparent)}
+  .stage__caps{display:grid; grid-template-columns:repeat(4, 1fr); position:relative; z-index:4; margin-top:-2px; padding:0 2px}
+  .stage__cap{
+    display:flex; flex-direction:column; align-items:center; gap:1px; min-height:48px; padding:4px 2px;
+    border:0; background:none; color:var(--cream); font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent;
+  }
+  .stage__cap b{font-family:var(--font-display); font-weight:600; font-size:19px; line-height:1.15; color:var(--gold)}
+  .stage__cap span{font-size:11px; line-height:1.2; color:var(--muted); text-align:center}
+  .stage__prompt{
+    display:block; position:relative; z-index:4; margin:14px 0 0; text-align:center;
+    font-family:var(--font-display); font-size:15px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold-300);
+    text-shadow:0 2px 12px rgba(0,10,32,.9); animation:promptPulse 2.4s ease-in-out infinite;
+  }
+  .stage__bottom{position:relative; bottom:auto; margin-top:18px}
+  .stage::after{height:10vh}
+  .stand__hint{display:none}
+}
+@keyframes promptPulse{0%, 100%{opacity:.55} 50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.stand::before,.stage__prompt,.stage__img{animation:none}}
+
 </style>
 </head>
 <body>
@@ -1409,89 +1924,51 @@ html.bg-ready body::before{
 
 <main id="main">
 
-  <section class="intro" id="top" aria-labelledby="introTitle">
-    <div class="intro__media" aria-hidden="true">
-      <video class="intro__video" id="introVideo" muted loop playsinline disablepictureinpicture preload="none"
-             poster="assets/kinolega-intro-poster.jpg" width="1920" height="1080">
-        <source src="assets/kinolega-intro.mp4" type="video/mp4">
-      </video>
+  <section class="intro stage" id="top" aria-labelledby="introTitle">
+    <div class="stage__bg" aria-hidden="true"></div>
+    <div class="stage__head">
+      <p class="stage__kicker"><svg width="13" height="13" aria-hidden="true"><use href="#i-film"/></svg>Киноквиз · архив с 2024 года</p>
+      <p class="stage__tag">Результаты игр, турниры и рейтинг игроков</p>
     </div>
-    <div class="intro__shade" aria-hidden="true"></div>
-    <div class="intro__grain" aria-hidden="true"></div>
-
+    <div class="stage__scene" id="stageScene">
+      <img class="stage__img" src="assets/home2-2400.jpg" srcset="assets/home2-1400.jpg 1400w, assets/home2-2400.jpg 2400w"
+           sizes="(max-aspect-ratio: 1/1) 120vw, 100vw" alt="" width="2400" height="1340" decoding="async" fetchpriority="high">
+      <nav class="stage__nav" aria-label="Разделы сайта">
+        <a class="stand" href="#games" data-goto="games" data-video="assets/stage-games" style="--i:0; --x:10.2%; --y:52.3%; --w:17.9%; --h:38.0%">
+          <span class="sr-only">Игры</span>
+          <span class="stand__hint" aria-hidden="true"><b>Игры</b><span id="ctaGames"></span></span>
+        </a>
+        <a class="stand" href="#tournament" data-goto="tournament" data-video="assets/stage-tournament" style="--i:1; --x:33.0%; --y:52.0%; --w:14.6%; --h:34.0%">
+          <span class="sr-only">Турнир</span>
+          <span class="stand__hint" aria-hidden="true"><b>Турнир</b><span id="ctaTour"></span></span>
+        </a>
+        <a class="stand" href="#rating" data-goto="rating" data-video="assets/stage-rating" style="--i:2; --x:52.4%; --y:52.2%; --w:14.6%; --h:34.0%">
+          <span class="sr-only">Рейтинг</span>
+          <span class="stand__hint" aria-hidden="true"><b>Рейтинг</b><span id="ctaRating"></span></span>
+        </a>
+        <a class="stand" href="#schedule" data-goto="schedule" data-video="assets/stage-schedule" style="--i:3; --x:72.0%; --y:52.6%; --w:17.9%; --h:38.0%">
+          <span class="sr-only">Расписание</span>
+          <span class="stand__hint" aria-hidden="true"><b>Расписание</b><span id="ctaSchedule"></span></span>
+        </a>
+      </nav>
+    </div>
+    <div class="stage__caps" id="stageCaps">
+      <button class="stage__cap" type="button" data-cap="games"><b>—</b><span>игры</span></button>
+      <button class="stage__cap" type="button" data-cap="tournament"><b>—</b><span>турнир</span></button>
+      <button class="stage__cap" type="button" data-cap="rating"><b>—</b><span>рейтинг</span></button>
+      <button class="stage__cap" type="button" data-cap="schedule"><b>—</b><span>расписание</span></button>
+    </div>
+    <h1 class="sr-only" id="introTitle">KinOlega Quiz — архив игр, турниров и рейтинга</h1>
+    <p class="stage__prompt" aria-hidden="true">Выберите трибуну</p>
     <button class="intro__pause intro__sound" id="introSound" type="button" hidden aria-pressed="true" aria-label="Звук переходов" title="Звук переходов">
       <svg width="18" height="18" aria-hidden="true"><use href="#i-sound-on"/></svg>
     </button>
-    <button class="intro__pause" id="introPause" type="button" aria-pressed="false" aria-label="Остановить видео">
-      <svg width="18" height="18" aria-hidden="true"><use href="#i-pause"/></svg>
-    </button>
-
-    <div class="wrap intro__inner">
-      <div class="intro__head">
-        <p class="intro__kicker">
-          <svg width="14" height="14" aria-hidden="true"><use href="#i-film"/></svg>
-          Киноквиз · архив с 2024 года
-        </p>
-        <h1 class="intro__title" id="introTitle">
-          <span class="l1">KinOlega</span>
-          <span class="l2">Quiz</span>
-        </h1>
-        <p class="intro__tag">Результаты всех игр, турнирные таблицы и рейтинг игроков — в одном месте.</p>
-      </div>
-
-      <nav class="intro__nav" aria-label="Разделы сайта">
-        <a class="door" href="#games" data-goto="games" style="--i:0">
-          <span class="door__glow" aria-hidden="true"></span>
-          <span class="door__head">
-            <span class="door__icon-wrap"><svg class="door__icon" aria-hidden="true"><use href="#i-ticket"/></svg></span>
-            <span class="door__no" aria-hidden="true">01</span>
-          </span>
-          <span class="door__label">Игры</span>
-          <span class="door__foot">
-            <span class="door__meta" id="ctaGames">Архив игр</span>
-            <span class="door__go" aria-hidden="true"><svg width="16" height="16"><use href="#i-arrow"/></svg></span>
-          </span>
-        </a>
-        <a class="door" href="#tournament" data-goto="tournament" style="--i:1">
-          <span class="door__glow" aria-hidden="true"></span>
-          <span class="door__head">
-            <span class="door__icon-wrap"><svg class="door__icon" aria-hidden="true"><use href="#i-trophy"/></svg></span>
-            <span class="door__no" aria-hidden="true">02</span>
-          </span>
-          <span class="door__label">Турнир</span>
-          <span class="door__foot">
-            <span class="door__meta" id="ctaTour">Год и сезоны</span>
-            <span class="door__go" aria-hidden="true"><svg width="16" height="16"><use href="#i-arrow"/></svg></span>
-          </span>
-        </a>
-        <a class="door" href="#rating" data-goto="rating" style="--i:2">
-          <span class="door__glow" aria-hidden="true"></span>
-          <span class="door__head">
-            <span class="door__icon-wrap"><svg class="door__icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
-            <span class="door__no" aria-hidden="true">03</span>
-          </span>
-          <span class="door__label">Рейтинг</span>
-          <span class="door__foot">
-            <span class="door__meta" id="ctaRating">Все игроки</span>
-            <span class="door__go" aria-hidden="true"><svg width="16" height="16"><use href="#i-arrow"/></svg></span>
-          </span>
-        </a>
-        <a class="door" href="#schedule" data-goto="schedule" style="--i:3">
-          <span class="door__glow" aria-hidden="true"></span>
-          <span class="door__head">
-            <span class="door__icon-wrap"><svg class="door__icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
-            <span class="door__no" aria-hidden="true">04</span>
-          </span>
-          <span class="door__label">Расписание игр</span>
-          <span class="door__foot">
-            <span class="door__meta" id="ctaSchedule">Скоро</span>
-            <span class="door__go" aria-hidden="true"><svg width="16" height="16"><use href="#i-arrow"/></svg></span>
-          </span>
-        </a>
-      </nav>
+    <div class="wrap stage__bottom">
       <div class="intro__ticker" id="introTicker" role="region" aria-label="Свежие события" hidden></div>
     </div>
   </section>
+  <div class="stage-fly" id="stageFly" aria-hidden="true"></div>
+  <div class="stage-veil" id="stageVeil" aria-hidden="true"></div>
 
   <div class="filmstrip" aria-hidden="true"></div>
 
@@ -1564,7 +2041,19 @@ html.bg-ready body::before{
       </div>
 
       <p class="result-count" id="gamesCount" aria-live="polite"></p>
-      <div class="grid-games" id="gamesGrid"></div>
+      <div class="grid-games" id="gamesGrid" hidden></div>
+      <div class="gstack" id="gamesStack" hidden>
+        <div class="gstack__stage" id="gstackStage" tabindex="0" aria-roledescription="карусель" aria-label="Игры: стрелки влево и вправо листают карточки">
+          <div class="gstack__glow" aria-hidden="true"></div>
+          <div class="gstack__track" id="gstackTrack"></div>
+        </div>
+        <div class="gstack__bar">
+          <button class="gstack__nav gstack__nav--prev" type="button" data-gs="prev" aria-label="Предыдущая игра"><svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <span class="gstack__pos" id="gstackPos" aria-live="polite"></span>
+          <input class="gstack__range" id="gstackRange" type="range" min="0" max="0" value="0" step="1" aria-label="Перемотка по играм">
+          <button class="gstack__nav gstack__nav--next" type="button" data-gs="next" aria-label="Следующая игра"><svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
       <div id="gamesTable" hidden></div>
       <div id="gamesEmpty" hidden>
         <div class="empty">
@@ -1862,6 +2351,10 @@ html.bg-ready body::before{
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<div class="gx" id="gx" hidden role="dialog" aria-modal="true" aria-labelledby="gxTitle">
+  <div class="gx__scrim" data-gx-close></div>
+  <article class="gx__panel" id="gxPanel"></article>
+</div>
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal__scrim" data-close></div>
   <div class="modal__panel">
@@ -1943,14 +2436,21 @@ function initials(name){
   const p = String(name).trim().split(/\s+/);
   return ((p[0]?.[0] ?? '') + (p[1]?.[0] ?? '')).toUpperCase();
 }
+// ячейка игрока в таблицах: кружок с инициалами и имя (под именем на телефоне — подпись)
+function pcellHTML(name, meta = '', open = true){
+  return `<span class="pcell"><span class="face face--${faceTone(name)}" aria-hidden="true">${esc(initials(name))}</span><span class="pcell__txt"><button class="row-btn" type="button"${open ? ` data-open-player="${esc(name)}"` : ''} aria-haspopup="dialog">${esc(name)}</button>${meta}</span></span>`;
+}
 function deltaHTML(before, after){
-  if(before == null || after == null) return '<span class="delta delta--flat">—</span>';
+  if(before == null || after == null) return '<span class="delta delta--none">—</span>';
   const d = after - before;
   const cls = d > 0.5 ? 'delta--up' : d < -0.5 ? 'delta--down' : 'delta--flat';
   const sign = d > 0.5 ? '▲' : d < -0.5 ? '▼' : '±';
   const word = d > 0.5 ? 'рост на ' : d < -0.5 ? 'снижение на ' : 'без изменений ';
-  return `<span class="delta ${cls}"><span aria-hidden="true">${sign} </span><span class="sr-only">${word}</span>${nf0.format(Math.abs(Math.round(d)))}</span>`;
+  return `<span class="delta ${cls}"><span class="delta__ic" aria-hidden="true">${sign}</span><span class="sr-only">${word}</span>${nf0.format(Math.abs(Math.round(d)))}</span>`;
 }
+// турнир: рейтинг пересчитывается один раз за сезон — изменение показываем у последней игры игрока в сезоне
+const seasonDeltaHTML = (p, last) => last ? deltaHTML(p.r, p.nr)
+  : '<span class="delta delta--none" title="Рейтинг турнира пересчитывается после последней игры сезона — изменение показано у неё">—</span>';
 
 /* ---------------- CSV ---------------- */
 function parseCSV(text){
@@ -2158,10 +2658,11 @@ function renderHero(){
   $('#ctaGames').innerHTML = `${tickerHTML(games)} ${plural(games,'игра','игры','игр')} в архиве`;
   $('#ctaTour').textContent = `Год 2026 · ${seasons} ${plural(seasons,'сезон','сезона','сезонов')}`;
   $('#ctaRating').innerHTML = `${tickerHTML(players)} ${plural(players,'игрок','игрока','игроков')}`;
-  observeTickers($('.intro__nav'));
+  observeTickers($('.stage__nav'));
   const today = new Date().toISOString().slice(0,10);
   const next = scheduleList().filter(x => (x.date || '') >= today).sort((a,b) => a.date.localeCompare(b.date))[0];
   $('#ctaSchedule').textContent = next ? `Ближайшая ${fmtDate(next.date)}` : 'Скоро';
+  fillStageCaps(games, seasons, players, next);
 
   $('#cntGames').textContent = games;
   $('#cntRating').textContent = players;
@@ -2179,9 +2680,27 @@ function histOrder(){
   const pn = p => +(String(p).match(/\d+/)?.[0] ?? 0);
   return [...new Set(DB.rating.flatMap(r => (r.hist || []).map(h => h.paket)))].sort((a,b) => pn(a) - pn(b));
 }
+// Дата события в истории игрока. Пакет — последняя игра игрока в этом пакете (в колонке листа Rating рейтинг после неё),
+// сезон — последняя игра сезона (рейтинг турнира пересчитывается после неё). История идёт в том же порядке, в каком
+// Apps Script считал рейтинг: по датам игр, а не по номеру пакета (пакеты #7–#10 шли одновременно)
+let histDateCache = null;
+function histDate(name, paket){
+  if(histDateCache?.db !== DB){
+    const player = new Map(), pkg = new Map();
+    DB.games.forEach(g => {
+      if(!g.date) return;
+      if(!(pkg.get(g.paket) >= g.date)) pkg.set(g.paket, g.date);
+      g.players.forEach(p => { const k = p.p + '|' + g.paket; if(!(player.get(k) >= g.date)) player.set(k, g.date); });
+    });
+    DB.seasons.forEach(se => { const d = se.items.map(i => i.date).filter(Boolean).sort().pop(); if(d) pkg.set(se.key, d); });
+    histDateCache = {db:DB, player, pkg};
+  }
+  return (!SEASON_COL.test(paket) && histDateCache.player.get(name + '|' + paket)) || histDateCache.pkg.get(paket) || '';
+}
+const eventDate = paket => histDate('', paket);
 function histSorted(r){
   const order = histOrder();
-  return (r?.hist || []).slice().sort((a,b) => order.indexOf(a.paket) - order.indexOf(b.paket));
+  return (r?.hist || []).slice().sort((a,b) => histDate(r.p, a.paket).localeCompare(histDate(r.p, b.paket)) || order.indexOf(a.paket) - order.indexOf(b.paket));
 }
 
 // Игры турнирных сезонов в том же виде, что игры пакетов. Место в игре — по игровому рейтингу турнира (fОчки),
@@ -2199,7 +2718,7 @@ function lastStepHTML(r){
   if(h.length < 2) return '';
   const d = h[h.length - 1].r - h[h.length - 2].r;
   if(Math.abs(d) < .5) return '';
-  return `<span class="rt-step ${d > 0 ? 'delta--up' : 'delta--down'}" title="За последнее событие — ${esc(histName(h[h.length - 1].paket))}">${d > 0 ? '▲' : '▼'}${n0(Math.abs(d))}</span>`;
+  return `<span class="delta rt-step ${d > 0 ? 'delta--up' : 'delta--down'}" title="За последнее событие — ${esc(histName(h[h.length - 1].paket))}"><span class="delta__ic" aria-hidden="true">${d > 0 ? '▲' : '▼'}</span>${n0(Math.abs(d))}</span>`;
 }
 
 let tourCache = null;
@@ -2209,6 +2728,7 @@ function tourGames(){
   DB.seasons.forEach(se => {
     const byGame = new Map();
     se.items.forEach(it => { const k = it.game || '—'; if(!byGame.has(k)) byGame.set(k, []); byGame.get(k).push(it); });
+    const seasonRows = [];
     byGame.forEach((items, code) => {
       const players = items.slice().sort((a,b) => (b.f ?? -Infinity) - (a.f ?? -Infinity)).map(it => {
         const sr = DB.seasonRating?.[se.key]?.[it.p];
@@ -2218,12 +2738,20 @@ function tourGames(){
       const date = items.map(i => i.date).filter(Boolean).sort()[0] || null;
       const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, num:tourNum(code), date, players};
       list.push(g);
+      players.forEach(p => seasonRows.push({g, p}));
       players.forEach(p => {
         const s = stats.get(p.p) || {g:0, w:0};
         s.g++; if(p.pos === 1 && players.length > 1) s.w++;
         stats.set(p.p, s);
       });
     });
+    // последняя игра каждого игрока в сезоне: после неё пересчитан рейтинг, у неё и показываем Δ
+    const lastOf = new Map();
+    seasonRows.forEach(x => {
+      const c = lastOf.get(x.p.p), d = x.g.date || '', cd = c?.g.date || '';
+      if(!c || d > cd || (d === cd && (x.g.num ?? 0) > (c.g.num ?? 0))) lastOf.set(x.p.p, x);
+    });
+    lastOf.forEach(x => { x.p.sLast = true; });
   });
   tourCache = {db:DB, list, stats};
   return list;
@@ -2280,7 +2808,7 @@ function renderTicker(){
   byPlayer.forEach((wins, name) => { let n = 0; for(let i = wins.length - 1; i >= 0 && wins[i]; i--) n++; if(n >= 2 && (!streak || n > streak.n)) streak = {n, name}; });
   if(streak) items.push({icon:'i-star', player:streak.name, html:`Идёт серия побед — <b>${esc(streak.name)}</b> · ${streak.n} подряд`});
   // взлёт за последнее событие рейтинга
-  const order = histOrder(), lastEvent = order[order.length - 1];
+  const lastEvent = histOrder().slice().sort((a,b) => eventDate(a).localeCompare(eventDate(b))).pop();
   let jump = null;
   DB.rating.forEach(r => { const h = histSorted(r); if(h.length < 2 || h[h.length - 1].paket !== lastEvent) return;
     const d = h[h.length - 1].r - h[h.length - 2].r; if(!jump || d > jump.d) jump = {d, name:r.p}; });
@@ -2330,7 +2858,7 @@ function gtMatch(g, p){
   const from = (v, s) => String(s).trim() === '' || (v != null && v >= parseFloat(String(s).replace(/\s/g, '').replace(',', '.')));
   if(!from(p.pts, f.pts) || !from(p.f, f.f) || !from(p.r, f.rb) || !from(p.nr, f.ra)) return false;
   if(f.d){
-    if(p.r == null || p.nr == null) return false;
+    if(p.r == null || p.nr == null || (g.tour && !p.sLast)) return false;
     const d = p.nr - p.r;
     if(f.d === 'up' ? !(d > .5) : f.d === 'down' ? !(d < -.5) : Math.abs(d) > .5) return false;
   }
@@ -2365,7 +2893,7 @@ function gtRowHTML(g, p, first, alt, anyTour){
         ${anyTour ? `<td class="num tmuted hide-md">${g.tour ? n0(p.f) : '—'}</td>` : ''}
         <td class="num tmuted hide-sm">${n0(p.r)}</td>
         <td class="num hide-sm">${n0(p.nr)}</td>
-        <td>${deltaHTML(p.r, p.nr)}</td>
+        <td>${g.tour ? seasonDeltaHTML(p, p.sLast) : deltaHTML(p.r, p.nr)}</td>
       </tr>`;
 }
 // игры в виде таблицы: строка — один игрок в одной игре; под названием столбца — его фильтр
@@ -2447,44 +2975,19 @@ function renderGames(){
   renderChron();
   const asTable = state.gview === 'table';
   $$('[data-gview]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.gview === state.gview)));
-  grid.hidden = asTable;
+  grid.hidden = true;   // карточки теперь показывает колода
+  $('#gamesStack').hidden = asTable || !list.length;
   $('#gamesTable').hidden = !asTable || !list.length;
   $('#gamesTable').innerHTML = asTable && list.length ? gamesTableHTML(list) : '';
   if(asTable) requestAnimationFrame(fitStickTables);
   $('#gamesCount').innerHTML = `Показано <b>${list.length}</b> из <b>${allGames().length}</b> игр`
     + (asTable && list.length ? gtCountSuffix() : '') + (state.gmonth ? ` · ${monthLabel(state.gmonth)}` : '');
   empty.hidden = list.length > 0;
-  grid.innerHTML = list.map((g,i) => {
-    const w = g.players[0];
-    const featured = i === 0 && state.paket === 'all' && !state.gq.trim() && state.gsort === 'date-desc';
-    const faces = g.players.slice(0,4).map(p =>
-      `<span class="face face--${faceTone(p.p)}" title="${esc(p.p)}">${esc(initials(p.p))}</span>`).join('');
-    const extra = g.players.length > 4 ? `<span class="face face--more">+${g.players.length-4}</span>` : '';
-    return `<button class="ticket${featured ? ' ticket--featured' : ''}${g.tour ? ' ticket--tour' : ''}" type="button" aria-haspopup="dialog" data-game="${esc(gameKey(g))}">
-      <span class="ticket__ring" aria-hidden="true"></span>
-      <span class="ticket__top">
-        <span class="badge${g.tour ? ' badge--tour' : ''}"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
-        <span class="ticket__date">${fmtDate(g.date)}</span>
-      </span>
-      ${featured ? '<span class="ticket__eyebrow">Последняя игра</span>' : ''}
-      <span class="ticket__title"${g.tour ? ` title="${esc(g.n)}"` : ''}>${esc(gameTitle(g))}</span>
-      ${featured ? top3HTML(g) : `<span class="ticket__winner">
-        <svg width="17" height="17" aria-hidden="true"><use href="#i-trophy"/></svg>
-        <span class="ticket__wname">${esc(w ? w.p : '—')}</span>
-        <span class="ticket__wpts">${w ? n0(w.pts) : '—'}</span>
-      </span>`}
-      <span class="ticket__foot">
-        <span class="faces">${faces}${extra}</span>
-        <span class="ticket__more">Результаты <svg width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></span>
-      </span>
-    </button>`;
-  }).join('');
+  if(!asTable && list.length) renderGamesStack(list);
 }
-function openTourGame(seasonKey, code, {push = true} = {}){
-  const g = tourGames().find(x => x.season === seasonKey && String(x.n) === String(code));
-  if(!g) return;
+function tourGameBodyHTML(g){
   const hasR = g.players.some(p => p.nr != null);
-  const body = `
+  return `
     <div class="kpis">
       <div class="kpi"><div class="kpi__v">${g.players.length}</div><div class="kpi__l">Участников</div></div>
       <div class="kpi"><div class="kpi__v">${n0(g.players[0]?.f)}</div><div class="kpi__l">Лучший игровой рейтинг</div></div>
@@ -2499,7 +3002,7 @@ function openTourGame(seasonKey, code, {push = true} = {}){
       </tr></thead>
       <tbody>${g.players.map(p => `<tr>
         <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
-        <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(p.p)}" aria-haspopup="dialog">${esc(p.p)}</button><span class="row-meta num">номинал ${n0(p.pts)}</span></td>
+        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">номинал ${n0(p.pts)}</span>`)}</td>
         <td class="num">${n0(p.f)}</td>
         <td class="num tmuted hide-sm">${n0(p.pts)}</td>
         <td class="num tmuted hide-sm">${n0(p.ans)}</td>
@@ -2509,6 +3012,11 @@ function openTourGame(seasonKey, code, {push = true} = {}){
     </table></div></div>
     <p class="result-count" style="margin-top:14px">Место — по игровому рейтингу турнира (fОчки).${hasR ? ' Рейтинг пересчитывается один раз за сезон, после его последней игры, поэтому Δ — за весь сезон.' : ''}
       <a href="#tournament/${encodeURIComponent(g.season)}">Вся таблица сезона</a></p>`;
+}
+function openTourGame(seasonKey, code, {push = true} = {}){
+  const g = tourGames().find(x => x.season === seasonKey && String(x.n) === String(code));
+  if(!g) return;
+  const body = tourGameBodyHTML(g);
   openModal(`${g.paket} · ${gameTitle(g)}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')} · ${g.n}`, body,
     {route:`tgame/${encodeURIComponent(g.season)}/${encodeURIComponent(g.n)}`, push, shareText:`${g.paket} · ${gameTitle(g)} — результаты KinOlega Quiz`});
 }
@@ -2520,8 +3028,13 @@ function openGame(key, {push = true} = {}){
   const [paket, n] = key.split('|');
   const g = DB.games.find(x => x.paket === paket && String(x.n) === n);
   if(!g) return;
+  const body = gameBodyHTML(g);
+  openModal(`${paket} · Игра №${g.n}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')}`, body,
+    {route:`game/${encodeURIComponent(paket)}/${g.n}`, push, shareText:`${paket} · Игра №${g.n} — результаты KinOlega Quiz`});
+}
+function gameBodyHTML(g){
   const total = g.players.reduce((s,p) => s + Math.max(0, p.pts || 0), 0);
-  const body = `
+  return `
     <div class="kpis">
       <div class="kpi"><div class="kpi__v">${g.players.length}</div><div class="kpi__l">Участников</div></div>
       <div class="kpi"><div class="kpi__v">${n0(g.players[0]?.pts)}</div><div class="kpi__l">Лучший результат</div></div>
@@ -2536,16 +3049,232 @@ function openGame(key, {push = true} = {}){
       </tr></thead>
       <tbody>${g.players.map(p => `<tr>
         <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
-        <td class="tname">${esc(p.p)}<span class="row-meta num">${n0(p.r)} → ${n0(p.nr)}</span></td>
+        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">${n0(p.r)} → ${n0(p.nr)}</span>`)}</td>
         <td class="num">${n0(p.pts)}</td>
         <td class="num tmuted hide-sm">${n0(p.r)}</td>
         <td class="num hide-sm">${n0(p.nr)}</td>
         <td>${deltaHTML(p.r, p.nr)}</td>
       </tr>`).join('')}</tbody>
     </table></div></div>`;
-  openModal(`${paket} · Игра №${g.n}`, `${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length,'участник','участника','участников')}`, body,
-    {route:`game/${encodeURIComponent(paket)}/${g.n}`, push, shareText:`${paket} · Игра №${g.n} — результаты KinOlega Quiz`});
 }
+/* ---------------- игры колодой: веер карточек, под активной — вся информация по игре ---------------- */
+const gs = {list:[], active:0, wired:false, detailTimer:0, drag:null, suppressClick:false};
+function gsCardHTML(g, i){
+  const latest = i === 0 && state.gsort === 'date-desc' && state.gkind === 'all' && state.paket === 'all' && !state.gq.trim() && !state.gmonth;
+  const num = g.tour ? (g.num ?? '') : g.n;
+  const top3 = g.players.slice(0, 3).map(p => `<li class="gcard__row"><span class="rank ${p.pos <= 3 ? 'rank--' + p.pos : ''}">${p.pos}</span><span class="gcard__pname">${esc(p.p)}</span><span class="gcard__ppts">${n0(g.tour ? p.f : p.pts)}</span></li>`).join('');
+  return `<div class="gcard__inner">
+      <span class="gcard__num" aria-hidden="true">${esc(String(num).padStart(2, '0'))}</span>
+      <div class="gcard__top">
+        <span class="badge${g.tour ? ' badge--tour' : ''}"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
+        <span class="gcard__date">${fmtDate(g.date)}</span>
+      </div>
+      ${latest ? '<span class="gcard__eyebrow">Последняя игра</span>' : ''}
+      <h3 class="gcard__title">${esc(gameTitle(g))}</h3>
+      <ol class="gcard__top3" aria-label="Тройка лучших">${top3 || '<li class="gcard__row">—</li>'}</ol>
+      <div class="gcard__foot">
+        <span>${g.players.length} ${plural(g.players.length, 'участник', 'участника', 'участников')}</span>
+        <button class="gcard__open" type="button" data-gs-open aria-haspopup="dialog"><svg width="14" height="14" aria-hidden="true"><use href="#i-expand"/></svg>Раскрыть карточку</button>
+      </div>
+    </div>`;
+}
+// раскладка веером: активная по центру и приподнята, соседние расходятся дугой, уходят в глубину и наклоняются
+function gsLayout(){
+  const track = $('#gstackTrack');
+  if(!track) return;
+  const mobile = innerWidth < 700;
+  const MAX = mobile ? 2 : 3;
+  const len = gs.list.length;
+  const probe = track.querySelector('.gcard');
+  const W = (probe && probe.offsetWidth) || (mobile ? Math.min(innerWidth * .8, 320) : 460);
+  const spacing = W * (mobile ? .34 : .5);
+  const step = (mobile ? 22 : 30) / MAX;
+  const tf = o => {
+    const a = Math.abs(o), act = o === 0;
+    return `translate3d(${(o * spacing).toFixed(1)}px, ${act ? -18 : a * 12}px, ${-a * 120}px) rotateZ(${(o * step).toFixed(2)}deg) rotateX(${act ? 0 : 10}deg) scale(${act ? 1.02 : Math.max(.8, .93 - a * .02)})`;
+  };
+  const existing = new Map([...track.children].map(el => [el.dataset.key, el]));
+  const keep = new Set();
+  for(let i = Math.max(0, gs.active - MAX - 1); i <= Math.min(len - 1, gs.active + MAX + 1); i++){
+    const g = gs.list[i], key = gameKey(g), off = i - gs.active, abs = Math.abs(off);
+    let el = existing.get(key);
+    if(!el){
+      el = document.createElement('article');
+      el.className = 'gcard' + (g.tour ? ' gcard--tour' : '');
+      el.dataset.key = key;
+      el.innerHTML = gsCardHTML(g, i);
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = tf(off === 0 ? 0 : off + Math.sign(off));   // новая карточка выезжает с края веера
+      track.appendChild(el);
+      void el.offsetWidth;
+      el.style.transition = '';
+    }
+    keep.add(key);
+    el.dataset.index = String(i);
+    el.classList.toggle('is-active', off === 0);
+    el.setAttribute('aria-hidden', String(off !== 0));
+    el.querySelector('[data-gs-open]').tabIndex = off === 0 ? 0 : -1;
+    el.style.zIndex = String(100 - abs);
+    el.style.transform = tf(off);
+    el.style.opacity = abs > MAX ? '0' : '1';
+    el.style.pointerEvents = abs > MAX ? 'none' : '';
+  }
+  existing.forEach((el, key) => { if(!keep.has(key)) el.remove(); });
+}
+function gsBar(){
+  const len = gs.list.length;
+  $('#gstackPos').innerHTML = `Игра <b>${gs.active + 1}</b> из <b>${len}</b>`;
+  const r = $('#gstackRange');
+  r.max = String(Math.max(0, len - 1));
+  r.value = String(gs.active);
+  r.disabled = len < 2;
+  r.style.setProperty('--p', len > 1 ? (gs.active / (len - 1) * 100).toFixed(2) + '%' : '0%');
+  $('#gamesStack [data-gs="prev"]').disabled = gs.active <= 0;
+  $('#gamesStack [data-gs="next"]').disabled = gs.active >= len - 1;
+}
+function gsGo(i){
+  const n = Math.max(0, Math.min(gs.list.length - 1, i));
+  if(n === gs.active) return;
+  gs.active = n;
+  gsLayout(); gsBar();
+}
+function gsWire(){
+  gs.wired = true;
+  const stage = $('#gstackStage');
+  $('#gamesStack').addEventListener('click', e => {
+    const nav = e.target.closest('[data-gs]');
+    if(nav){ gsGo(gs.active + (nav.dataset.gs === 'next' ? 1 : -1)); return; }
+    const card = e.target.closest('.gcard');
+    if(!card || gs.suppressClick) return;
+    if(e.target.closest('[data-gs-open]') && card.classList.contains('is-active')) gxOpen(card);
+    else gsGo(+card.dataset.index);
+  });
+  stage.addEventListener('keydown', e => {
+    const k = {ArrowLeft:-1, ArrowRight:1}[e.key];
+    if(k){ e.preventDefault(); gsGo(gs.active + k); }
+    else if(e.key === 'Enter' && e.target === stage){ e.preventDefault(); const c = $('#gstackTrack .gcard.is-active'); if(c) gxOpen(c); }
+    else if(e.key === 'Home'){ e.preventDefault(); gsGo(0); }
+    else if(e.key === 'End'){ e.preventDefault(); gsGo(gs.list.length - 1); }
+  });
+  // свайп по колоде: влево — следующая, вправо — предыдущая
+  stage.addEventListener('pointerdown', e => { if(e.button) return; gs.drag = {x:e.clientX, y:e.clientY}; });
+  stage.addEventListener('pointerup', e => {
+    if(!gs.drag) return;
+    const dx = e.clientX - gs.drag.x, dy = e.clientY - gs.drag.y;
+    gs.drag = null;
+    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){
+      gs.suppressClick = true;
+      gsGo(gs.active + (dx < 0 ? 1 : -1));
+      setTimeout(() => { gs.suppressClick = false; }, 0);
+    }
+  });
+  stage.addEventListener('pointercancel', () => { gs.drag = null; });
+  $('#gstackRange').addEventListener('input', e => gsGo(+e.target.value));
+  window.addEventListener('resize', () => { if(!$('#gamesStack').hidden) gsLayout(); }, {passive:true});
+}
+function renderGamesStack(list){
+  if(!gs.wired) gsWire();
+  const prevKey = gs.list[gs.active] ? gameKey(gs.list[gs.active]) : null;
+  const same = gs.list.length === list.length && gs.list.every((g, i) => g === list[i]);
+  if(!same){
+    const idx = prevKey ? list.findIndex(g => gameKey(g) === prevKey) : -1;
+    gs.active = idx >= 0 ? idx : 0;   // после смены фильтров остаёмся на той же игре, если она есть
+    $('#gstackTrack').innerHTML = '';
+  }
+  gs.list = list;
+  gs.active = Math.max(0, Math.min(gs.active, list.length - 1));
+  gsLayout(); gsBar();
+}
+
+/* ---------------- раскрытая карточка: карточка вырастает из колоды в большое окно с полными результатами ---------------- */
+const gx = {open:false, busy:false, card:null, g:null, lastFocus:null, wired:false};
+const gxReduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// в скрытой вкладке анимация не доигрывает — ждём её не дольше её длительности с запасом
+const gxDone = (a, ms) => Promise.race([a.finished.catch(() => {}), new Promise(r => setTimeout(r, ms + 200))]);
+function gxHTML(g){
+  const num = g.tour ? (g.num ?? '') : g.n;
+  const route = g.tour ? `tgame/${encodeURIComponent(g.season)}/${encodeURIComponent(g.n)}` : `game/${encodeURIComponent(g.paket)}/${g.n}`;
+  return `<div class="gx__inner">
+      <header class="gx__head">
+        <span class="gcard__num" aria-hidden="true">${esc(String(num).padStart(2, '0'))}</span>
+        <div class="gcard__top">
+          <span class="badge${g.tour ? ' badge--tour' : ''}"><svg width="11" height="11" aria-hidden="true"><use href="#${g.tour ? 'i-trophy' : 'i-film'}"/></svg>${esc(g.paket)}</span>
+          <span class="gx__tools">
+            <button class="gx__btn" type="button" data-gx-share="${esc(route)}" aria-label="Поделиться ссылкой на игру" title="Поделиться"><svg width="18" height="18" aria-hidden="true"><use href="#i-share"/></svg></button>
+            <button class="gx__btn" type="button" data-gx-close aria-label="Свернуть карточку" title="Свернуть"><svg width="18" height="18" aria-hidden="true"><use href="#i-collapse"/></svg></button>
+          </span>
+        </div>
+        <h2 class="gcard__title" id="gxTitle">${esc(gameTitle(g))}</h2>
+        <p class="gx__sub">${fmtDate(g.date, true)} · ${g.players.length} ${plural(g.players.length, 'участник', 'участника', 'участников')}${g.tour ? ' · ' + esc(g.n) : ''}</p>
+      </header>
+      <div class="gx__body">${g.tour ? tourGameBodyHTML(g) : gameBodyHTML(g)}</div>
+    </div>`;
+}
+// окно ставим поверх карточки и обрезаем до её размера, затем раскрываем обрезку — содержимое не растягивается
+function gxFrom(panel, card){
+  const p = panel.getBoundingClientRect(), c = card.getBoundingClientRect();
+  return {transform:`translate(${(c.left - p.left).toFixed(1)}px, ${(c.top - p.top).toFixed(1)}px)`,
+          clipPath:`inset(0px ${Math.max(0, p.width - c.width).toFixed(1)}px ${Math.max(0, p.height - c.height).toFixed(1)}px 0px round 24px)`};
+}
+function gxTo(panel){
+  return {transform:'translate(0px, 0px)', clipPath:`inset(0px 0px 0px 0px round ${getComputedStyle(panel).borderTopLeftRadius})`};
+}
+function gxWire(){
+  gx.wired = true;
+  $('#gx').addEventListener('click', e => {
+    if(e.target.closest('[data-gx-close]')){ gxClose(); return; }
+    const sh = e.target.closest('[data-gx-share]');
+    if(sh && gx.g){ shareLink({route:sh.dataset.gxShare, title:`${gx.g.paket} · ${gameTitle(gx.g)}`, text:`${gx.g.paket} · ${gameTitle(gx.g)} — результаты KinOlega Quiz`}); return; }
+    if(e.target.closest('a[href^="#"]')) gxClose();
+  });
+  // Esc сворачивает карточку, если поверх неё не открыто окно игрока
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && gx.open && $('#modal').hidden){ e.preventDefault(); gxClose(); }
+  }, true);
+}
+async function gxOpen(card){
+  if(gx.open || gx.busy) return;
+  const g = gs.list[+card.dataset.index];
+  if(!g) return;
+  if(!gx.wired) gxWire();
+  const root = $('#gx'), panel = $('#gxPanel');
+  Object.assign(gx, {open:true, busy:true, card, g, lastFocus:document.activeElement});
+  panel.className = 'gx__panel' + (g.tour ? ' gx__panel--tour' : '');
+  panel.innerHTML = gxHTML(g);
+  root.hidden = false;
+  panel.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  void root.offsetWidth;
+  root.classList.add('is-open');
+  if(!gxReduce()){
+    const from = gxFrom(panel, card);
+    card.style.visibility = 'hidden';
+    await gxDone(panel.animate([from, gxTo(panel)], {duration:600, easing:'cubic-bezier(.2,.85,.22,1)'}), 600);
+  }
+  gx.busy = false;
+  $('[data-gx-close]', panel)?.focus({preventScroll:true});
+}
+async function gxClose(){
+  if(!gx.open || gx.busy) return;
+  const root = $('#gx'), panel = $('#gxPanel'), card = gx.card;
+  gx.busy = true;
+  root.classList.remove('is-open');
+  if(!gxReduce() && card?.isConnected && card.classList.contains('is-active')){
+    panel.scrollTo({top:0});
+    const a = panel.animate([gxTo(panel), gxFrom(panel, card)], {duration:440, easing:'cubic-bezier(.45,0,.2,1)', fill:'forwards'});
+    await gxDone(a, 440);
+    card.style.visibility = '';
+    a.cancel();
+  }
+  if(card) card.style.visibility = '';
+  root.hidden = true;
+  panel.innerHTML = '';
+  if($('#modal').hidden) document.body.style.overflow = '';
+  Object.assign(gx, {open:false, busy:false, card:null, g:null});
+  if(gx.lastFocus?.isConnected) gx.lastFocus.focus({preventScroll:true});
+}
+
 function plural(n, one, few, many){
   const m10 = n % 10, m100 = n % 100;
   if(m10 === 1 && m100 !== 11) return one;
@@ -2602,7 +3331,7 @@ function renderTournament(){
       : (edgeIn ? `<span class="delta delta--down">−${n0((edgeIn.pts || 0) - (r.pts || 0))}</span>` : '—');
     body.innerHTML = rows.map((r, i) => `<tr>
       <td><span class="rank ${r.pos<=3?'rank--'+r.pos:''}">${r.pos ?? '—'}</span></td>
-      <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(r.p)}" aria-haspopup="dialog">${esc(r.p)}</button>${r.pen ? `<span class="row-meta">штраф ${n0(r.pen)}</span>` : ''}</td>
+      <td class="tname">${pcellHTML(r.p, r.pen ? `<span class="row-meta">штраф ${n0(r.pen)}</span>` : '')}</td>
       <td class="num bar-cell"><i class="bar" data-sx="${((r.pts||0)/max).toFixed(3)}"></i><span>${n0(r.pts)}</span></td>
       <td class="num tmuted hide-sm">${r.pen ? n0(r.pen) : '—'}</td>
       <td class="num hide-sm">${gapHTML(r, i)}</td></tr>${r.pos === PLAYOFF_SPOTS && rows.length > PLAYOFF_SPOTS ? `<tr class="cutline"><td colspan="5"><span class="cutline__label">Граница плей-офф · выходят ${PLAYOFF_SPOTS} лучших</span></td></tr>` : ''}`).join('');
@@ -2620,7 +3349,7 @@ function renderTournament(){
       <th scope="col" class="hide-sm">Взвешенные</th><th scope="col" class="hide-sm">Ответы</th><th scope="col" class="hide-md">Игра</th></tr>`;
     body.innerHTML = rows.map(r => `<tr>
       <td><span class="rank ${r.pos<=3?'rank--'+r.pos:''}">${r.pos ?? '—'}</span></td>
-      <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(r.p)}" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(r.ans)} ${plural(Math.round(r.ans||0),'ответ','ответа','ответов')} · ${esc(r.game || '—')}</span></td>
+      <td class="tname">${pcellHTML(r.p, `<span class="row-meta">${n0(r.ans)} ${plural(Math.round(r.ans||0),'ответ','ответа','ответов')} · ${esc(r.game || '—')}</span>`)}</td>
       <td class="num bar-cell"><i class="bar" data-sx="${((r.f||0)/max).toFixed(3)}"></i><span>${n0(r.f)}</span></td>
       <td class="num tmuted hide-sm">${n0(r.pts)}</td>
       <td class="num tmuted hide-sm">${r.w == null ? '—' : nf2.format(r.w)}</td>
@@ -2873,10 +3602,10 @@ function renderChron(){
   bars.innerHTML = months.map(([yy, mm], i) => {
     const key = `${yy}-${String(mm).padStart(2, '0')}`;
     const n = counts[key] || 0;
-    return `<button type="button" class="chron__bar" data-month="${key}" aria-pressed="${state.gmonth === key}" ${n ? '' : 'disabled'}
-        aria-label="${MONTHS_FULL[mm - 1]} ${yy}: ${n} ${plural(n, 'игра', 'игры', 'игр')}">
+    return `<button type="button" class="chron__bar${n === max && n > 1 ? ' is-peak' : ''}" data-month="${key}" aria-pressed="${state.gmonth === key}" ${n ? '' : 'disabled'}
+        aria-label="${MONTHS_FULL[mm - 1]} ${yy}: ${n} ${plural(n, 'игра', 'игры', 'игр')}${n === max && n > 1 ? ' — больше всего игр' : ''}">
       <span class="chron__n" aria-hidden="true">${n || ''}</span>
-      <span class="chron__col" style="--h:${n ? Math.round(8 + n / max * 56) : 2}px" aria-hidden="true"></span>
+      <span class="chron__col" style="--h:${n ? Math.round(10 + n / max * 58) : 3}px; --k:${i}" aria-hidden="true"></span>
       <span class="chron__m" aria-hidden="true">${MONTHS_SHORT[mm - 1]}</span>
       <span class="chron__y" aria-hidden="true">${i === 0 || mm === 1 ? yy : ''}</span>
     </button>`;
@@ -2962,40 +3691,46 @@ function renderRatingLines(){
   const top = DB.rating.filter(r => r.r != null && (r.hist || []).length > 1).slice().sort((a,b) => b.r - a.r).slice(0, 10);
   if(top.length < 2){ fig.hidden = true; return; }
   fig.hidden = false;
-  const pakets = histOrder().filter(p => top.some(r => r.hist.some(h => h.paket === p)));
+  // ось X — время: у игроков разный порядок событий (пакеты шли одновременно), поэтому точку ставим по дате события
+  const tOf = (r, h) => Date.parse(histDate(r.p, h.paket) || '') || null;
+  const times = top.flatMap(r => r.hist.map(h => tOf(r, h))).filter(Boolean);
+  if(!times.length){ fig.hidden = true; return; }
+  const t0 = Math.min(...times), t1 = Math.max(...times);
+  const dated = r => histSorted(r).filter(h => tOf(r, h));
   const vals = top.flatMap(r => r.hist.map(h => h.r));
   const vmin = Math.min(...vals), vmax = Math.max(...vals), pad = (vmax - vmin) * .08 || 10;
   const lo = vmin - pad, hi = vmax + pad;
   const W = 640, H = 280, L = 12, R = 14, T = 12, B = 12;
-  const x = p => L + (pakets.length === 1 ? 0 : pakets.indexOf(p) * (W - L - R) / (pakets.length - 1));
+  const x = t => L + (t1 > t0 ? (t - t0) * (W - L - R) / (t1 - t0) : 0);
   const yv = v => T + (hi - v) * (H - T - B) / (hi - lo);
   const grid = [0, .25, .5, .75, 1].map(f => `<line class="chart__grid" x1="${L}" x2="${W - R}" y1="${(T + f * (H - T - B)).toFixed(1)}" y2="${(T + f * (H - T - B)).toFixed(1)}"/>`).join('');
   const lines = top.map((r, i) => {
-    const pts = histSorted(r).map(h => [x(h.paket), yv(h.r)]);
+    const pts = dated(r).map(h => [x(tOf(r, h)), yv(h.r)]);
+    if(!pts.length) return '';
     const d = pts.map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
     const last = pts[pts.length - 1];
     return `<g class="series${i === 0 ? ' is-leader' : ''}" data-series="${i}"><path class="hit" d="${d}"/><path d="${d}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="5"/></g>`;
   }).join('');
   // точки для подсказки: координаты в системе viewBox
   fig._vb = [W, H];
-  fig._pts = top.flatMap((r, i) => histSorted(r).map(h => ({x:x(h.paket), y:yv(h.r), s:i, text:`${r.p} · ${histName(h.paket)} · ${n0(h.r)}`})));
-  const mid = pakets[Math.floor((pakets.length - 1) / 2)];
-  const xl = [...new Set([pakets[0], mid, pakets[pakets.length - 1]])];
+  fig._pts = top.flatMap((r, i) => dated(r).map(h => ({x:x(tOf(r, h)), y:yv(h.r), s:i, text:`${r.p} · ${histName(h.paket)} · ${n0(h.r)}`})));
+  const monthOf = t => monthLabel(new Date(t).toISOString().slice(0, 7));
+  const xl = [t0, (t0 + t1) / 2, t1].map(t => [x(t), monthOf(t)]);
   $('#rlPlot').innerHTML = `
     <svg class="chart__svg" viewBox="0 0 ${W} ${H}" aria-hidden="true">${grid}${lines}</svg>
     <span class="chart__marker" hidden></span><div class="chart__tip" hidden></div>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmax) / H * 100).toFixed(2)}%">${n0(vmax)}</span>
     <span class="chart__yl chart__yl--in" style="top:${(yv(vmin) / H * 100).toFixed(2)}%">${n0(vmin)}</span>
-    ${xl.map(p => `<span class="chart__xl" style="left:${(x(p) / W * 100).toFixed(2)}%">${esc(histLabel(p))}</span>`).join('')}`;
+    ${xl.map(([px, label]) => `<span class="chart__xl" style="left:${(px / W * 100).toFixed(2)}%">${esc(label)}</span>`).join('')}`;
   $('#rlLegend').innerHTML = top.map((r, i) => {
     const first = histSorted(r)[0].r;
     return `<li><button type="button" class="chart__item" data-series="${i}" aria-pressed="false"
-        aria-label="${esc(r.p)}: рейтинг ${n0(r.r)}, с ${esc(pakets[0])} ${r.r >= first ? 'рост' : 'снижение'} на ${n0(Math.abs(r.r - first))}">
+        aria-label="${esc(r.p)}: рейтинг ${n0(r.r)}, с ${esc(histName(histSorted(r)[0].paket))} ${r.r >= first ? 'рост' : 'снижение'} на ${n0(Math.abs(r.r - first))}">
       <span class="chart__pos">${i + 1}</span><span class="chart__name">${esc(r.p)}</span>
       <span class="chart__val"><b>${n0(r.r)}</b>${deltaHTML(first, r.r)}</span>
     </button></li>`;
   }).join('');
-  $('#rlHint').textContent = `${histLabel(pakets[0])} — ${histLabel(pakets[pakets.length - 1])} · пакеты и турнирные сезоны · рейтинг от ${n0(vmin)} до ${n0(vmax)}`;
+  $('#rlHint').textContent = `${xl[0][1]} — ${xl[2][1]} · пакеты и турнирные сезоны · рейтинг от ${n0(vmin)} до ${n0(vmax)}`;
   fig.dispatchEvent(new CustomEvent('chart:reset'));
 }
 
@@ -3159,7 +3894,7 @@ function renderRating(){
     const G = gamesAll(r), W = winsAll(r);
     return `<tr class="clickable" data-player="${esc(r.p)}">
       <td><span class="rank ${pos<=3?'rank--'+pos:''}">${pos}</span></td>
-      <td class="tname"><button class="row-btn" type="button" aria-haspopup="dialog">${esc(r.p)}</button><span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span></td>
+      <td class="tname">${pcellHTML(r.p, `<span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span>`, false)}</td>
       <td class="num" style="color:var(--gold);font-weight:700">${n0(r.r)}${lastStepHTML(r)}</td>
       <td class="num hide-sm">${n0(W)}</td>
       <td class="num hide-sm">${n0(G)}</td>
@@ -3280,6 +4015,13 @@ function openPlayer(name, {push = true} = {}){
     const sr = DB.seasonRating?.[se.key]?.[name];   // [общий рейтинг до, после] — сезон учитывается после своей последней игры
     played.push({season: se, g: {paket: se.name, n: it.game, date: it.date}, me: {pos, pts: it.pts, f: it.f, r: sr ? sr[0] : null, nr: sr ? sr[1] : null}});
   }));
+  // рейтинг турнира пересчитывается один раз за сезон — Δ показываем у последней игры игрока в сезоне
+  const seasonLast = new Map();
+  played.filter(x => x.season).forEach(x => {
+    const c = seasonLast.get(x.season.key), d = x.g.date || '', cd = c?.g.date || '';
+    if(!c || d > cd || (d === cd && (tourNum(x.g.n) ?? 0) > (tourNum(c.g.n) ?? 0))) seasonLast.set(x.season.key, x);
+  });
+  seasonLast.forEach(x => { x.me.sLast = true; });
   played.sort((a,b) => (b.g.date||'').localeCompare(a.g.date||''));
   const wins = played.filter(x => x.me.pos === 1).length;
   // лучший результат — по пакетам: номинал сезонных игр считается по другому числу вопросов
@@ -3326,7 +4068,7 @@ function openPlayer(name, {push = true} = {}){
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
         <td class="num">${n0(x.me.pts)}</td>
         <td class="num tmuted hide-sm">${n0(x.me.nr)}</td>
-        <td>${deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
+        <td>${x.season ? seasonDeltaHTML(x.me, x.me.sLast) : deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
   const actions = `<div class="modal__actions">${r ? `<button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка<span class="btn__more"> с результатом</span></button>` : ''}${played.length ? `<button class="btn btn--ghost btn--sm" type="button" data-h2h="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Личные встречи</button>` : ''}</div>`;
@@ -3405,11 +4147,11 @@ async function playerCardBlob(name){
     c.width = W; c.height = H;
     const x = c.getContext('2d');
     const dy = ph ? 50 : 0;
-    x.fillStyle = '#000A20'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#030E2E'; x.fillRect(0, 0, W, H);
     if(img){
       const k = Math.max(W / img.width, H / img.height), iw = img.width * k, ih = img.height * k;
       x.drawImage(img, (W - iw) / 2, (H - ih) / 2, iw, ih);
-      x.fillStyle = 'rgba(0,10,32,.58)'; x.fillRect(0, 0, W, H);
+      x.fillStyle = 'rgba(4,15,48,.58)'; x.fillRect(0, 0, W, H);
     }
     x.textAlign = 'center';
     x.fillStyle = '#ECB024'; x.font = '600 34px Manrope, sans-serif';
@@ -3498,6 +4240,103 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* ---------------- плавный скролл (как Lenis на Augen Pro) ----------------
+   Колесо мыши не двигает страницу скачком, а сдвигает цель; страница догоняет цель с инерцией.
+   Прокрутка остаётся настоящей (window.scrollTo), поэтому липкая шапка и заголовки таблиц работают как раньше.
+   На сенсорных экранах и при «уменьшить движение» — обычная прокрутка системы. */
+const SS = (() => {
+  const fine = window.matchMedia('(pointer: fine)');
+  const api = {active:false, to, toEl};
+  let target = 0, current = 0, raf = 0, last = 0, anim = null;
+  const maxY = () => Math.max(0, document.documentElement.scrollHeight - innerHeight);
+  const locked = () => document.body.style.overflow === 'hidden';   // открыто окно — страница стоит
+  function stop(){ cancelAnimationFrame(raf); raf = 0; last = 0; anim = null; }
+  function enable(){
+    api.active = fine.matches && !RM.matches;
+    document.documentElement.classList.toggle('ss-on', api.active);
+    stop();
+    target = current = scrollY;
+  }
+  function frame(now){
+    const dt = Math.min(64, now - (last || now));
+    last = now;
+    if(anim){
+      const k = Math.min(1, Math.max(0, (now - anim.t0) / anim.dur));
+      current = anim.from + (anim.to - anim.from) * (k === 1 ? 1 : 1 - Math.pow(2, -10 * k));   // easeOutExpo
+      if(k === 1){ anim = null; target = current; }
+    } else {
+      current += (target - current) * (1 - Math.exp(-dt / 110));   // инерция: чем больше делитель, тем «тяжелее» скролл
+      if(Math.abs(target - current) < .5) current = target;
+    }
+    window.scrollTo(0, current);
+    if(current === target && !anim){ raf = 0; last = 0; return; }
+    raf = requestAnimationFrame(frame);
+  }
+  const run = () => { if(!raf) raf = requestAnimationFrame(frame); };
+  // под курсором блок со своей вертикальной прокруткой, и ему есть куда крутить — колесо остаётся ему
+  function innerScroller(el, dy){
+    for(; el && el !== document.body && el !== document.documentElement; el = el.parentElement){
+      const oy = getComputedStyle(el).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 1
+        && (dy > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0)) return true;
+    }
+    return false;
+  }
+  window.addEventListener('wheel', e => {
+    if(!api.active || e.defaultPrevented || e.ctrlKey || locked()) return;
+    let dy = e.deltaY, dx = e.deltaX;
+    if(e.deltaMode === 1){ dy *= 40; dx *= 40; } else if(e.deltaMode === 2){ dy *= innerHeight; dx *= innerWidth; }
+    if(e.shiftKey || Math.abs(dx) > Math.abs(dy)) return;          // прокрутка вбок — как обычно
+    if(e.target.closest?.('[data-ss-prevent]') || innerScroller(e.target, dy)) return;
+    e.preventDefault();
+    if(!raf) target = current = scrollY;
+    if(anim){ anim = null; target = current; }
+    target = Math.max(0, Math.min(maxY(), target + dy));
+    run();
+  }, {passive:false});
+  // клавиши, полоса прокрутки, переход по якорю — сбрасываем инерцию и берём позицию страницы
+  window.addEventListener('scroll', () => {
+    if(!raf) target = current = scrollY;
+    else if(Math.abs(scrollY - current) > 2){ stop(); target = current = scrollY; }
+  }, {passive:true});
+  window.addEventListener('resize', () => { target = Math.min(target, maxY()); }, {passive:true});
+  function to(y, {duration = 1.2} = {}){
+    y = Math.max(0, Math.min(maxY(), y));
+    if(!api.active){ window.scrollTo({top:y, behavior: RM.matches ? 'instant' : 'smooth'}); return; }
+    stop();
+    current = scrollY;
+    anim = {from:current, to:y, t0:performance.now(), dur:duration * 1000};
+    target = y;
+    run();
+  }
+  function toEl(el, opts){
+    const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    to(el.getBoundingClientRect().top + scrollY - pad, opts);
+  }
+  fine.addEventListener?.('change', enable);
+  RM.addEventListener?.('change', enable);
+  enable();
+  return api;
+})();
+
+/* ---------------- появление при прокрутке (как title-reveal / copy-reveal на Augen Pro) ---------------- */
+(() => {
+  if(RM.matches || !('IntersectionObserver' in window)) return;
+  // заголовки разделов — по словам, каждое слово в своей маске
+  $$('.sec-head__title').forEach(h => {
+    const text = h.textContent.trim();
+    h.setAttribute('aria-label', text);
+    h.innerHTML = text.split(/\s+/).map((w, i) => `<span class="rv-w" aria-hidden="true"><span style="--i:${i}">${esc(w)}</span></span>`).join(' ');
+  });
+  const targets = $$('.sec-head').concat(['#ratingPodium', '#tourPodium', '#recordsGrid', '#ratingLines'].map(s => $(s)).filter(Boolean));
+  targets.forEach(el => el.classList.add('rv'));
+  document.documentElement.classList.add('rv-ready');
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add('rv-in'); io.unobserve(e.target); }
+  }), {rootMargin:'0px 0px -10% 0px', threshold:.05});
+  targets.forEach(el => io.observe(el));
+})();
+
 /* ---------------- tabs ---------------- */
 const TABS = ['games','tournament','rating','schedule'];
 let scrollGuard = 0;
@@ -3519,10 +4358,11 @@ function setTab(name, {scroll=true, push=true, instant=false} = {}){
     const strip = $('.filmstrip');
     const y = Math.max(0, strip.offsetTop + strip.offsetHeight - $('.site-header').offsetHeight);
     const smooth = !instant && !RM.matches && document.visibilityState === 'visible';
-    window.scrollTo({top:y, behavior: smooth ? 'smooth' : 'instant'});
+    if(smooth && SS.active) SS.to(y);
+    else window.scrollTo({top:y, behavior: smooth ? 'smooth' : 'instant'});
     if(!smooth) dockCheck();
     clearTimeout(scrollGuard);
-    if(smooth){
+    if(smooth && !SS.active){
       // плавная прокрутка может не отработать (фоновая вкладка, энергосбережение) — тогда докручиваем сразу
       scrollGuard = setTimeout(() => {
         if(Math.abs(window.scrollY - y) > 80){ window.scrollTo({top:y, behavior:'instant'}); dockCheck(); }
@@ -3597,7 +4437,8 @@ document.addEventListener('click', e => {
   const goto = e.target.closest('[data-goto]');
   if(goto){
     e.preventDefault();
-    if(goto.classList.contains('door')) filmTo(goto.dataset.goto);
+    if(goto.classList.contains('stand')) standTo(goto);
+    else if(goto.classList.contains('door')) filmTo(goto.dataset.goto);
     else setTab(goto.dataset.goto);
     return;
   }
@@ -3844,7 +4685,8 @@ document.addEventListener('click', e => {
   setTimeout(() => {
     setTab('rating', {scroll:false});
     renderH2H();
-    $('#h2h').scrollIntoView({behavior: RM.matches ? 'auto' : 'smooth', block:'start'});
+    if(SS.active) SS.toEl($('#h2h'));
+    else $('#h2h').scrollIntoView({behavior: RM.matches ? 'auto' : 'smooth', block:'start'});
     $('#h2hB').focus({preventScroll:true});
   }, 150);
 });
@@ -3934,52 +4776,108 @@ async function loadLive({silent=false} = {}){
 }
 $('#refreshBtn').addEventListener('click', () => loadLive());
 
-/* ---------------- intro video ---------------- */
-(function initIntro(){
-  const intro = $('.intro'), v = $('#introVideo'), btn = $('#introPause'), header = $('.site-header');
-  if(!intro || !v) return;
-  v.muted = true;
-
-  const conn = navigator.connection;
-  const lowData = !!(conn && (conn.saveData || conn.type === 'cellular' || /^(slow-2g|2g)$/.test(conn.effectiveType || '')));
-  let userPaused = RM.matches || lowData;   // «меньше движения», экономия трафика, мобильная сеть, 2G: сами не запускаем (оценку «3g» Chrome ставит и на обычном интернете)
-  let pageReady = document.readyState === 'complete';   // видео не отнимает канал у шрифтов и обложки
-  let onScreen = true;
-
-  function paint(){
-    const playing = !userPaused;
-    btn.setAttribute('aria-pressed', String(!playing));
-    btn.setAttribute('aria-label', playing ? 'Остановить видео' : 'Запустить видео');
-    btn.querySelector('use').setAttribute('href', playing ? '#i-pause' : '#i-play');
+/* ---------------- главная-студия: трибуны и пролёт камеры (черновик) ---------------- */
+const FLY_SEC = 2;   // сколько длится пролёт к трибуне; ролики по 4 с проигрываются ускоренно
+const SRC_SEC = 4;   // длина роликов — если браузер не узнал её из файла
+const stageWait = ms => new Promise(r => setTimeout(r, ms));
+const stageVideos = new Map();
+function stageVideo(stand){
+  const base = stand?.dataset.video;
+  if(!base) return null;
+  if(!stageVideos.has(base)){
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    ['muted', 'playsinline', 'disablepictureinpicture'].forEach(a => v.setAttribute(a, ''));
+    v.className = 'stage__video';
+    v.innerHTML = `<source src="${base}.mp4" type="video/mp4">`;
+    $('#stageFly').appendChild(v);
+    stageVideos.set(base, v);
   }
-  function sync(){
-    if(!userPaused && pageReady && onScreen && !document.hidden){
-      const p = v.play();
-      if(p && p.catch) p.catch(err => {
-        if(err && err.name === 'NotAllowedError'){ userPaused = true; paint(); }   // автозапуск запрещён: остаётся обложка
-      });
-    } else {
-      v.pause();
+  return stageVideos.get(base);
+}
+// телефон: цифры под трибунами
+function fillStageCaps(games, seasons, players, next){
+  const set = (k, val, label) => {
+    const c = document.querySelector(`.stage__cap[data-cap="${k}"]`);
+    if(!c) return;
+    c.querySelector('b').textContent = val;
+    c.querySelector('span').textContent = label;
+  };
+  set('games', games, plural(games, 'игра', 'игры', 'игр'));
+  set('tournament', seasons, plural(seasons, 'сезон', 'сезона', 'сезонов') + ' 2026');
+  set('rating', players, plural(players, 'игрок', 'игрока', 'игроков'));
+  const d = next?.date?.split('-');
+  set('schedule', d ? `${d[2]}.${d[1]}` : 'скоро', d ? 'ближайшая' : 'новые игры');
+}
+let flying = false, flyAnim = null;
+async function standTo(stand){
+  const name = stand.dataset.goto;
+  if(flying) return;
+  const v = RM.matches ? null : stageVideo(stand);
+  if(!v){ setTab(name); $('#tab-' + name)?.focus({preventScroll:true}); return; }
+  flying = true;
+  const stage = $('.stage'), veil = $('#stageVeil');
+  stage.classList.add('is-flying');
+  try{
+    if(v.readyState < 2){
+      await Promise.race([
+        new Promise((res, rej) => { v.addEventListener('loadeddata', res, {once:true}); v.addEventListener('error', rej, {once:true}); }),
+        stageWait(3000).then(() => { throw new Error('видео не успело загрузиться'); })
+      ]);
     }
-    paint();
+    // ролик ставим ровно поверх картинки студии — первый кадр совпадает с ней
+    const r = $('#stageScene').getBoundingClientRect();
+    const from = {left:r.left + 'px', top:r.top + 'px', width:r.width + 'px', height:r.height + 'px'};
+    Object.assign(v.style, from);
+    v.currentTime = 0;
+    const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : SRC_SEC;
+    v.playbackRate = Math.min(4, Math.max(1, dur / FLY_SEC));
+    v.classList.add('is-on');
+    await v.play();
+    // телефон вертикально: картинка — полоса посередине, ролик раскрывается на весь экран (наезд камеры)
+    if(innerHeight > innerWidth){
+      flyAnim = v.animate([from, {left:'0px', top:'0px', width:innerWidth + 'px', height:innerHeight + 'px'}],
+        {duration:600, easing:'cubic-bezier(.65,0,.35,1)', fill:'forwards'});
+    }
+    await Promise.race([new Promise(res => v.addEventListener('ended', res, {once:true})), stageWait(FLY_SEC * 1000 + 900)]);
+  }catch(err){ /* видео недоступно — просто переходим в раздел */ }
+  veil.classList.add('is-on');
+  await stageWait(280);
+  setTab(name, {instant:true});
+  await stageWait(140);
+  stage.classList.remove('is-flying');
+  v.classList.remove('is-on'); v.pause();
+  flyAnim?.cancel(); flyAnim = null;
+  v.removeAttribute('style');
+  try{ v.currentTime = 0; }catch(err){}
+  veil.classList.remove('is-on');
+  await stageWait(420);
+  flying = false;
+  $('#tab-' + name)?.focus({preventScroll:true});
+}
+(function initStage(){
+  const stage = $('.stage'), header = $('.site-header');
+  if(!stage) return;
+  // видео подгружаем заранее: при наведении на трибуну, а на хорошей сети — все сразу после загрузки страницы
+  const warm = e => { const s = e.target.closest?.('.stand'); if(s) stageVideo(s); };
+  stage.addEventListener('pointerover', warm, {passive:true});
+  stage.addEventListener('touchstart', warm, {passive:true});
+  stage.addEventListener('focusin', warm);
+  $('#stageCaps')?.addEventListener('click', e => {
+    const c = e.target.closest('.stage__cap');
+    const s = c && $(`.stand[data-goto="${c.dataset.cap}"]`);
+    if(s){ stageVideo(s); standTo(s); }
+  });
+  const conn = navigator.connection;
+  const lowData = !!(conn && (conn.saveData || conn.type === 'cellular'));
+  if(!lowData && !RM.matches){
+    const preload = () => setTimeout(() => $$('.stand').forEach(stageVideo), 700);
+    if(document.readyState === 'complete') preload(); else window.addEventListener('load', preload, {once:true});
   }
-
-  v.addEventListener('playing', () => intro.classList.add('is-playing'), {once:true});
-  btn.addEventListener('click', () => { userPaused = !userPaused; pageReady = true; sync(); });
-  if(!pageReady) window.addEventListener('load', () => { pageReady = true; sync(); }, {once:true});
-  document.addEventListener('visibilitychange', sync);
-  if(RM.addEventListener) RM.addEventListener('change', e => { if(e.matches){ userPaused = true; sync(); } });
-
-  new IntersectionObserver(es => { onScreen = es[0].isIntersecting; sync(); },
-    {rootMargin:`-${header.offsetHeight}px 0px 0px 0px`, threshold:0}).observe(intro);
-
-  // шапка прозрачная, пока под ней видео
+  // шапка прозрачная, пока под ней студия
   header.classList.add('is-clear');
-  new IntersectionObserver(
-    es => header.classList.toggle('is-clear', es[0].isIntersecting),
-    {rootMargin:`-${header.offsetHeight + 8}px 0px 0px 0px`, threshold:0}
-  ).observe(intro);
-  sync();
+  new IntersectionObserver(es => header.classList.toggle('is-clear', es[0].isIntersecting),
+    {rootMargin:`-${header.offsetHeight + 8}px 0px 0px 0px`, threshold:0}).observe(stage);
 })();
 
 /* ---------------- фон разделов: грузим после страницы, чтобы не мешать видео и шрифтам ---------------- */
