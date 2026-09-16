@@ -37,8 +37,8 @@
   --gold-400:var(--gold);
   --gold-600:#B88923;   /* золото 78% + ночь */
   --ink:var(--cream);
-  --muted:#C0BAAE;      /* крем 78% + ночь */
-  --muted-2:#999691;    /* крем 62% + ночь */
+  --muted:#CBC5B9;      /* крем 82% + ночь — основной второстепенный текст */
+  --muted-2:#ABA69E;    /* крем 68% + ночь — мелкие подписи, контраст на синих карточках не ниже 6:1 */
   --line:rgba(214,168,90,.30);
   --line-soft:rgba(246,236,214,.13);
 
@@ -478,8 +478,9 @@ tbody tr.cutline:hover{background:transparent}
 /* ---------- panels ---------- */
 .panel{padding:clamp(32px,5vw,56px) 0 clamp(56px,8vw,96px)}
 .panel[hidden]{display:none}
-@keyframes panelShow{from{opacity:0} to{opacity:1}}
-.panel:not([hidden]){animation:panelShow var(--t-mid) var(--ease)}
+/* смена вкладки: раздел поднимается и проявляется из лёгкого размытия, как кадр после склейки */
+@keyframes panelShow{from{opacity:0; transform:translateY(18px); filter:blur(6px)} to{opacity:1; transform:none; filter:none}}
+.panel:not([hidden]){animation:panelShow .6s cubic-bezier(.19,1,.22,1)}
 .sec-head{margin-bottom:var(--space-6)}
 .sec-head__eyebrow{
   font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold);
@@ -1692,6 +1693,300 @@ html.ss-on{scroll-behavior:auto}
   .bento__label,.field__label{letter-spacing:.07em; font-size:10.5px}
 }
 
+/* ---------- кнопка «Как играть» в шапке ---------- */
+.hdr-cta{
+  display:inline-flex; align-items:center; gap:8px; height:42px; padding:0 16px 0 14px; border-radius:999px; text-decoration:none;
+  border:1px solid rgba(236,176,36,.55); background:rgba(236,176,36,.12); color:var(--gold-300); font:600 14px/1 var(--font-body);
+  transition:background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.hdr-cta:hover{background:var(--gold); color:var(--night); box-shadow:0 10px 24px -10px rgba(236,176,36,.8)}
+.hdr-cta:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+@media (max-width:560px){
+  .hdr-cta{width:44px; height:44px; padding:0; justify-content:center}
+  .hdr-cta span{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+}
+
+/* ---------- о квизе ---------- */
+.about{position:relative; padding:clamp(56px,8vw,104px) 0 clamp(48px,7vw,88px)}
+.about__grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:20px; margin-bottom:20px}
+.about__card{
+  position:relative; isolation:isolate; border:1px solid var(--card-bd); border-radius:24px; background:var(--card-bg); box-shadow:var(--card-sh);
+  padding:26px 28px 26px 46px;
+}
+.about__card::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:18px; z-index:-1; pointer-events:none;
+  border-radius:24px 0 0 24px; background-image:var(--perf); background-size:18px 22px; border-right:1px dashed rgba(246,236,214,.16);
+}
+.about__card::after{content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; background:var(--card-glare)}
+.about__h{margin:0 0 12px; font-family:var(--font-display); font-weight:600; font-size:26px; letter-spacing:.03em; text-transform:uppercase; color:var(--cream)}
+.about__intro p{margin:0 0 12px; color:var(--muted); line-height:1.6}
+.about__facts{list-style:none; margin:16px 0 20px; padding:0; display:flex; flex-wrap:wrap; gap:8px}
+.about__facts li{display:inline-flex; align-items:center; gap:7px; padding:7px 13px; border-radius:999px; font-size:13px; font-weight:600; color:var(--cream);
+  background:rgba(3,11,34,.5); border:1px solid rgba(214,168,90,.28)}
+.about__facts svg{color:var(--gold)}
+.about__logic{padding:16px 18px; border-radius:16px; border:1px solid rgba(236,176,36,.38);
+  background:linear-gradient(120deg, rgba(236,176,36,.16), rgba(236,176,36,.03) 70%)}
+.about__logic p{margin:0; color:var(--cream)}
+.about__logic .about__logic-h{display:flex; align-items:center; gap:8px; margin-bottom:6px; font-family:var(--font-display); font-size:19px; letter-spacing:.04em; text-transform:uppercase; color:var(--gold)}
+.about__play-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 16px; margin-bottom:14px}
+.about__play-head .about__h{margin:0}
+.about__hint{margin:0; font-size:13px; color:var(--muted-2)}
+
+/* виды вопросов и темы из пакетов */
+.fmt{list-style:none; margin:0 0 20px; padding:0; display:grid; gap:14px}
+.fmt li{display:flex; gap:12px; align-items:flex-start}
+.fmt__ic{flex:none; display:grid; place-items:center; width:38px; height:38px; border-radius:11px; color:var(--night);
+  background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10); box-shadow:0 8px 20px -8px rgba(236,176,36,.8), inset 0 1px 0 rgba(255,255,255,.5)}
+.fmt h4{margin:0 0 3px; font-family:var(--font-display); font-weight:600; font-size:19px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.fmt p{margin:0; font-size:14px; line-height:1.5; color:var(--muted)}
+.about__tags{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px}
+.about__tags li{padding:6px 11px; border-radius:999px; font-size:12.5px; font-weight:600; color:var(--muted); background:rgba(3,11,34,.5); border:1px solid rgba(246,236,214,.12)}
+
+/* «Попробуйте сами»: два блока — текст и видео, стоимость выбирается кнопками */
+.qz{margin-bottom:28px}
+.qz__head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 16px; margin-bottom:14px}
+.qz__head .about__h{margin:0}
+.qz__grid{display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); gap:20px; align-items:start}
+.qz__top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid rgba(214,168,90,.2)}
+.qz__kind{display:inline-flex; align-items:center; gap:9px; font-family:var(--font-display); font-weight:600; font-size:23px; letter-spacing:.05em; text-transform:uppercase; color:var(--cream)}
+.qz__kind svg{color:var(--gold)}
+.qz__prices{display:flex; gap:6px}
+.qz__price{
+  min-width:66px; height:46px; padding:0 10px; border-radius:12px; cursor:pointer; font-family:var(--font-display); font-weight:700; font-size:22px; color:var(--gold);
+  background:linear-gradient(160deg, #2148b8, #12308a 60%, #0c2366); border:1px solid rgba(236,176,36,.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 10px 22px -14px rgba(0,0,0,.9); text-shadow:0 2px 10px rgba(4,15,48,.7);
+  transition:transform .25s cubic-bezier(.2,1.2,.3,1), filter .2s ease, box-shadow .2s ease;
+}
+.qz__price:hover{transform:translateY(-2px); filter:brightness(1.12)}
+.qz__price:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.qz__price[aria-selected="true"]{color:var(--night); text-shadow:none; background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #C98A14); box-shadow:0 12px 26px -10px rgba(236,176,36,.8)}
+.qz__body{display:flex; gap:20px; align-items:flex-start}
+.qz__body.is-in{animation:boardIn .45s cubic-bezier(.19,1,.22,1)}
+.qz__media{flex:none; width:min(250px, 44%)}
+.qz__video{display:block; width:100%; height:auto; border-radius:14px; background:#000; object-fit:contain;
+  border:1px solid rgba(236,176,36,.3); box-shadow:0 24px 44px -22px rgba(0,0,0,.95)}
+.qz__info{flex:1; min-width:0}
+.qz__card .board__text{font-size:17px; line-height:1.55}
+.qz__reveal[hidden],.qz__ans[hidden]{display:none}   /* .btn задаёт display — без этого hidden не прячет кнопку */
+.qz__ans{margin-top:4px; padding-top:12px; border-top:1px dashed rgba(236,176,36,.35); animation:boardIn .45s cubic-bezier(.19,1,.22,1)}
+.qz__list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.qz__list li{font-family:var(--font-display); font-size:22px; line-height:1.25; letter-spacing:.02em; color:var(--gold)}
+@media (max-width:900px){.qz__grid{grid-template-columns:1fr}}
+
+/* как попасть на игру: шаги слева, карточка цены справа */
+.join{margin-bottom:28px}
+.join__grid{display:grid; grid-template-columns:minmax(0,1.22fr) minmax(0,.78fr); gap:20px; align-items:stretch}
+.jsteps{list-style:none; margin:0 0 22px; padding:0; display:grid; gap:16px}
+.jsteps li{display:flex; gap:14px; align-items:flex-start}
+.jsteps__n{flex:none; display:grid; place-items:center; width:36px; height:36px; border-radius:50%; font-family:var(--font-display); font-weight:700; font-size:18px; color:var(--night);
+  background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10); box-shadow:0 8px 20px -8px rgba(236,176,36,.8), inset 0 1px 0 rgba(255,255,255,.5)}
+.jsteps h4{margin:2px 0 4px; font-family:var(--font-display); font-weight:600; font-size:19px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.jsteps p{margin:0; font-size:14.5px; line-height:1.55; color:var(--muted)}
+.jsteps a{color:var(--gold-300); font-weight:600}
+.jfmt{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.jfmt li{padding:10px 14px; border-radius:12px; font-size:14px; line-height:1.5; color:var(--muted); background:rgba(3,11,34,.45); border:1px solid rgba(246,236,214,.1)}
+.jfmt b{color:var(--cream)}
+/* карточка участия: обычный вид, цена — спокойной строкой, без акцента */
+.price{display:flex; flex-direction:column}
+.price__label{margin:0; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(226,200,150,.85)}
+.price__v{margin:8px 0 0; font-size:15px; font-weight:600; line-height:1.5; color:var(--cream)}
+.price__alt{margin:0; font-size:14px; color:var(--muted)}
+.price__per{margin:2px 0 20px; font-size:13px; color:var(--muted-2)}
+.price__h{margin:0 0 10px; font-family:var(--font-display); font-weight:600; font-size:19px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.price__list{list-style:none; margin:0 0 22px; padding:0; display:grid; gap:10px}
+.price__list li{position:relative; padding-left:22px; font-size:14px; line-height:1.5; color:var(--muted)}
+.price__list li::before{content:''; position:absolute; left:2px; top:.45em; width:9px; height:9px; border-radius:2px; transform:rotate(45deg);
+  background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10)}
+.price__list b{color:var(--cream)}
+.price__cta{justify-content:center; margin-top:auto}
+.price__cta + .price__cta{margin-top:10px}
+@media (max-width:900px){.join__grid{grid-template-columns:1fr}}
+
+/* ---------- «Рейтинг топ-10»: плавные линии, медальные цвета, сезоны, прицел ---------- */
+#ratingLines .chart__plot{--pl:38px; margin-bottom:30px; padding-left:var(--pl)}   /* слева — место под шкалу рейтинга */
+#ratingLines .rl-grid{stroke:rgba(246,236,214,.07); stroke-dasharray:2 5}
+#ratingLines .rl-band{fill:rgba(111,168,168,.09); stroke:rgba(111,168,168,.22); stroke-width:1; vector-effect:non-scaling-stroke}
+#ratingLines .rl-band__t{fill:#9FD3CC; font:600 10px var(--font-body); letter-spacing:.08em; text-anchor:middle; text-transform:uppercase}
+#ratingLines .rl-year{stroke:rgba(214,168,90,.28); stroke-width:1; stroke-dasharray:4 5; vector-effect:non-scaling-stroke}
+#ratingLines .rl-yl{left:0; padding:0; background:none; font-size:11px; color:var(--muted-2)}
+#ratingLines .rl-xl{font-size:12px; color:var(--muted)}
+#ratingLines .rl-xl--year{color:rgba(226,200,150,.9); font-weight:700}
+#ratingLines .chart__xl.rl-xl--start{transform:none}
+#ratingLines .chart__xl.rl-xl--end{transform:translateX(-100%)}
+#ratingLines .series path.rl-line{
+  stroke:var(--c); stroke-width:2; opacity:.55; stroke-dasharray:1; stroke-dashoffset:1;
+  transition:stroke-dashoffset 1.6s cubic-bezier(.3,.7,.2,1) calc(var(--k) * 60ms), stroke-width .2s ease, opacity .2s ease, stroke .2s ease;
+}
+#ratingLines.rl-drawn .series path.rl-line{stroke-dashoffset:0}
+#ratingLines .series.rl-top path.rl-line{stroke-width:2.6; opacity:.95}
+#ratingLines .series.is-leader path.rl-line{stroke:var(--c); stroke-width:3.2; opacity:1}
+#ratingLines .series path.rl-area{stroke:none; opacity:0; transition:opacity .3s ease}   /* заливка задана в style — общий .series path её гасит */
+#ratingLines .series.is-leader .rl-area{opacity:.8}
+#ratingLines .series .rl-end{fill:var(--c); stroke:#061232; stroke-width:2; vector-effect:non-scaling-stroke; opacity:0; transition:opacity .4s ease 1.2s}
+#ratingLines.rl-drawn .series .rl-end{opacity:1}
+#ratingLines.has-focus .series{opacity:.14}
+#ratingLines.has-focus .series.is-focus{opacity:1}
+#ratingLines.has-focus .series.is-focus path.rl-line{stroke:var(--cf); stroke-width:3.4; opacity:1}
+#ratingLines.has-focus .series.is-focus .rl-area{opacity:1}
+#ratingLines.has-focus .series.is-leader:not(.is-focus) .rl-area{opacity:0}
+#ratingLines.has-focus .series.is-focus .rl-end{fill:var(--cf)}
+#ratingLines .rl-cross{position:absolute; width:0; border-left:1px dashed rgba(246,236,214,.35); pointer-events:none; z-index:1}
+#ratingLines .rl-cross[hidden]{display:none}
+#ratingLines .chart__marker{background:var(--c, var(--gold)); box-shadow:0 0 0 3px #061232, 0 0 18px var(--c, var(--gold))}
+#ratingLines .rl-tip{min-width:170px; padding:10px 12px; border-radius:12px; text-align:left; line-height:1.35;
+  background:rgba(8,20,58,.96); border:1px solid rgba(236,176,36,.4); box-shadow:0 18px 40px -16px rgba(0,0,0,.9)}
+#ratingLines .rl-tip b{display:block; font-size:13.5px; color:var(--cream)}
+#ratingLines .rl-tip__e{display:block; margin-top:2px; font-size:12px; color:var(--muted-2)}
+#ratingLines .rl-tip__v{display:flex; align-items:center; gap:8px; margin-top:6px; font-family:var(--font-display); font-size:20px; color:var(--gold)}
+#ratingLines .rl-tip__v .delta{font-family:var(--font-body)}
+.rl-sw{display:inline-block; width:14px; height:3px; margin-right:9px; border-radius:2px; vertical-align:middle; background:var(--c); opacity:.9}
+#rlLegend .chart__val .rt-step{margin-left:0}
+@media (max-width:700px){
+  #ratingLines .chart__plot{--pl:32px}
+  #ratingLines .rl-xl--tight{display:none}
+  #ratingLines .rl-band__t{font-size:12px}
+}
+
+/* ---------- рейтинг «до → после» в карточках игр ---------- */
+.rflow{display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-variant-numeric:tabular-nums}
+.rflow__b{color:var(--muted-2)}
+.rflow__arr{flex:none; color:rgba(236,176,36,.75)}
+.rflow__a{color:var(--cream); font-weight:700}
+.game-table .row-meta{white-space:normal; margin-top:2px}   /* на телефоне подписи под именем переносятся — таблица не шире экрана */
+.game-table .pcell__txt .row-btn{white-space:normal}
+
+/* ---------- средние очки по форматам в карточке игрока ---------- */
+.kpis--3{grid-template-columns:repeat(3, minmax(0,1fr))}
+.avg2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:-6px 0 8px}
+.avg2__col{padding:14px 16px 16px; border-radius:16px; border:1px solid rgba(214,168,90,.22);
+  background:linear-gradient(165deg, rgba(22,46,110,.7), rgba(5,16,46,.7)); box-shadow:inset 0 1px 0 rgba(246,236,214,.08)}
+.avg2__col--tour{border-color:rgba(111,168,168,.38); background:linear-gradient(165deg, rgba(18,58,85,.72), rgba(5,16,46,.72))}
+.avg2__h{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:2px 10px; margin:0 0 4px;
+  font-family:var(--font-display); font-weight:600; font-size:17px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.avg2__h span{font-family:var(--font-body); font-weight:500; font-size:12px; letter-spacing:0; text-transform:none; color:var(--muted-2)}
+.avg2__row{display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:4px 12px; margin-top:10px; font-size:13.5px; color:var(--muted)}
+.avg2__row b{font-family:var(--font-display); font-weight:600; font-size:22px; letter-spacing:.02em; color:var(--gold); font-variant-numeric:tabular-nums}
+.avg2__col--tour .avg2__row b{color:#9FD3CC}
+.avg2__row b.avg2__opp{color:var(--cream)}
+.avg2__bar{grid-column:1 / -1; display:block; height:5px; border-radius:999px; overflow:hidden; background:rgba(3,11,34,.6)}
+.avg2__bar i{display:block; width:var(--w); height:100%; border-radius:inherit; background:linear-gradient(90deg, #B67B10, #F2BE3C)}
+.avg2__col--tour .avg2__bar i{background:linear-gradient(90deg, #3f7c7c, #9FD3CC)}
+.avg2__bar--opp i,.avg2__col--tour .avg2__bar--opp i{background:rgba(246,236,214,.45)}
+.avg2__note{margin:0 0 18px; font-size:12.5px; line-height:1.5; color:var(--muted-2)}
+@media (max-width:560px){
+  .avg2{grid-template-columns:1fr}
+  .kpis--compact.kpis--3{grid-template-columns:repeat(3, minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .qz__top{flex-direction:column; align-items:stretch}
+  .qz__prices{width:100%}
+  .qz__price{flex:1 1 0; min-width:0}
+  .qz__body{flex-direction:column}
+  .qz__media{width:100%; max-width:300px; margin:0 auto}
+  .qz__list li{font-size:19px}
+  .qz__card .board__text{font-size:15.5px}
+}
+
+/* мини-табло: темы слева, стоимости — синие плитки с золотыми цифрами, как на табло «Своей игры» */
+.board{display:grid; grid-template-columns:minmax(0,1.55fr) repeat(3, minmax(0,1fr)); gap:8px; margin-bottom:14px}
+.board__theme{display:flex; align-items:center; min-height:58px; padding:8px 12px; border-radius:12px;
+  font-family:var(--font-display); font-size:15px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; line-height:1.15; color:var(--cream);
+  background:linear-gradient(160deg, #1a3790, #0f2466); border:1px solid rgba(246,236,214,.12); box-shadow:inset 0 1px 0 rgba(246,236,214,.14)}
+.board__cell{
+  min-height:58px; border-radius:12px; cursor:pointer; font-family:var(--font-display); font-weight:700; font-size:26px; letter-spacing:.02em; color:var(--gold);
+  background:linear-gradient(160deg, #2148b8, #12308a 60%, #0c2366); border:1px solid rgba(236,176,36,.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 10px 22px -14px rgba(0,0,0,.9); text-shadow:0 2px 10px rgba(4,15,48,.7);
+  transition:transform .25s cubic-bezier(.2,1.2,.3,1), box-shadow .2s ease, filter .2s ease, opacity .3s ease;
+}
+.board__cell:hover{transform:translateY(-3px); filter:brightness(1.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 16px 30px -14px rgba(236,176,36,.55)}
+.board__cell:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.board__cell.is-used{color:rgba(236,176,36,.45); filter:saturate(.6) brightness(.8)}
+.board__cell.is-on{color:var(--night); filter:none; background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #C98A14); box-shadow:0 0 0 2px rgba(242,190,60,.35), 0 14px 30px -10px rgba(236,176,36,.8); text-shadow:none}
+.board__q{min-height:150px; padding:16px 18px; border-radius:16px; background:rgba(3,11,34,.5); border:1px solid rgba(246,236,214,.1); box-shadow:inset 0 2px 8px rgba(0,0,0,.35)}
+.board__q.is-in{animation:boardIn .45s cubic-bezier(.19,1,.22,1)}
+@keyframes boardIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+.board__empty{margin:0; height:100%; min-height:116px; display:grid; place-items:center; text-align:center; color:var(--muted-2)}
+.board__eyebrow{margin:0 0 6px; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold)}
+.board__text{margin:0 0 14px; font-size:17px; line-height:1.5; color:var(--cream)}
+.board__ans{padding-top:12px; border-top:1px dashed rgba(236,176,36,.35); animation:boardIn .45s cubic-bezier(.19,1,.22,1)}
+.board__a{margin:0 0 6px; font-family:var(--font-display); font-size:24px; letter-spacing:.03em; color:var(--gold)}
+.board__how{margin:0; font-size:14px; line-height:1.55; color:var(--muted)}
+.board__how b{color:var(--cream)}
+
+/* как проходит игра */
+.about__steps{list-style:none; margin:0 0 28px; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px}
+.about__step{position:relative; overflow:hidden; padding:18px 18px 16px; border-radius:18px; border:1px solid rgba(214,168,90,.22);
+  background:linear-gradient(170deg, rgba(20,44,108,.62), rgba(4,14,42,.62)); box-shadow:inset 0 1px 0 rgba(246,236,214,.08)}
+.about__n{position:absolute; right:-4px; top:-18px; font-family:var(--font-display); font-weight:700; font-size:84px; line-height:1; color:transparent; -webkit-text-stroke:1.5px rgba(236,176,36,.22); pointer-events:none}
+.about__step h3{margin:0 0 6px; font-family:var(--font-display); font-weight:600; font-size:21px; letter-spacing:.04em; text-transform:uppercase; color:var(--gold)}
+.about__step p{margin:0; font-size:14px; line-height:1.5; color:var(--muted)}
+
+/* особые вопросы */
+.about__sub{margin:0 0 12px; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(226,200,150,.8)}
+.about__cards{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin-bottom:28px}
+.spec{position:relative; isolation:isolate; padding:18px; border-radius:20px; border:1px solid var(--card-bd); background:var(--card-bg); box-shadow:var(--card-sh);
+  transition:transform .35s cubic-bezier(.2,1.1,.3,1), border-color .25s ease}
+.spec::after{content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; background:var(--card-glare)}
+.spec:hover{transform:translateY(-4px); border-color:rgba(236,176,36,.55)}
+.spec__ic{display:grid; place-items:center; width:40px; height:40px; margin-bottom:12px; border-radius:12px; color:var(--night);
+  background:linear-gradient(150deg, #FFE9A8, #F2BE3C 45%, #B67B10); box-shadow:0 8px 20px -8px rgba(236,176,36,.8), inset 0 1px 0 rgba(255,255,255,.5)}
+.spec h3{margin:0 0 6px; font-family:var(--font-display); font-weight:600; font-size:21px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.spec p{margin:0; font-size:14px; line-height:1.5; color:var(--muted)}
+.spec--final{border-color:rgba(236,176,36,.55); background:radial-gradient(120% 100% at 100% 0%, rgba(236,176,36,.3), transparent 60%), linear-gradient(160deg, #1b2f72 0%, #0C1D4B 50%, #061232 100%)}
+.about__cta{display:flex; flex-wrap:wrap; gap:12px}
+
+@media (max-width:900px){
+  .about__grid{grid-template-columns:1fr}
+  .about__steps,.about__cards{grid-template-columns:repeat(2, minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .about__card{padding:18px 16px 18px 30px; border-radius:18px}
+  .about__card::before{width:14px; background-size:14px 18px; background-image:radial-gradient(circle at 7px 9px, rgba(4,15,48,.95) 3.4px, transparent 3.9px)}
+  .about__h{font-size:21px}
+  .board{grid-template-columns:minmax(0,1.3fr) repeat(3, minmax(0,1fr)); gap:5px}
+  .board__theme{min-height:50px; padding:6px 8px; font-size:11.5px; letter-spacing:.02em}
+  .board__cell{min-height:50px; font-size:19px; border-radius:10px}
+  .board__text{font-size:15.5px}
+  .about__steps{grid-template-columns:1fr 1fr; gap:8px}
+  .about__step{padding:14px 12px}
+  .about__step h3,.spec h3{font-size:18px}
+  .about__cards{grid-template-columns:1fr}
+  .about__cta .btn{flex:1 1 100%; justify-content:center}
+}
+
+/* ---------- подсказки к терминам: fОчки, tОчки, номинал, взвешенные ---------- */
+.term{cursor:help; text-decoration:underline dotted rgba(236,176,36,.65); text-decoration-thickness:1.5px; text-underline-offset:3px}
+.term:focus-visible{outline:2px solid var(--gold); outline-offset:2px; border-radius:4px}
+.term-tip{
+  position:fixed; left:0; top:0; z-index:300; max-width:290px; padding:10px 13px; border-radius:12px; pointer-events:none;
+  background:rgba(8,20,58,.97); border:1px solid rgba(236,176,36,.45); box-shadow:0 18px 40px -16px rgba(0,0,0,.9);
+  color:var(--cream); font:500 13px/1.45 var(--font-body); letter-spacing:0; text-transform:none;
+}
+.term-tip b{color:var(--gold)}
+
+/* ---------- шапка над разделом «О квизе» ---------- */
+.site-header.is-clear.is-solid{
+  background:linear-gradient(to bottom, rgba(7,22,64,.94), rgba(8,24,70,.76)); border-bottom-color:var(--line-soft);
+  backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
+}
+
+/* ---------- подвал (footer.site-footer — сильнее старых правил подвала ниже по файлу) ---------- */
+footer.site-footer{padding:0 0 30px; border-top:0; background:linear-gradient(180deg, rgba(4,15,48,.35), rgba(3,10,32,.92))}
+footer.site-footer > .filmstrip{margin-bottom:clamp(36px,5vw,56px)}
+footer.site-footer .wrap{display:block}
+@media (max-width:560px){footer.site-footer{padding-bottom:calc(30px + 76px + env(safe-area-inset-bottom))}}
+.foot{display:grid; grid-template-columns:minmax(0,1.6fr) repeat(3, minmax(0,1fr)); gap:32px; padding-bottom:28px; border-bottom:1px solid rgba(214,168,90,.18)}
+.foot__logo{display:block; height:58px; width:auto; margin-bottom:14px; filter:drop-shadow(0 4px 14px rgba(4,15,48,.7))}
+.site-footer .foot__tag{margin:0 0 18px; max-width:36ch; font-size:14px; line-height:1.55; color:var(--muted)}
+.site-footer .foot__h{margin:0 0 4px; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(226,200,150,.82)}
+.foot__col{display:flex; flex-direction:column; align-items:flex-start; gap:10px; font-size:14px}
+.foot__col a,.foot__col button{display:inline-flex; align-items:center; gap:8px; padding:2px 0; border:0; background:none; font:inherit; color:var(--cream); text-decoration:none; cursor:pointer; transition:color .2s ease}
+.foot__col a:hover,.foot__col button:hover{color:var(--gold-300)}
+.foot__meta{font-size:13px; color:var(--muted-2)}
+.site-footer .foot__copy{display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin:20px 0 0; font-size:13px; color:var(--muted-2)}
+@media (max-width:860px){.foot{grid-template-columns:repeat(3, minmax(0,1fr))} .foot__brand{grid-column:1 / -1}}
+@media (max-width:520px){.foot{grid-template-columns:1fr 1fr; gap:24px}}
+
 /* ---------- footer ---------- */
 .site-footer{border-top:1px solid var(--line-soft); padding:var(--space-7) 0; background:rgba(4,15,48,.5)}
 .site-footer .wrap{display:flex; flex-wrap:wrap; gap:var(--space-5); justify-content:space-between; align-items:center}
@@ -1812,7 +2107,7 @@ html.ss-on{scroll-behavior:auto}
   content:''; position:absolute; left:0; right:0; bottom:0; height:18vh; z-index:3; pointer-events:none;
   background:linear-gradient(to bottom, rgba(4,15,48,0), rgba(4,15,48,.55) 60%, rgba(4,15,48,.92));
 }
-.stage + .stage-fly + .stage-veil + .filmstrip{
+.stage ~ .filmstrip{
   background:linear-gradient(to bottom, rgba(214,168,90,.30), rgba(214,168,90,.10)); border-color:rgba(214,168,90,.35);
 }
 .stage__prompt,.stage__head,.stage__caps{display:none}
@@ -1909,6 +2204,9 @@ html.ss-on{scroll-behavior:auto}
         <span class="status__dot" aria-hidden="true"></span>
         <span id="statusText">Локальная копия</span>
       </span>
+      <a class="hdr-cta" href="#about" data-about title="Как проходит игра">
+        <svg width="17" height="17" aria-hidden="true"><use href="#i-clapper"/></svg><span>Как играть</span>
+      </a>
       <a class="icon-btn hdr-social" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener" aria-label="Telegram-канал KinOlega Quiz" title="Telegram">
         <svg width="19" height="19" aria-hidden="true"><use href="#i-telegram"/></svg>
       </a>
@@ -1969,6 +2267,125 @@ html.ss-on{scroll-behavior:auto}
   </section>
   <div class="stage-fly" id="stageFly" aria-hidden="true"></div>
   <div class="stage-veil" id="stageVeil" aria-hidden="true"></div>
+
+  <!-- ============ О КВИЗЕ ============ -->
+  <section class="about" id="about" aria-labelledby="aboutTitle">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-head__eyebrow">Как это устроено</p>
+        <h2 class="sec-head__title" id="aboutTitle">Кино-квиз по правилам «Своей игры»</h2>
+        <p class="sec-head__desc">Мы играем в квизы по кино в формате «Своей игры» — а иногда пробуем и другие форматы. Игры идут онлайн в SiGame: это бесплатное приложение для «Своей игры» по сети.</p>
+      </div>
+
+      <div class="about__grid">
+        <article class="about__card about__intro">
+          <h3 class="about__h">Как устроена игра</h3>
+          <p>Каждая игра — свой пакет вопросов по кино: три раунда и финал. В раунде 6 тем, в каждой по 5 вопросов, и от раунда к раунду они дороже: 100–500, 200–1000, 300–1500.</p>
+          <p>Ведущий открывает вопрос, отвечает тот, кто первым нажал кнопку. Верный ответ приносит стоимость вопроса, неверный её отнимает, а шанс переходит к остальным. На ответ отведено ограниченное время.</p>
+          <p>Нужно знать кино, но и логика пригодится: подсказка часто спрятана в самом вопросе.</p>
+          <ul class="about__facts">
+            <li><svg width="15" height="15" aria-hidden="true"><use href="#i-film"/></svg>Только кино</li>
+            <li><svg width="15" height="15" aria-hidden="true"><use href="#i-ticket"/></svg>90 вопросов за игру</li>
+            <li><svg width="15" height="15" aria-hidden="true"><use href="#i-users"/></svg>Онлайн в SiGame</li>
+          </ul>
+        </article>
+
+        <article class="about__card about__formats">
+          <h3 class="about__h">Какие бывают вопросы</h3>
+          <ul class="fmt">
+            <li><span class="fmt__ic" aria-hidden="true"><svg width="19" height="19"><use href="#i-image"/></svg></span>
+              <div><h4>По картинке</h4><p>Кадр, постер без слов, актёр в гриме, стилизация — узнайте фильм или героя.</p></div></li>
+            <li><span class="fmt__ic" aria-hidden="true"><svg width="19" height="19"><use href="#i-film"/></svg></span>
+              <div><h4>Текстовые</h4><p>Вопрос-загадка: слово в нём заменено на ИКС, ОН или ОНИ, и его нужно разгадать.</p></div></li>
+            <li><span class="fmt__ic" aria-hidden="true"><svg width="19" height="19"><use href="#i-users"/></svg></span>
+              <div><h4>Вопрос для всех</h4><p>В каждом раунде есть один-два таких вопроса: на них отвечают все игроки сразу.</p></div></li>
+            <li><span class="fmt__ic" aria-hidden="true"><svg width="19" height="19"><use href="#i-trophy"/></svg></span>
+              <div><h4>Финал</h4><p>Два-три самых дорогих вопроса, от 1000 до 3000. Отвечают все, и один ответ может перевернуть игру.</p></div></li>
+          </ul>
+          <p class="about__sub">Темы из наших пакетов</p>
+          <ul class="about__tags">
+            <li>Постер без слов</li><li>Кадр за кадром</li><li>Кто в кадре</li><li>Он же ИКС</li>
+            <li>В гриме Джокера</li><li>Похудели-потолстели</li><li>Реверсивный слоган</li><li>Фильмы 1970-х</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="qz" aria-labelledby="qzTitle">
+        <div class="qz__head">
+          <h3 class="about__h" id="qzTitle">Попробуйте сами</h3>
+          <p class="about__hint">Вопросы в форматах нашей игры. Выберите стоимость и нажмите «Показать ответ».</p>
+        </div>
+        <div class="qz__grid">
+          <article class="about__card qz__card" data-qz="text" aria-label="Текстовые вопросы">
+            <div class="qz__top">
+              <span class="qz__kind"><svg width="20" height="20" aria-hidden="true"><use href="#i-film"/></svg>Текст</span>
+              <div class="qz__prices" role="tablist" aria-label="Стоимость вопроса"></div>
+            </div>
+            <div class="qz__body" data-qz-body aria-live="polite"></div>
+          </article>
+          <article class="about__card qz__card" data-qz="video" aria-label="Вопросы по видео">
+            <div class="qz__top">
+              <span class="qz__kind"><svg width="20" height="20" aria-hidden="true"><use href="#i-play"/></svg>Видео</span>
+              <div class="qz__prices" role="tablist" aria-label="Стоимость вопроса"></div>
+            </div>
+            <div class="qz__body" data-qz-body aria-live="polite"></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="join" id="join" aria-labelledby="joinTitle">
+        <div class="join__grid">
+          <article class="about__card join__steps">
+            <h3 class="about__h" id="joinTitle">Как попасть на игру</h3>
+            <ol class="jsteps">
+              <li><span class="jsteps__n" aria-hidden="true">1</span>
+                <div><h4>Выберите дату</h4><p>Каждую неделю в <a href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener">Telegram-канале</a> выходит анонс: новый пакет, даты, время по Москве и сколько осталось мест.</p></div></li>
+              <li><span class="jsteps__n" aria-hidden="true">2</span>
+                <div><h4>Запишитесь</h4><p>Оставьте комментарий под анонсом или напишите организатору в личные сообщения — <a href="https://t.me/Xelar93" target="_blank" rel="noopener">@Xelar93</a>.</p></div></li>
+              <li><span class="jsteps__n" aria-hidden="true">3</span>
+                <div><h4>Оплатите участие</h4><p>Реквизиты — в анонсе. Оплатить можно из России, Казахстана и Беларуси, а если удобнее другой способ, организатор подскажет.</p></div></li>
+              <li><span class="jsteps__n" aria-hidden="true">4</span>
+                <div><h4>Играйте</h4><p>Игра идёт онлайн, за столом 3–5 человек, примерно полтора часа. Подходит и новичкам, и опытным игрокам.</p></div></li>
+            </ol>
+            <p class="about__sub">Форматы</p>
+            <ul class="jfmt">
+              <li><b>С кнопкой</b> — классическая «Своя игра»: отвечает тот, кто быстрее нажал.</li>
+              <li><b>Без кнопки</b> — каждый отвечает на каждый вопрос, никакой гонки за кнопкой.</li>
+              <li><b>Частная игра</b> — своей компанией до 7 человек, в будни с 18:30 до 23:00 по Москве.</li>
+            </ul>
+          </article>
+
+          <article class="about__card price" aria-labelledby="priceTitle">
+            <p class="price__label" id="priceTitle">Участие в игре</p>
+            <p class="price__v">500 ₽</p>
+            <p class="price__alt">или 3300 ₸ · 18 BYN</p>
+            <p class="price__per">Меньше 6 ₽ за вопрос</p>
+            <h4 class="price__h">За что вы платите</h4>
+            <ul class="price__list">
+              <li><b>Авторский пакет.</b> 90 вопросов, придуманных и оформленных специально под игру: текстовые и с картинками.</li>
+              <li><b>Ведущий.</b> Читает вопросы, принимает ответы и держит темп всей игры.</li>
+              <li><b>Маленький стол.</b> 3–5 игроков — каждый в игре, а не в зрительном зале.</li>
+              <li><b>Место в истории.</b> Каждая игра попадает в архив, сквозной рейтинг и турнир на этом сайте.</li>
+            </ul>
+            <a class="btn btn--primary price__cta" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener">
+              <svg width="18" height="18" aria-hidden="true"><use href="#i-telegram"/></svg>Ближайшие игры
+            </a>
+            <a class="btn btn--ghost price__cta" href="https://t.me/Xelar93" target="_blank" rel="noopener">Написать организатору</a>
+          </article>
+        </div>
+      </div>
+
+      <div class="about__cta">
+        <a class="btn btn--primary" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener">
+          <svg width="18" height="18" aria-hidden="true"><use href="#i-telegram"/></svg>Записаться на игру
+        </a>
+        <a class="btn btn--ghost" href="https://store.steampowered.com/app/3553500/SIGame/" target="_blank" rel="noopener">
+          <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg>Скачать SiGame
+        </a>
+        <button class="btn btn--ghost" type="button" data-goto="games">Архив игр</button>
+      </div>
+    </div>
+  </section>
 
   <div class="filmstrip" aria-hidden="true"></div>
 
@@ -2328,14 +2745,38 @@ html.ss-on{scroll-behavior:auto}
 </main>
 
 <footer class="site-footer">
+  <div class="filmstrip" aria-hidden="true"></div>
   <div class="wrap">
-    <p>KinOlega Quiz — архив игр, турниров и рейтинга. Данные обновлены: <span id="footUpdated" class="num">—</span></p>
-    <div class="foot-links">
-      <a class="foot-social" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-telegram"/></svg>Telegram</a>
-      <a class="foot-social" href="https://www.youtube.com/@KinOlega_quiz/" target="_blank" rel="noopener"><svg width="17" height="17" aria-hidden="true"><use href="#i-youtube"/></svg>YouTube</a>
-      <a href="https://docs.google.com/spreadsheets/d/1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU/edit" target="_blank" rel="noopener">Таблица игр и рейтинга</a>
-      <a href="https://docs.google.com/spreadsheets/d/1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280/edit" target="_blank" rel="noopener">Годовой зачёт</a>
+    <div class="foot">
+      <div class="foot__brand">
+        <img class="foot__logo" src="assets/logo-wordmark.png" alt="KinOlega Quiz" width="569" height="209" loading="lazy" decoding="async">
+        <p class="foot__tag">Кино-квиз по правилам «Своей игры». Архив игр, турниров и рейтинга игроков.</p>
+        <a class="btn btn--primary btn--sm" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-telegram"/></svg>Записаться на игру
+        </a>
+      </div>
+      <nav class="foot__col" aria-label="Разделы сайта">
+        <p class="foot__h">Разделы</p>
+        <a href="#about" data-about>Как играть</a>
+        <button type="button" data-goto="games">Игры</button>
+        <button type="button" data-goto="tournament">Турнир</button>
+        <button type="button" data-goto="rating">Рейтинг</button>
+        <button type="button" data-goto="schedule">Расписание</button>
+      </nav>
+      <div class="foot__col">
+        <p class="foot__h">Сообщество</p>
+        <a class="foot-social" href="https://t.me/KinOlegaQuiz" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-telegram"/></svg>Telegram</a>
+        <a class="foot-social" href="https://www.youtube.com/@KinOlega_quiz/" target="_blank" rel="noopener"><svg width="17" height="17" aria-hidden="true"><use href="#i-youtube"/></svg>YouTube</a>
+        <a class="foot-social" href="https://store.steampowered.com/app/3553500/SIGame/" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg>SiGame</a>
+      </div>
+      <div class="foot__col">
+        <p class="foot__h">Данные</p>
+        <a href="https://docs.google.com/spreadsheets/d/1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU/edit" target="_blank" rel="noopener">Таблица игр и рейтинга</a>
+        <a href="https://docs.google.com/spreadsheets/d/1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280/edit" target="_blank" rel="noopener">Годовой зачёт</a>
+        <span class="foot__meta">Обновлено: <span id="footUpdated" class="num">—</span></span>
+      </div>
     </div>
+    <p class="foot__copy"><span>© 2024–<span id="footYear">2026</span> KinOlega Quiz</span><span>Сделано с любовью к кино</span></p>
   </div>
 </footer>
 
@@ -2449,8 +2890,56 @@ function deltaHTML(before, after){
   return `<span class="delta ${cls}"><span class="delta__ic" aria-hidden="true">${sign}</span><span class="sr-only">${word}</span>${nf0.format(Math.abs(Math.round(d)))}</span>`;
 }
 // турнир: рейтинг пересчитывается один раз за сезон — изменение показываем у последней игры игрока в сезоне
-const seasonDeltaHTML = (p, last) => last ? deltaHTML(p.r, p.nr)
+const seasonDeltaHTML = (before, after, last) => last ? deltaHTML(before, after)
   : '<span class="delta delta--none" title="Рейтинг турнира пересчитывается после последней игры сезона — изменение показано у неё">—</span>';
+
+/* Штраф за пропуски на момент события — так же, как Apps Script (Rating.gs) считает MISSED:
+   окно из 10 последних событий (пакеты — по дате первой игры, сезоны — по дате последней), пропуск — событие без игрока */
+let penCache = null;
+function penData(){
+  if(penCache?.db === DB) return penCache;
+  const first = new Map(), ev = [], played = new Map();
+  const mark = (name, key) => { if(!played.has(name)) played.set(name, new Set()); played.get(name).add(key); };
+  DB.games.forEach(g => {
+    if(g.date && !(first.get(g.paket) <= g.date)) first.set(g.paket, g.date);
+    g.players.forEach(p => mark(p.p, g.paket));
+  });
+  first.forEach((d, k) => ev.push({k, d}));
+  DB.seasons.forEach(se => {
+    const d = se.items.map(i => i.date).filter(Boolean).sort().pop();
+    if(d) ev.push({k:se.key, d});
+    se.items.forEach(it => mark(it.p, se.key));
+  });
+  ev.sort((a, b) => a.d.localeCompare(b.d));
+  penCache = {db:DB, ev, idx:new Map(ev.map((e, i) => [e.k, i])), played, rating:new Map(DB.rating.map(r => [r.p, r]))};
+  return penCache;
+}
+function missAt(name, key){
+  const c = penData(), i = c.idx.get(key);
+  if(i == null) return 0;
+  const mine = c.played.get(name) || new Set();
+  let m = 0;
+  for(let k = Math.max(0, i - 9); k <= i; k++) if(!mine.has(c.ev[k].k)) m++;
+  return m;
+}
+const withPenalty = (v, name, key) => v == null ? null : v / missFactor(missAt(name, key));
+// рейтинг до и после игры со штрафом: «после» — на момент этого события, «до» — после предыдущей игры игрока (первая игра — старт без штрафа)
+function ratingPair(g, p){
+  const key = g.tour ? g.season : g.paket;
+  const after = withPenalty(p.nr, p.p, key);
+  if(p.r == null) return [null, after];
+  let prevKey = null;
+  const d = g.date || '';
+  if(!g.tour && DB.games.some(o => o !== g && o.paket === g.paket && o.players.some(q => q.p === p.p)
+      && ((o.date || '') < d || ((o.date || '') === d && nCmp(o.n, g.n) < 0)))) prevKey = key;   // в этом пакете игрок уже играл раньше
+  else {
+    const h = histSorted(penData().rating.get(p.p)), i = h.findIndex(x => x.paket === key);
+    if(i > 0) prevKey = h[i - 1].paket;
+  }
+  return [prevKey ? withPenalty(p.r, p.p, prevKey) : p.r, after];
+}
+const rflowHTML = (before, after) => before == null || after == null ? '<span class="tmuted">—</span>'
+  : `<span class="rflow"><span class="rflow__b">${n0(before)}</span><svg class="rflow__arr" width="13" height="13" aria-hidden="true"><use href="#i-arrow"/></svg><b class="rflow__a">${n0(after)}</b></span>`;
 
 /* ---------------- CSV ---------------- */
 function parseCSV(text){
@@ -2773,6 +3262,22 @@ function playStats(name){
   }
   return playStatsCache.map.get(name);
 }
+// пакеты, сыгранные по турнирным правилам (без кнопки): их очки сравниваем с турниром, а не с классикой
+const TOUR_RULE_PAKETS = new Set(['KinOlega#13']);
+const isTourFormat = g => !!g.tour || TOUR_RULE_PAKETS.has(g.paket);
+// средние за игру по форматам: свои очки и очки соперников (как avg_P и avg_P_opp в листе Rating — среднее по всем соперникам)
+function formatAverages(name){
+  const acc = {classic:{g:0, me:0, opp:0, on:0}, tour:{g:0, me:0, opp:0, on:0}};
+  allGames().forEach(g => {
+    const me = g.players.find(p => p.p === name);
+    if(!me) return;
+    const b = isTourFormat(g) ? acc.tour : acc.classic;
+    b.g++; b.me += me.pts || 0;
+    g.players.forEach(p => { if(p.p !== name){ b.opp += p.pts || 0; b.on++; } });
+  });
+  const fin = b => ({g:b.g, me:b.g ? b.me / b.g : null, opp:b.on ? b.opp / b.on : null});
+  return {classic:fin(acc.classic), tour:fin(acc.tour)};
+}
 const gamesAll  = r => playStats(r.p)?.g ?? r.g ?? null;
 const winsAll   = r => playStats(r.p)?.w ?? r.w ?? null;
 const ratingVal = (r, k) => k === 'g' ? gamesAll(r) : k === 'w' ? winsAll(r) : r[k];
@@ -2856,10 +3361,11 @@ function gtMatch(g, p){
   if(f.pos === 'top3' ? p.pos > 3 : f.pos === 'rest' ? p.pos <= 3 : f.pos !== '' && p.pos !== +f.pos) return false;
   if(f.player.trim() && !p.p.toLowerCase().includes(f.player.trim().toLowerCase())) return false;
   const from = (v, s) => String(s).trim() === '' || (v != null && v >= parseFloat(String(s).replace(/\s/g, '').replace(',', '.')));
-  if(!from(p.pts, f.pts) || !from(p.f, f.f) || !from(p.r, f.rb) || !from(p.nr, f.ra)) return false;
+  const [rb, ra] = String(f.rb).trim() || String(f.ra).trim() || f.d ? ratingPair(g, p) : [p.r, p.nr];
+  if(!from(p.pts, f.pts) || !from(p.f, f.f) || !from(rb, f.rb) || !from(ra, f.ra)) return false;
   if(f.d){
-    if(p.r == null || p.nr == null || (g.tour && !p.sLast)) return false;
-    const d = p.nr - p.r;
+    if(rb == null || ra == null || (g.tour && !p.sLast)) return false;
+    const d = ra - rb;
     if(f.d === 'up' ? !(d > .5) : f.d === 'down' ? !(d < -.5) : Math.abs(d) > .5) return false;
   }
   return true;
@@ -2883,6 +3389,7 @@ function gtCountSuffix(){
     + (gtActive() ? ` <button class="chip gt-reset" type="button" data-gt-reset>Сбросить фильтры столбцов</button>` : '');
 }
 function gtRowHTML(g, p, first, alt, anyTour){
+  const [rb, ra] = ratingPair(g, p);   // со штрафом за пропуски, как во вкладке «Рейтинг»
   return `<tr class="gt-row${first ? ' gt-first' : ''}${alt ? ' gt-alt' : ''}${g.tour ? ' gt-tour' : ''}">
         <td class="num gt-date hide-sm">${fmtDate(g.date)}</td>
         <td class="gt-game"><button class="row-btn" type="button" data-game="${esc(gameKey(g))}" aria-haspopup="dialog">${g.tour ? `<span class="gt-pfx">Турнир · </span>${esc(g.seasonName)}` : esc(g.paket)}</button><span class="row-meta num">${fmtDate(g.date)} · ${esc(gameTitle(g))}</span></td>
@@ -2891,9 +3398,9 @@ function gtRowHTML(g, p, first, alt, anyTour){
         <td class="tname"><button class="row-btn" type="button" data-open-player="${esc(p.p)}" aria-haspopup="dialog">${esc(p.p)}</button></td>
         <td class="num">${n0(p.pts)}</td>
         ${anyTour ? `<td class="num tmuted hide-md">${g.tour ? n0(p.f) : '—'}</td>` : ''}
-        <td class="num tmuted hide-sm">${n0(p.r)}</td>
-        <td class="num hide-sm">${n0(p.nr)}</td>
-        <td>${g.tour ? seasonDeltaHTML(p, p.sLast) : deltaHTML(p.r, p.nr)}</td>
+        <td class="num tmuted hide-sm">${n0(rb)}</td>
+        <td class="num hide-sm">${n0(ra)}</td>
+        <td>${g.tour ? seasonDeltaHTML(rb, ra, p.sLast) : deltaHTML(rb, ra)}</td>
       </tr>`;
 }
 // игры в виде таблицы: строка — один игрок в одной игре; под названием столбца — его фильтр
@@ -2994,23 +3501,26 @@ function tourGameBodyHTML(g){
       <div class="kpi"><div class="kpi__v">${n0(Math.max(0, ...g.players.map(p => p.pts || 0)))}</div><div class="kpi__l">Лучший номинал</div></div>
       <div class="kpi"><div class="kpi__v">${fmtDate(g.date)}</div><div class="kpi__l">Дата</div></div>
     </div>
-    <div class="table-wrap"><div class="table-scroll"><table>
+    <div class="table-wrap"><div class="table-scroll"><table class="game-table">
       <thead><tr>
         <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th>
-        <th scope="col">fОчки</th><th scope="col" class="hide-sm">Номинал</th><th scope="col" class="hide-sm">Ответы</th>
-        <th scope="col" class="hide-sm">Рейтинг</th><th scope="col">Δ за сезон</th>
+        <th scope="col">fОчки</th><th scope="col" class="hide-md">Номинал</th><th scope="col" class="hide-md">Ответы</th>
+        <th scope="col" class="hide-sm">Рейтинг до → после</th><th scope="col">Δ за сезон</th>
       </tr></thead>
-      <tbody>${g.players.map(p => `<tr>
+      <tbody>${g.players.map(p => {
+        const [rb, ra] = ratingPair(g, p), shown = p.sLast && rb != null && ra != null;
+        return `<tr>
         <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
-        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">номинал ${n0(p.pts)}</span>`)}</td>
+        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">номинал ${n0(p.pts)}</span>${shown ? `<span class="row-meta num">${n0(rb)} → ${n0(ra)}</span>` : ''}`)}</td>
         <td class="num">${n0(p.f)}</td>
-        <td class="num tmuted hide-sm">${n0(p.pts)}</td>
-        <td class="num tmuted hide-sm">${n0(p.ans)}</td>
-        <td class="num hide-sm">${n0(p.nr)}</td>
-        <td>${deltaHTML(p.r, p.nr)}</td>
-      </tr>`).join('')}</tbody>
+        <td class="num tmuted hide-md">${n0(p.pts)}</td>
+        <td class="num tmuted hide-md">${n0(p.ans)}</td>
+        <td class="hide-sm">${shown ? rflowHTML(rb, ra) : '<span class="tmuted" title="Рейтинг турнира пересчитывается после последней игры игрока в сезоне">—</span>'}</td>
+        <td>${seasonDeltaHTML(rb, ra, p.sLast)}</td>
+      </tr>`;
+      }).join('')}</tbody>
     </table></div></div>
-    <p class="result-count" style="margin-top:14px">Место — по игровому рейтингу турнира (fОчки).${hasR ? ' Рейтинг пересчитывается один раз за сезон, после его последней игры, поэтому Δ — за весь сезон.' : ''}
+    <p class="result-count" style="margin-top:14px">Место — по игровому рейтингу турнира (fОчки).${hasR ? ' Рейтинг — сквозной, со штрафом за пропуски; турнирный сезон пересчитывает его один раз, после последней игры игрока в сезоне.' : ''}
       <a href="#tournament/${encodeURIComponent(g.season)}">Вся таблица сезона</a></p>`;
 }
 function openTourGame(seasonKey, code, {push = true} = {}){
@@ -3041,21 +3551,23 @@ function gameBodyHTML(g){
       <div class="kpi"><div class="kpi__v">${n0(total/g.players.length)}</div><div class="kpi__l">Средние очки</div></div>
       <div class="kpi"><div class="kpi__v">${fmtDate(g.date)}</div><div class="kpi__l">Дата</div></div>
     </div>
-    <div class="table-wrap"><div class="table-scroll"><table>
+    <div class="table-wrap"><div class="table-scroll"><table class="game-table">
       <thead><tr>
         <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th>
-        <th scope="col">Очки</th><th scope="col" class="hide-sm">Рейтинг до</th>
-        <th scope="col" class="hide-sm">После</th><th scope="col">Δ</th>
+        <th scope="col">Очки</th><th scope="col" class="hide-sm">Рейтинг до → после</th><th scope="col">Δ</th>
       </tr></thead>
-      <tbody>${g.players.map(p => `<tr>
+      <tbody>${g.players.map(p => {
+        const [rb, ra] = ratingPair(g, p);
+        return `<tr>
         <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
-        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">${n0(p.r)} → ${n0(p.nr)}</span>`)}</td>
+        <td class="tname">${pcellHTML(p.p, rb == null || ra == null ? '' : `<span class="row-meta num">${n0(rb)} → ${n0(ra)}</span>`)}</td>
         <td class="num">${n0(p.pts)}</td>
-        <td class="num tmuted hide-sm">${n0(p.r)}</td>
-        <td class="num hide-sm">${n0(p.nr)}</td>
-        <td>${deltaHTML(p.r, p.nr)}</td>
-      </tr>`).join('')}</tbody>
-    </table></div></div>`;
+        <td class="hide-sm">${rflowHTML(rb, ra)}</td>
+        <td>${deltaHTML(rb, ra)}</td>
+      </tr>`;
+      }).join('')}</tbody>
+    </table></div></div>
+    <p class="result-count" style="margin-top:14px">Рейтинг — со штрафом за пропуски на момент игры, как во вкладке «Рейтинг».</p>`;
 }
 /* ---------------- игры колодой: веер карточек, под активной — вся информация по игре ---------------- */
 const gs = {list:[], active:0, wired:false, detailTimer:0, drag:null, suppressClick:false};
@@ -3700,38 +4212,81 @@ function renderRatingLines(){
   const vals = top.flatMap(r => r.hist.map(h => h.r));
   const vmin = Math.min(...vals), vmax = Math.max(...vals), pad = (vmax - vmin) * .08 || 10;
   const lo = vmin - pad, hi = vmax + pad;
-  const W = 640, H = 280, L = 12, R = 14, T = 12, B = 12;
+  const W = 640, H = 290, L = 6, R = 14, T = 22, B = 10;
   const x = t => L + (t1 > t0 ? (t - t0) * (W - L - R) / (t1 - t0) : 0);
   const yv = v => T + (hi - v) * (H - T - B) / (hi - lo);
-  const grid = [0, .25, .5, .75, 1].map(f => `<line class="chart__grid" x1="${L}" x2="${W - R}" y1="${(T + f * (H - T - B)).toFixed(1)}" y2="${(T + f * (H - T - B)).toFixed(1)}"/>`).join('');
+  // цвета: тройка лидеров — медали, остальные приглушены и светлеют при выборе
+  const colorOf = i => ['#F2BE3C', '#DDE3EC', '#D39463'][i] || '#8FA3C8';
+  const focusOf = i => ['#F2BE3C', '#FFFFFF', '#E8A876'][i] || '#F6ECD6';
+  // шкала рейтинга: ровные отметки через 50 или 100
+  const step = hi - lo > 300 ? 100 : 50;
+  const ticks = [];
+  for(let v = Math.ceil(lo / step) * step; v <= hi; v += step) ticks.push(v);
+  const grid = ticks.map(v => `<line class="chart__grid rl-grid" x1="${L}" x2="${W - R}" y1="${yv(v).toFixed(1)}" y2="${yv(v).toFixed(1)}"/>`).join('');
+  // турнирные сезоны — полупрозрачные полосы на время серии
+  const bands = DB.seasons.map(se => {
+    const ds = se.items.map(it => Date.parse(it.date || '')).filter(Boolean);
+    if(!ds.length) return '';
+    const a = x(Math.min(...ds)), b = Math.max(x(Math.max(...ds)), a + 6);
+    return `<rect class="rl-band" x="${a.toFixed(1)}" y="${T - 16}" width="${(b - a).toFixed(1)}" height="${(H - B - T + 16).toFixed(1)}" rx="4"/>
+      <text class="rl-band__t" x="${((a + b) / 2).toFixed(1)}" y="${T - 5}">${esc(se.name.split(' ')[0])}</text>`;
+  }).join('');
+  // границы лет — пунктир
+  const years = [];
+  for(let yr = new Date(t0).getFullYear() + 1; Date.UTC(yr, 0, 1) <= t1; yr++) years.push(yr);
+  const yearLines = years.map(yr => `<line class="rl-year" x1="${x(Date.UTC(yr, 0, 1)).toFixed(1)}" x2="${x(Date.UTC(yr, 0, 1)).toFixed(1)}" y1="${T - 16}" y2="${H - B}"/>`).join('');
+  // плавная линия: горизонтальные касательные в каждой точке — без «перелётов» за значения
+  const smooth = pts => pts.map((p, k) => {
+    if(!k) return `M${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+    const q = pts[k - 1], mx = ((q[0] + p[0]) / 2).toFixed(1);
+    return `C${mx} ${q[1].toFixed(1)} ${mx} ${p[1].toFixed(1)} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+  }).join(' ');
+  const defs = top.map((r, i) => `<linearGradient id="rlFill${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${focusOf(i)}" stop-opacity=".26"/><stop offset="1" stop-color="${focusOf(i)}" stop-opacity="0"/></linearGradient>`).join('');
   const lines = top.map((r, i) => {
     const pts = dated(r).map(h => [x(tOf(r, h)), yv(h.r)]);
     if(!pts.length) return '';
-    const d = pts.map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
-    const last = pts[pts.length - 1];
-    return `<g class="series${i === 0 ? ' is-leader' : ''}" data-series="${i}"><path class="hit" d="${d}"/><path d="${d}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="5"/></g>`;
-  }).join('');
-  // точки для подсказки: координаты в системе viewBox
+    const d = smooth(pts), last = pts[pts.length - 1];
+    const area = `${d} L${last[0].toFixed(1)} ${H - B} L${pts[0][0].toFixed(1)} ${H - B} Z`;
+    return `<g class="series rl-s${i < 3 ? ' rl-top' : ''}${i === 0 ? ' is-leader' : ''}" data-series="${i}" style="--c:${colorOf(i)}; --cf:${focusOf(i)}; --k:${10 - i}">
+      <path class="rl-area" d="${area}" style="fill:url(#rlFill${i})"/><path class="hit" d="${d}"/><path class="rl-line" d="${d}" pathLength="1"/>
+      <circle class="rl-end" cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="${i < 3 ? 5 : 4}"/></g>`;
+  }).reverse().join('');   // лидер рисуется последним — поверх остальных
+  // точки для подсказки: координаты в системе viewBox, в подсказке — событие, дата и изменение
   fig._vb = [W, H];
-  fig._pts = top.flatMap((r, i) => dated(r).map(h => ({x:x(tOf(r, h)), y:yv(h.r), s:i, text:`${r.p} · ${histName(h.paket)} · ${n0(h.r)}`})));
-  const monthOf = t => monthLabel(new Date(t).toISOString().slice(0, 7));
-  const xl = [t0, (t0 + t1) / 2, t1].map(t => [x(t), monthOf(t)]);
+  fig._pts = top.flatMap((r, i) => {
+    const hs = dated(r);
+    return hs.map((h, k) => ({x:x(tOf(r, h)), y:yv(h.r), s:i, c:focusOf(i),
+      html:`<b>${esc(r.p)}</b><span class="rl-tip__e">${esc(histName(h.paket))} · ${fmtDate(histDate(r.p, h.paket))}</span>
+        <span class="rl-tip__v">${n0(h.r)}${k ? deltaHTML(hs[k - 1].r, h.r) : ''}</span>`}));
+  });
+  const monthOf = t => { const d = new Date(t); return `${MONTHS_SHORT[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+  // подписи оси: начало, годы, конец; крайняя подпись вплотную к подписи года помечается «тесной» — на телефоне её скрываем
+  const yearMarks = years.map(yr => [x(Date.UTC(yr, 0, 1)), String(yr), 'rl-xl--year']);
+  const near = (a, b) => Math.abs(a - b) / W < .18;
+  const tight = (px, i) => yearMarks.length && near(yearMarks[i][0], px) ? ' rl-xl--tight' : '';
+  const xl = [[x(t0), monthOf(t0), 'rl-xl--start' + tight(x(t0), 0)], ...yearMarks, [x(t1), monthOf(t1), 'rl-xl--end' + tight(x(t1), yearMarks.length - 1)]];
   $('#rlPlot').innerHTML = `
-    <svg class="chart__svg" viewBox="0 0 ${W} ${H}" aria-hidden="true">${grid}${lines}</svg>
-    <span class="chart__marker" hidden></span><div class="chart__tip" hidden></div>
-    <span class="chart__yl chart__yl--in" style="top:${(yv(vmax) / H * 100).toFixed(2)}%">${n0(vmax)}</span>
-    <span class="chart__yl chart__yl--in" style="top:${(yv(vmin) / H * 100).toFixed(2)}%">${n0(vmin)}</span>
-    ${xl.map(([px, label]) => `<span class="chart__xl" style="left:${(px / W * 100).toFixed(2)}%">${esc(label)}</span>`).join('')}`;
+    <svg class="chart__svg" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs>${defs}</defs>${bands}${grid}${yearLines}${lines}</svg>
+    <span class="rl-cross" hidden></span><span class="chart__marker" hidden></span><div class="chart__tip rl-tip" hidden></div>
+    ${ticks.map(v => `<span class="chart__yl rl-yl" style="top:${(yv(v) / H * 100).toFixed(2)}%">${n0(v)}</span>`).join('')}
+    ${xl.map(([px, label, cls]) => `<span class="chart__xl rl-xl ${cls}" style="left:calc(var(--pl) + (100% - var(--pl)) * ${(px / W).toFixed(4)})">${esc(label)}</span>`).join('')}`;
+  // стрелка в легенде — как в таблице рейтинга: изменение за последнее событие игрока
   $('#rlLegend').innerHTML = top.map((r, i) => {
-    const first = histSorted(r)[0].r;
-    return `<li><button type="button" class="chart__item" data-series="${i}" aria-pressed="false"
-        aria-label="${esc(r.p)}: рейтинг ${n0(r.r)}, с ${esc(histName(histSorted(r)[0].paket))} ${r.r >= first ? 'рост' : 'снижение'} на ${n0(Math.abs(r.r - first))}">
-      <span class="chart__pos">${i + 1}</span><span class="chart__name">${esc(r.p)}</span>
-      <span class="chart__val"><b>${n0(r.r)}</b>${deltaHTML(first, r.r)}</span>
+    const h = histSorted(r), dlt = h.length > 1 ? h[h.length - 1].r - h[h.length - 2].r : 0;
+    const said = Math.abs(dlt) >= .5 ? `, за последнее событие ${dlt > 0 ? 'рост' : 'снижение'} на ${n0(Math.abs(dlt))}` : '';
+    return `<li><button type="button" class="chart__item" data-series="${i}" aria-pressed="false" style="--c:${colorOf(i)}"
+        aria-label="${esc(r.p)}: рейтинг ${n0(r.r)}${said}">
+      <span class="chart__pos">${i + 1}</span><span class="chart__name"><i class="rl-sw" aria-hidden="true"></i>${esc(r.p)}</span>
+      <span class="chart__val"><b>${n0(r.r)}</b>${lastStepHTML(r)}</span>
     </button></li>`;
   }).join('');
-  $('#rlHint').textContent = `${xl[0][1]} — ${xl[2][1]} · пакеты и турнирные сезоны · рейтинг от ${n0(vmin)} до ${n0(vmax)}`;
+  $('#rlHint').textContent = `${monthOf(t0)} — ${monthOf(t1)} · полосы — турнирные сезоны · стрелка — изменение за последнее событие`;
   fig.dispatchEvent(new CustomEvent('chart:reset'));
+  // линии прорисовываются, когда график попадает в экран
+  fig.classList.remove('rl-drawn');
+  if(!('IntersectionObserver' in window)){ fig.classList.add('rl-drawn'); return; }
+  const io = new IntersectionObserver(es => { if(es[0].isIntersecting){ fig.classList.add('rl-drawn'); io.disconnect(); } }, {threshold:.25});
+  io.observe(fig);
 }
 
 /* ---------------- рекорды и истории ---------------- */
@@ -4024,9 +4579,20 @@ function openPlayer(name, {push = true} = {}){
   seasonLast.forEach(x => { x.me.sLast = true; });
   played.sort((a,b) => (b.g.date||'').localeCompare(a.g.date||''));
   const wins = played.filter(x => x.me.pos === 1).length;
-  // лучший результат — по пакетам: номинал сезонных игр считается по другому числу вопросов
-  const pkgPlayed = played.filter(x => !x.season);
+  // лучший результат — по классическим пакетам: в турнирном формате (сезоны и #13) очки набираются по другим правилам
+  const pkgPlayed = played.filter(x => !x.season && !TOUR_RULE_PAKETS.has(x.g.paket));
   const best = pkgPlayed.length ? pkgPlayed.reduce((m,x) => Math.max(m, x.me.pts || 0), 0) : null;
+  // рейтинг до и после каждой игры — со штрафом за пропуски, как во вкладке «Рейтинг»
+  played.forEach(x => { x.rr = x.season ? ratingPair({tour:true, season:x.season.key}, {p:name, r:x.me.r, nr:x.me.nr}) : ratingPair(x.g, x.me); });
+  const av = formatAverages(name);
+  const avgCol = (title, s, cls) => {
+    const mx = Math.max(s.me || 0, s.opp || 0) || 1, w = v => v == null ? 0 : Math.max(0, v) / mx * 100;
+    return `<div class="avg2__col${cls}">
+        <p class="avg2__h">${title}<span>${s.g ? `${s.g} ${plural(s.g, 'игра', 'игры', 'игр')}` : 'нет игр'}</span></p>
+        <div class="avg2__row"><span>Свои очки</span><b>${s.me == null ? '—' : n0(Math.round(s.me))}</b><span class="avg2__bar"><i style="--w:${w(s.me).toFixed(1)}%"></i></span></div>
+        <div class="avg2__row"><span>Очки соперников</span><b class="avg2__opp">${s.opp == null ? '—' : n0(Math.round(s.opp))}</b><span class="avg2__bar avg2__bar--opp"><i style="--w:${w(s.opp).toFixed(1)}%"></i></span></div>
+      </div>`;
+  };
 
   const hist = histSorted(r);
   // шапка профиля: аватар с местом, рейтинг с изменением за последнее событие, форма, достижения, короткая сводка
@@ -4041,12 +4607,15 @@ function openPlayer(name, {push = true} = {}){
       ${actions}
     </div>
     ${badgesHTML(name, r, played, hist)}
-    <div class="kpis kpis--compact">
+    <div class="kpis kpis--compact kpis--3">
       <div class="kpi"><div class="kpi__v">${played.length || n0(r?.g)}</div><div class="kpi__l">Игр</div></div>
       <div class="kpi"><div class="kpi__v">${wins || n0(r?.w)}</div><div class="kpi__l">Побед</div></div>
       <div class="kpi"><div class="kpi__v">${n0(best)}</div><div class="kpi__l">Лучший результат</div></div>
-      <div class="kpi"><div class="kpi__v">${n0(r?.avgP)}</div><div class="kpi__l">Средние очки</div></div>
     </div>
+    <section class="avg2" aria-label="Средние очки за игру по форматам">
+      ${avgCol('Классика', av.classic, '')}${avgCol('Турнирный формат', av.tour, ' avg2__col--tour')}
+    </section>
+    <p class="avg2__note">Средние за игру. Турнирный формат — турнирные сезоны и пакет #13: они игрались по одним правилам, без кнопки, поэтому очки там считаются отдельно.</p>
     ${participationHTML(name, played, r)}`;
 
   const chart = hist.length > 1 ? `
@@ -4067,8 +4636,8 @@ function openPlayer(name, {push = true} = {}){
           : `${esc(x.g.paket)} <span class="tmuted">№${x.g.n}</span>`}<span class="row-meta num">${fmtDate(x.g.date)}</span></td>
         <td><span class="rank ${x.me.pos<=3?'rank--'+x.me.pos:''}">${x.me.pos}</span></td>
         <td class="num">${n0(x.me.pts)}</td>
-        <td class="num tmuted hide-sm">${n0(x.me.nr)}</td>
-        <td>${x.season ? seasonDeltaHTML(x.me, x.me.sLast) : deltaHTML(x.me.r, x.me.nr)}</td></tr>`).join('')}</tbody>
+        <td class="num tmuted hide-sm">${x.season && !x.me.sLast ? '—' : n0(x.rr[1])}</td>
+        <td>${x.season ? seasonDeltaHTML(x.rr[0], x.rr[1], x.me.sLast) : deltaHTML(x.rr[0], x.rr[1])}</td></tr>`).join('')}</tbody>
     </table></div></div>` : '<p class="tmuted">По этому участнику ещё нет сыгранных игр в таблице.</p>';
 
   const actions = `<div class="modal__actions">${r ? `<button class="btn btn--ghost btn--sm" type="button" data-share-card="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-image"/></svg>Картинка<span class="btn__more"> с результатом</span></button>` : ''}${played.length ? `<button class="btn btn--ghost btn--sm" type="button" data-h2h="${esc(name)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Личные встречи</button>` : ''}</div>`;
@@ -4328,13 +4897,135 @@ const SS = (() => {
     h.setAttribute('aria-label', text);
     h.innerHTML = text.split(/\s+/).map((w, i) => `<span class="rv-w" aria-hidden="true"><span style="--i:${i}">${esc(w)}</span></span>`).join(' ');
   });
-  const targets = $$('.sec-head').concat(['#ratingPodium', '#tourPodium', '#recordsGrid', '#ratingLines'].map(s => $(s)).filter(Boolean));
+  const targets = $$('.sec-head').concat(['#ratingPodium', '#tourPodium', '#recordsGrid', '#ratingLines', '.about__grid', '.qz', '.join'].map(s => $(s)).filter(Boolean));
   targets.forEach(el => el.classList.add('rv'));
   document.documentElement.classList.add('rv-ready');
   const io = new IntersectionObserver(es => es.forEach(e => {
     if(e.isIntersecting){ e.target.classList.add('rv-in'); io.unobserve(e.target); }
   }), {rootMargin:'0px 0px -10% 0px', threshold:.05});
   targets.forEach(el => io.observe(el));
+})();
+
+/* ---------------- о квизе: «Попробуйте сами» — текстовые вопросы и вопросы по видео ---------------- */
+const QZ = {
+  text: [
+    {p:100, q:'Фильм, в котором снялась Эми Адамс, — первый полнометражный фильм студии Disney, совмещающий игру живых актёров и нарисованных персонажей, со времён «Кто подставил кролика Роджера». Назовите этот фильм.',
+     a:['Зачарованная (Enchanted, 2007)']},
+    {p:200, q:'Фильм «ОНИ» рассказывает историю, разворачивающуюся на фоне забастовки из-за низких зарплат, — из-за неё так называемые ОНИ и получили возможность проявить себя в игре. Например, Чад Стахелски тоже был одним из НИХ в фильме «Матрица». В ответе одно слово.',
+     a:['Дублёры (The Replacements, 2000)']},
+    {p:300, q:'В фильме «ОН» персонаж Джека Блэка снимает ленту о НЁМ. А в фильме «Перемотка» его герой участвует в съёмках любительской версии фильма «ОН». В коротком эпизоде видно и слышно главного героя, а на фоне раздаётся женский крик. Какие два слова на одну букву заменены на ОН?',
+     a:['Кинг Конг (King Kong, 2005)']},
+  ],
+  video: [
+    {p:100, src:'assets/quiz-100.mp4', poster:'assets/quiz-100.jpg', w:808, q:'Кадр из какого сериала стилизован под «Симпсонов»?',
+     a:['Доктор Хаус (House M.D., 2004)']},
+    {p:200, src:'assets/quiz-200.mp4', poster:'assets/quiz-200.jpg', w:604, q:'Назовите три анимационные работы.',
+     a:['Маугли (1973)', 'Зверополис 2 (Zootopia 2, 2025)', 'Кунг-фу панда (Kung Fu Panda, 2008)']},
+    {p:300, src:'assets/quiz-300.mp4', poster:'assets/quiz-300.jpg', w:604, q:'Перед вами три шлема разных героев, сыгранных одним актёром. Назовите эти фильмы.',
+     a:['Последняя дуэль (The Last Duel, 2021)', 'Марсианин (The Martian, 2015)', 'Одиссея (The Odyssey, 2026)']},
+  ],
+};
+(function initQuiz(){
+  $$('[data-qz]').forEach(card => {
+    const kind = card.dataset.qz, list = QZ[kind], prices = $('.qz__prices', card), body = $('[data-qz-body]', card);
+    if(!list || !prices || !body) return;
+    prices.innerHTML = list.map((x, i) => `<button type="button" class="qz__price" role="tab" aria-selected="${i === 0}" data-i="${i}">${x.p}</button>`).join('');
+    const label = kind === 'video' ? 'Видео' : 'Текст';
+    const render = i => {
+      const x = list[i];
+      $$('.qz__price', prices).forEach((b, k) => b.setAttribute('aria-selected', String(k === i)));
+      $$('video', body).forEach(v => v.pause());
+      const answer = `<button type="button" class="btn btn--ghost btn--sm qz__reveal" aria-expanded="false">Показать ответ</button>
+        <div class="qz__ans" hidden><p class="board__eyebrow">${x.a.length > 1 ? 'Ответы' : 'Ответ'}</p><ul class="qz__list">${x.a.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
+      const info = `<div class="qz__info"><p class="board__eyebrow">${label} · ${x.p}</p><p class="board__text">${esc(x.q)}</p>${answer}</div>`;
+      // ролики тяжёлые — грузятся только по нажатию «play», до этого видна обложка
+      body.innerHTML = kind === 'video'
+        ? `<div class="qz__media"><video class="qz__video" controls playsinline preload="none" poster="${x.poster}" src="${x.src}" width="${x.w}" height="1080" style="aspect-ratio:${x.w} / 1080" aria-label="Видеовопрос за ${x.p}"></video></div>${info}`
+        : info;
+      body.classList.remove('is-in'); void body.offsetWidth; body.classList.add('is-in');
+    };
+    prices.addEventListener('click', e => { const b = e.target.closest('.qz__price'); if(b) render(+b.dataset.i); });
+    body.addEventListener('click', e => {
+      const btn = e.target.closest('.qz__reveal');
+      if(!btn) return;
+      $('.qz__ans', body).hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      btn.hidden = true;
+    });
+    render(0);
+  });
+})();
+// «Как играть» в шапке и подвале: плавно к разделу, адрес страницы не меняем
+document.addEventListener('click', e => {
+  const link = e.target.closest('[data-about]');
+  if(!link) return;
+  e.preventDefault();
+  const el = $('#about');
+  if(SS.active) SS.toEl(el);
+  else el.scrollIntoView({behavior: RM.matches ? 'auto' : 'smooth', block:'start'});
+});
+if($('#footYear')) $('#footYear').textContent = String(new Date().getFullYear());
+
+/* ---------------- подсказки к терминам таблиц: наведение, фокус с клавиатуры, нажатие на телефоне ---------------- */
+const TERMS = {
+  'fОчки':'<b>Игровой рейтинг турнира.</b> (Номинал + 3 × Взвешенные × 1000) ÷ 4. По нему расставлены места в сезоне.',
+  'tОчки':'<b>Турнирный рейтинг года.</b> Среднее игровых рейтингов за сезоны с учётом числа участников, минус штраф за пропуски.',
+  'wОчки':'<b>Взвешенные очки.</b> Сумма весов взятых вопросов. Вес вопроса = 1 − доля ответивших верно: чем реже берут вопрос, тем он ценнее.',
+  'Очки':'<b>Номинал.</b> Очки за правильные ответы по стоимости вопросов.',
+  'Номинал':'<b>Номинал.</b> Очки за правильные ответы по стоимости вопросов.',
+  'Взвешенные':'<b>Взвешенные очки.</b> Сумма весов взятых вопросов. Вес вопроса = 1 − доля ответивших верно.',
+  'Штраф':'<b>Штраф.</b> Снижение турнирного рейтинга за пропущенные отборочные сезоны.',
+  'Лучший игровой рейтинг':'<b>Игровой рейтинг турнира (fОчки).</b> (Номинал + 3 × Взвешенные × 1000) ÷ 4.',
+  'Лучший номинал':'<b>Номинал.</b> Очки за правильные ответы по стоимости вопросов.',
+};
+(function initTerms(){
+  const tip = document.createElement('div');
+  tip.className = 'term-tip'; tip.id = 'termTip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
+  document.body.appendChild(tip);
+  const SEL = '.th-src, th, .kpi__l';
+  const markOne = el => {
+    if(el.dataset.term) return;
+    const key = el.textContent.trim();
+    if(!Object.prototype.hasOwnProperty.call(TERMS, key)) return;
+    el.dataset.term = key;
+    el.classList.add('term');
+    el.tabIndex = 0;
+  };
+  const mark = node => {
+    if(node.nodeType !== 1) return;
+    if(node.matches(SEL)) markOne(node);
+    node.querySelectorAll(SEL).forEach(markOne);
+  };
+  mark(document.body);
+  new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(mark))).observe(document.body, {childList:true, subtree:true});
+  let cur = null, shownAt = 0, via = '';
+  const show = (el, how = 'pointer') => {
+    cur = el;
+    via = how;
+    shownAt = performance.now();
+    tip.innerHTML = TERMS[el.dataset.term];
+    tip.hidden = false;
+    const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    const x = Math.min(innerWidth - w - 10, Math.max(10, r.left + r.width / 2 - w / 2));
+    const y = r.top - h - 10 < 10 ? r.bottom + 10 : r.top - h - 10;
+    tip.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    el.setAttribute('aria-describedby', 'termTip');
+  };
+  const hide = () => { if(cur){ cur.removeAttribute('aria-describedby'); cur = null; } tip.hidden = true; };
+  // мышь ушла с термина — прячем только подсказку, открытую мышью: при фокусе с клавиатуры страница может проехать под курсором
+  document.addEventListener('pointerover', e => { const t = e.target.closest?.('.term'); if(t){ if(t !== cur) show(t, 'pointer'); } else if(cur && via === 'pointer') hide(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest?.('.term'); if(t) show(t, 'focus'); });
+  document.addEventListener('focusout', hide);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && cur) hide(); });
+  // прокрутка прячет подсказку; сразу после показа не прячем — фокус сам подкручивает элемент в видимую область
+  document.addEventListener('scroll', () => { if(cur && performance.now() - shownAt > 250) hide(); }, {passive:true, capture:true});
+})();
+// над разделом «О квизе» шапка снова плотная: сквозь прозрачную просвечивала бы студия
+(() => {
+  const about = $('#about'), header = $('.site-header');
+  if(!about || !header) return;
+  new IntersectionObserver(es => header.classList.toggle('is-solid', es[0].isIntersecting),
+    {rootMargin:'0px 0px -55% 0px', threshold:0}).observe(about);
 })();
 
 /* ---------------- tabs ---------------- */
@@ -4615,7 +5306,7 @@ document.addEventListener('pointermove', pchartTip, {passive:true});
 
 // «Рейтинг топ-10»: подсказка у ближайшей к курсору точки и подсветка линии этого игрока
 function rlTip(e){
-  const fig = $('#ratingLines'), plot = $('#rlPlot'), svg = $('svg', plot), tip = $('.chart__tip', plot), mark = $('.chart__marker', plot);
+  const fig = $('#ratingLines'), plot = $('#rlPlot'), svg = $('svg', plot), tip = $('.chart__tip', plot), mark = $('.chart__marker', plot), cross = $('.rl-cross', plot);
   if(!fig?._pts?.length || !svg || !tip) return;
   const b = svg.getBoundingClientRect(), [W, H] = fig._vb;
   const px = (e.clientX - b.left) * W / b.width, py = (e.clientY - b.top) * H / b.height;
@@ -4623,10 +5314,11 @@ function rlTip(e){
   fig._pts.forEach(p => { const d = (p.x - px) ** 2 + ((p.y - py) * .7) ** 2; if(d < bd){ bd = d; best = p; } });
   if(!best) return;
   const pb = plot.getBoundingClientRect(), cx = b.left - pb.left + best.x * b.width / W, cy = b.top - pb.top + best.y * b.height / H;
-  tip.textContent = best.text; tip.hidden = false; mark.hidden = false;
+  tip.innerHTML = best.html; tip.hidden = false; mark.hidden = false;
   const half = tip.offsetWidth / 2 + 4;
   tip.style.left = Math.min(Math.max(cx, half), pb.width - half) + 'px'; tip.style.top = cy + 'px';
-  mark.style.left = cx + 'px'; mark.style.top = cy + 'px';
+  mark.style.left = cx + 'px'; mark.style.top = cy + 'px'; mark.style.setProperty('--c', best.c);
+  if(cross){ cross.hidden = false; cross.style.left = cx + 'px'; cross.style.top = (b.top - pb.top) + 'px'; cross.style.height = b.height + 'px'; }
   if(!$('#rlLegend [aria-pressed="true"]')){
     fig.classList.add('has-focus');
     $$('[data-series]', fig).forEach(el => el.classList.toggle('is-focus', el.dataset.series === String(best.s)));
@@ -4638,6 +5330,7 @@ $('#rlPlot').addEventListener('pointerleave', () => {
   const plot = $('#rlPlot');
   $('.chart__tip', plot)?.setAttribute('hidden', '');
   $('.chart__marker', plot)?.setAttribute('hidden', '');
+  $('.rl-cross', plot)?.setAttribute('hidden', '');
   if(!$('#rlLegend [aria-pressed="true"]')) $('#ratingLines').dispatchEvent(new CustomEvent('chart:reset'));
 });
 
