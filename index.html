@@ -2814,12 +2814,12 @@ footer.site-footer .wrap{display:block}
     <div class="modal__body" id="modalBody"></div>
   </div>
 </div>
-<script src="assets/data.js?v=202609161932"></script>
+<script src="assets/data.js?v=202610072207"></script>
 <script>
 /* ============================================================
    KinOlega Quiz — data + app
-   Источник данных: Google Таблица (лист Games / Rating /
-   KinOlega_2026 / Зима_2026 / Весна_2026 / Лето_2026).
+   Источник данных: Google Таблица (листы KinOlega_игрыG / Rating /
+   KinOlega_2026 / Рейтинг_турниры и листы сезонов — Зима_2026 и далее).
    Ниже — локальный снимок на случай, если таблица недоступна.
    ============================================================ */
 const SNAPSHOT = window.KINOLEGA_SNAPSHOT || null;   // данные — в assets/data.js
@@ -2836,8 +2836,24 @@ const PLAYER_PHOTOS = {};
 const SHEET_ID = '1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU';
 const YEAR_SHEET_ID = '1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280';
 const SEASON_COL = /^(Зима|Весна|Лето|Осень)_\d{4}$/;   // колонки сезонов в листе Rating
+const SEASON_KEY = /^(Зима|Весна|Лето|Осень)_(\d{4})$/;   // имя листа сезона: «Осень_2026»
+const SEASON_NAMES = ['Зима','Весна','Лето','Осень'];
+const SEASON_FIRST = 'Зима_2026';                        // первый турнирный сезон проекта
+
+/* Листы сезонов сайт определяет сам: сезоны из сохранённой копии плюс все сезоны по календарю
+   до текущего и следующий (лист могли завести заранее). Лишнее имя не мешает: если листа нет,
+   Google отдаёт первый лист таблицы, а он не проходит проверку на колонку «Имя игрока» в buildDB. */
+function seasonSheets(){
+  const idx = n => { const m = SEASON_KEY.exec(n || ''); return m ? +m[2] * 4 + SEASON_NAMES.indexOf(m[1]) : null; };
+  const now = new Date();
+  let last = now.getFullYear() * 4 + Math.floor(now.getMonth() / 3) + 1;
+  (SNAPSHOT?.seasons || []).forEach(x => { const i = idx(x.key); if(i != null && i > last) last = i; });
+  const out = [];
+  for(let i = idx(SEASON_FIRST); i <= last; i++) out.push(SEASON_NAMES[i % 4] + '_' + Math.floor(i / 4));
+  return out;
+}
 const SHEETS = { games:'KinOlega_игрыG', rating:'Rating', year:'KinOlega_2026', log:'Рейтинг_турниры', schedule:'Расписание',
-                 seasons:['Зима_2026','Весна_2026','Лето_2026'] };
+                 seasons:seasonSheets() };
 
 /* ---------------- helpers ---------------- */
 const $  = (s, r=document) => r.querySelector(s);
@@ -3040,8 +3056,8 @@ function buildDB(raw){
     pos: num(r[yi('Место')]), p: r[yi('Имя')].trim(), pts: num(r[yi('tОчки')]), pen: num(r[yi('Штраф')])
   }));
 
-  // seasons
-  const seasons = raw.seasons.map(s => {
+  // seasons: лист сезона узнаём по колонкам — если такого листа в таблице нет, Google отдаёт первый лист
+  const seasons = raw.seasons.filter(s => s.data && col(s.data.head, 'Имя игрока') >= 0 && col(s.data.head, 'fОчки') >= 0).map(s => {
     const si = n => col(s.data.head, n);
     const qcols = s.data.head.map((h, i) => /^Q\d+$/.test(h) ? i : -1).filter(i => i >= 0);
     return { name: s.name.replace('_',' '), key: s.name,
@@ -5445,7 +5461,7 @@ async function loadLive({silent=false} = {}){
       fetchSheet(SHEETS.year, ctl.signal, YEAR_SHEET_ID),
       fetchSheet(SHEETS.log, ctl.signal).catch(() => null),        // без лога сайт работает, просто без Δ у турнирных игр
       fetchSheet(SHEETS.schedule, ctl.signal).catch(() => null),   // листа расписания может не быть
-      ...SHEETS.seasons.map(s => fetchSheet(s, ctl.signal))
+      ...SHEETS.seasons.map(s => fetchSheet(s, ctl.signal).catch(() => null))   // сезон мог ещё не начаться
     ]);
     const db = buildDB({games, rating, year, log, schedule,
       seasons: SHEETS.seasons.map((name,i) => ({name, data:seasonData[i]}))});

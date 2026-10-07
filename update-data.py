@@ -21,7 +21,29 @@ MAIN_ID  = "1NQqMvuNrNAYw5LGvdAS-4lUhnTdf7-U5CZHaIcgv4YU"
 YEAR_ID  = "1D11oDpDLMaRFFTeLwWPOMJ49x8ZVEXSqzyxZsXJf280"
 HTML     = "index.html"
 DATA_JS  = "assets/data.js"
-SEASONS  = ["Зима_2026", "Весна_2026", "Лето_2026"]
+# Запасной список сезонов — на случай, если имена листов не удалось прочитать
+SEASONS  = ["Зима_2026", "Весна_2026", "Лето_2026", "Осень_2026"]
+SEASON_NAMES = ["Зима", "Весна", "Лето", "Осень"]
+SEASON_RE = re.compile(r"^(Зима|Весна|Лето|Осень)_(\d{4})$")
+
+
+def sheet_names(sheet_id=MAIN_ID):
+    """Имена листов таблицы — страница htmlview отдаёт их без авторизации."""
+    url = "https://docs.google.com/spreadsheets/d/%s/htmlview" % sheet_id
+    with urllib.request.urlopen(url, timeout=60) as r:
+        html = r.read().decode("utf-8", "replace")
+    return re.findall(r'items\.push\(\{name: "([^"]*)"', html)
+
+
+def season_sheets():
+    """Листы сезонов берём из самой таблицы — новый сезон попадает на сайт сам, без правки кода."""
+    try:
+        found = [n for n in sheet_names() if SEASON_RE.match(n)]
+    except Exception as e:
+        print("Список листов не прочитан (%s) — беру сезоны из запасного списка" % e)
+        found = []
+    order = lambda n: (int(SEASON_RE.match(n).group(2)), SEASON_NAMES.index(SEASON_RE.match(n).group(1)))
+    return sorted(set(found) | set(SEASONS), key=order)
 
 
 def fetch(sheet, sheet_id=MAIN_ID):
@@ -127,9 +149,14 @@ def build():
 
     # --- сезоны ---
     seasons = []
-    for name in SEASONS:
+    for name in season_sheets():
         head, rows = fetch(name)
         c = lambda n: col(head, n)
+        try:                               # листа нет — gviz отдаёт первый лист таблицы, его не берём
+            c("Имя игрока"); c("fОчки")
+        except RuntimeError:
+            print("Лист сезона «%s» пропущен: это не таблица сезона" % name)
+            continue
         qcols = [i for i, h in enumerate(head) if re.match(r"^Q\d+$", h)]
         cell = lambda r, i: r[i] if i < len(r) else ""
         seasons.append({
