@@ -1284,6 +1284,98 @@ tbody tr.clickable{cursor:pointer}
 .miss__note{margin:6px 0 0; font-size:12.5px; color:var(--muted)}
 @media (max-width:560px){.miss{padding:12px 12px 10px} .ev{min-width:38px; height:30px; padding:0 7px; font-size:12px}}
 
+/* карта ответов: таблица, радар и объёмная карта по типам вопросов турнира */
+.hm{margin:0 0 22px; padding:16px; border-radius:24px; /* 8 (ячейка) + 16 (отступ) */
+  background:linear-gradient(170deg, rgba(20,44,108,.55), rgba(4,14,42,.55));
+  box-shadow:0 0 0 1px rgba(214,168,90,.22), inset 0 1px 0 rgba(246,236,214,.07)}
+.hm__head{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px 16px; margin-bottom:14px}
+.hm__sum{margin:4px 0 0; font-size:13px; color:var(--muted); text-wrap:pretty}
+.hm__sum b{color:var(--cream); font-variant-numeric:tabular-nums}
+.hm__tabs{display:inline-flex; padding:3px; border-radius:13px; /* 10 + 3 */ background:rgba(3,14,46,.55); box-shadow:inset 0 0 0 1px var(--line-soft)}
+.hm__tab{-webkit-tap-highlight-color:transparent; min-height:40px; padding:0 16px; border:0; border-radius:10px; background:none; color:var(--muted); font:600 14px/1 var(--font-body); cursor:pointer;
+  transition-property:background-color, color, box-shadow, scale; transition-duration:150ms; transition-timing-function:ease-out}
+.hm__tab[aria-selected="true"]{background:rgba(236,176,36,.18); color:var(--gold-300); box-shadow:inset 0 0 0 1px rgba(236,176,36,.5)}
+.hm__tab:active{scale:.97}
+@media (hover:hover) and (pointer:fine){.hm__tab[aria-selected="false"]:hover{color:var(--cream); background:rgba(246,236,214,.06)}}
+.hm__pane[hidden]{display:none}
+
+/* таблица */
+.hm__grid{display:grid; grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr)); gap:6px}
+.hm__col{padding:0 2px 2px; font-size:12.5px; font-weight:600; color:var(--muted-2); text-align:center}
+.hm__row{display:flex; flex-direction:column; justify-content:center; min-width:0; padding-right:4px; font-size:13.5px; line-height:1.25; color:var(--cream)}
+.hm__row small{margin-top:1px; font-size:11.5px; color:var(--muted-2)}
+.hm__c{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:52px; padding:6px 4px; border-radius:8px; font-variant-numeric:tabular-nums; color:var(--cream); box-shadow:inset 0 0 0 1px rgba(246,236,214,.08); cursor:default}
+.hm__c b{font-size:16px; line-height:1.1; font-weight:800}
+.hm__c small{margin-top:2px; font-size:11px; opacity:.72}
+.hm__c--hi{color:var(--night)}
+.hm__c--hi small{opacity:.8}
+.hm__c--few{opacity:.66; outline:1px dashed rgba(246,236,214,.45); outline-offset:-3px}
+.hm__c--few b{font-weight:600}
+.hm__c--none{color:rgba(246,236,214,.28); background:rgba(4,15,48,.4)}
+.hm__c--sum{box-shadow:inset 0 0 0 1px rgba(236,176,36,.45)}
+.hm__mark{position:absolute; top:3px; right:5px; font-size:9px; line-height:1}
+.hm__mark--up{color:#8ED9CB}
+.hm__mark--down{color:#F2A08F}
+.hm__c--hi .hm__mark--up{color:#0B4A3F}
+.hm__c--hi .hm__mark--down{color:#7A2A1C}
+.hm__sub{margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--muted-2)}
+.hm__tiers{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:6px}
+.hm__tiers .hm__c{min-height:48px}
+.hm__tl{margin-top:4px; text-align:center; font-size:11px; color:var(--muted-2); font-variant-numeric:tabular-nums}
+.hm__legend{display:flex; flex-wrap:wrap; align-items:center; gap:4px 14px; margin:12px 0 0; font-size:12px; color:var(--muted-2)}
+.hm__scale{display:inline-flex; align-items:center; gap:6px}
+.hm__scale i{display:block; width:84px; height:8px; border-radius:4px; background:linear-gradient(90deg, rgb(22,42,98), rgb(46,116,122), rgb(236,176,36))}
+.hm__scale--gold i{background:linear-gradient(90deg, rgba(236,176,36,.07), rgba(236,176,36,.73))}
+.hm__note{margin:10px 0 0; font-size:12.5px; color:var(--muted); text-wrap:pretty}
+/* появление ячеек — только когда человек сам переключил вкладку: блоки по очереди, мягко */
+.hm__pane.is-enter .hm__c, .hm__pane.is-enter .hm__row{animation:hmIn 360ms cubic-bezier(.23,1,.32,1) both; animation-delay:var(--d,0ms)}
+@keyframes hmIn{from{opacity:0; transform:translateY(8px); filter:blur(4px)} to{opacity:1; transform:none; filter:blur(0)}}
+
+/* радар */
+.hmr{display:block; width:100%; max-width:460px; margin:0 auto; height:auto; overflow:visible}
+.hmr__ring{fill:none; stroke:rgba(246,236,214,.10); stroke-width:1}
+.hmr__ring--out{stroke:rgba(246,236,214,.22)}
+.hmr__spoke{stroke:rgba(246,236,214,.10); stroke-width:1}
+.hmr__club{fill:rgba(111,168,168,.10); stroke:var(--teal); stroke-width:1.5; stroke-dasharray:4 4}
+.hmr__me{fill:url(#hmrFill); stroke:var(--gold); stroke-width:2.5; stroke-linejoin:round; transform-box:view-box; transform-origin:50% 50%}
+.hmr__dot{fill:var(--gold); stroke:var(--night); stroke-width:2}
+.hmr__dot--few{fill:var(--night); stroke:var(--gold)}
+.hmr__lab{font:700 14px var(--font-body); fill:var(--cream)}
+.hmr__val{font:600 12px var(--font-body); fill:var(--muted-2); font-variant-numeric:tabular-nums}
+.hm__pane:not([hidden]) .hmr__me{animation:hmrIn 700ms cubic-bezier(.23,1,.32,1) both}
+.hm__pane:not([hidden]) .hmr__dots{animation:hmrDots 400ms ease-out 380ms both}
+@keyframes hmrIn{from{opacity:0; transform:scale(.35)} to{opacity:1; transform:none}}
+@keyframes hmrDots{from{opacity:0} to{opacity:1}}
+.hm__key{display:inline-block; vertical-align:-1px; width:18px; height:0; margin-right:6px; border-top:2px solid var(--gold)}
+.hm__key--club{border-top:2px dashed var(--teal)}
+
+/* объёмная карта */
+.hm3d{position:relative}
+.hm3d canvas{display:block; width:100%; touch-action:pan-y; cursor:grab; border-radius:10px; user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent}
+.hm3d canvas.is-drag{cursor:grabbing}
+.hm__tip{position:absolute; z-index:2; pointer-events:none; padding:8px 11px; border-radius:10px; font-size:13px; line-height:1.35; white-space:nowrap;
+  background:rgba(3,14,46,.94); box-shadow:0 0 0 1px var(--line), 0 10px 30px -10px #000; opacity:0; transform:translateY(4px);
+  transition-property:opacity, transform; transition-duration:140ms; transition-timing-function:ease-out}
+.hm__tip.on{opacity:1; transform:none}
+.hm__tip b{color:var(--gold-300); font-variant-numeric:tabular-nums}
+
+@media (max-width:560px){
+  .hm{padding:12px; border-radius:20px}
+  .hm__grid{grid-template-columns:minmax(0,1.25fr) repeat(3,minmax(0,1fr)); gap:5px}
+  .hm__row{font-size:12.5px}
+  .hm__c{min-height:48px; padding:5px 2px} .hm__c b{font-size:15px}
+  .hm__col{font-size:11px}
+  .hm__tiers{gap:5px}
+  .hm__tiers .hm__c b{font-size:13.5px} .hm__tiers .hm__c small{font-size:10px}
+  .hm__mark{top:2px; right:3px; font-size:8px}
+  .hm__tabs{width:100%} .hm__tab{flex:1; padding:0 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hm__pane.is-enter .hm__c, .hm__pane.is-enter .hm__row,
+  .hm__pane:not([hidden]) .hmr__me, .hm__pane:not([hidden]) .hmr__dots{animation:none}
+  .hm__tip, .hm__tab{transition:none}
+}
+
 .pchart{position:relative; margin:0; padding:14px 14px 10px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background:linear-gradient(180deg, rgba(236,176,36,.05), rgba(246,236,214,.012))}
 .pchart svg{display:block; width:100%; height:auto; overflow:visible; touch-action:pan-y}
 .pchart__grid{stroke:rgba(246,236,214,.08); stroke-width:1; stroke-dasharray:3 5}
@@ -2837,6 +2929,7 @@ footer.site-footer .wrap{display:block}
   </div>
 </div>
 <script src="assets/data.js?v=202610162249"></script>
+<script src="assets/packs.js?v=1"></script>
 <script>
 /* ============================================================
    KinOlega Quiz — data + app
@@ -4607,6 +4700,314 @@ function participationHTML(name, played, r){
     </section>`;
 }
 
+/* ---------------- карта ответов ----------------
+   Разметка вопросов сезонных пакетов (формат, тип ответа, ступень) лежит в assets/packs.js — без текстов и ответов.
+   Верно = в колонке Q>0 за вопрос набраны очки (как «ответили» в карточке турнирной игры).
+   Три вида одних и тех же данных: таблица, радар и объёмная карта (canvas, без библиотек). */
+const PACKS = window.KINOLEGA_PACKS || null;
+const HEAT_TIERS = ['1', '2', '3', '4', '5', 'Финал'];
+const HEAT_SHORT = ['Фильм', 'Сериал', 'Актёр', 'Слово', 'Несколько'];   // короткие подписи для радара
+const heatSum = a => a.reduce((s, x) => [s[0] + x[0], s[1] + x[1]], [0, 0]);
+const heatEase = t => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 5);   // ease-out-quint
+function heatAgg(rows){
+  const nc = PACKS.cats.length, nf = PACKS.fmts.length;
+  const cell = Array.from({length:nc}, () => Array.from({length:nf}, () => [0, 0]));   // [верно, всего]
+  const tier = HEAT_TIERS.map(() => [0, 0]);                                           // ступени 1–5 и финал
+  const ct = Array.from({length:nc}, () => HEAT_TIERS.map(() => [0, 0]));              // тип ответа × ступень
+  const seasons = new Set();
+  let games = 0;
+  rows.forEach(({key, qn}) => {
+    const map = PACKS.packs[key];
+    if(!map || !qn?.length) return;
+    games++; seasons.add(key);
+    map.forEach(([c, f, t], i) => {
+      if(i >= qn.length) return;
+      const ok = qn[i] > 0 ? 1 : 0, ti = t ? t - 1 : 5;
+      cell[c][f][0] += ok; cell[c][f][1]++;
+      tier[ti][0] += ok; tier[ti][1]++;
+      ct[c][ti][0] += ok; ct[c][ti][1]++;
+    });
+  });
+  return {cell, tier, ct, games, seasons};
+}
+let heatAllCache = null;
+function heatAll(){   // как отвечают все игроки клуба — для сравнения
+  if(heatAllCache?.db !== DB) heatAllCache = {db:DB, v:heatAgg(DB.seasons.flatMap(se => se.items.map(i => ({key:se.key, qn:i.qn}))))};
+  return heatAllCache.v;
+}
+let heatCtx = null;   // данные открытого профиля для вкладок
+
+/* таблица */
+function heatCellHTML(me, all, label, extra = '', d = 0){
+  const delay = `--d:${d}ms`;
+  if(!me[1]) return `<div class="hm__c hm__c--none${extra}" style="${delay}" title="${esc(label)}: таких вопросов не было" role="img" aria-label="${esc(label)}: таких вопросов не было">—</div>`;
+  const p = me[0] / me[1], base = all?.[1] >= 10 ? all[0] / all[1] : null;
+  const diff = base == null ? 0 : p - base, few = me[1] < 4;
+  const mark = !few && Math.abs(diff) >= .1 ? `<span class="hm__mark hm__mark--${diff > 0 ? 'up' : 'down'}" aria-hidden="true">${diff > 0 ? '▲' : '▼'}</span>` : '';
+  const alpha = .07 + .66 * p, pc = Math.round(p * 100);
+  const tip = `${label}: верно ${me[0]} из ${me[1]}${base != null ? ` · у всех ${Math.round(base * 100)}%` : ''}${few ? ' · мало вопросов, картина приблизительная' : ''}`;
+  return `<div class="hm__c${p >= .62 ? ' hm__c--hi' : ''}${few ? ' hm__c--few' : ''}${extra}" style="background:rgba(236,176,36,${alpha.toFixed(2)});${delay}" title="${esc(tip)}" role="img" aria-label="${esc(tip)}"><b>${pc}%</b><small>${me[0]}/${me[1]}</small>${mark}</div>`;
+}
+function heatTableHTML(mine, all){
+  const fmts = PACKS.fmts;
+  const rows = PACKS.cats.map((cat, c) => ({cat, c, tot:heatSum(mine.cell[c])})).filter(r => r.tot[1]);
+  const body = rows.map(({cat, c, tot}, r) => {
+    const d = r * 55;
+    return `<div class="hm__row" style="--d:${d}ms">${esc(cat)}<small>${tot[1]} ${plural(tot[1], 'вопрос', 'вопроса', 'вопросов')}</small></div>`
+      + fmts.map((f, k) => heatCellHTML(mine.cell[c][k], all.cell[c][k], `${cat} · ${f}`, '', d + (k + 1) * 25)).join('')
+      + heatCellHTML(tot, heatSum(all.cell[c]), cat, '', d + (fmts.length + 1) * 25);
+  }).join('');
+  const dl = rows.length * 55;
+  const colTot = fmts.map((f, k) => heatCellHTML(heatSum(mine.cell.map(r => r[k])), heatSum(all.cell.map(r => r[k])), `Все вопросы · ${f}`, ' hm__c--sum', dl + (k + 1) * 25)).join('');
+  const total = heatSum(mine.tier), totalAll = heatSum(all.tier);
+  const tiers = mine.tier.map((t, i) => heatCellHTML(t, all.tier[i], `Ступень ${HEAT_TIERS[i]}`, '', dl + 140 + i * 30)).join('');
+  return `<div class="hm__grid" role="group" aria-label="Доля верных ответов по типу ответа и формату вопроса">
+        <span></span>${fmts.map(f => `<span class="hm__col">${esc(f)}</span>`).join('')}<span class="hm__col">Всего</span>
+        ${body}
+        <div class="hm__row" style="--d:${dl}ms"><b>Все вопросы</b></div>${colTot}${heatCellHTML(total, totalAll, 'Все вопросы', ' hm__c--sum', dl + (fmts.length + 1) * 25)}
+      </div>
+      <p class="hm__sub">По ступеням сложности</p>
+      <div class="hm__tiers" role="group" aria-label="Доля верных ответов по ступеням: от дешёвых вопросов темы к дорогим">${tiers}</div>
+      <div class="hm__tiers" aria-hidden="true">${HEAT_TIERS.map(l => `<span class="hm__tl">${l}</span>`).join('')}</div>
+      <p class="hm__legend"><span class="hm__scale hm__scale--gold">0%<i></i>100%</span><span><span class="hm__mark--up">▲</span> лучше всех участников на 10+&nbsp;п.п.</span><span><span class="hm__mark--down">▼</span> хуже</span><span>пунктир — меньше 4 вопросов</span></p>`;
+}
+
+/* радар */
+const HR = {R:122, CX:230, CY:196};
+function heatAxes(a){
+  const cats = PACKS.cats.map((n, c) => ({name:HEAT_SHORT[c] || n, full:n, v:heatSum(a.cell[c])}));
+  const fmts = PACKS.fmts.map((n, k) => ({name:n, full:'Формат: ' + n.toLowerCase(), v:heatSum(a.cell.map(r => r[k]))}));
+  return [...cats, ...fmts];
+}
+function heatRadarHTML(mine, all){
+  const A = heatAxes(mine), B = heatAxes(all), n = A.length;
+  const ang = i => -Math.PI / 2 + i * 2 * Math.PI / n, pt = (i, r) => [HR.CX + Math.cos(ang(i)) * r, HR.CY + Math.sin(ang(i)) * r];
+  const ratio = v => v[1] ? v[0] / v[1] : 0, f1 = x => x.toFixed(1);
+  const poly = arr => arr.map((ax, i) => pt(i, HR.R * ratio(ax.v)).map(f1).join(',')).join(' ');
+  const rings = [.25, .5, .75, 1].map(k => `<polygon class="hmr__ring${k === 1 ? ' hmr__ring--out' : ''}" points="${A.map((_, i) => pt(i, HR.R * k).map(f1).join(',')).join(' ')}"/>`).join('');
+  const spokes = A.map((_, i) => { const [x, y] = pt(i, HR.R); return `<line class="hmr__spoke" x1="${HR.CX}" y1="${HR.CY}" x2="${f1(x)}" y2="${f1(y)}"/>`; }).join('');
+  const labels = A.map((ax, i) => {
+    const [x, y] = pt(i, HR.R + 22), c = Math.cos(ang(i)), s = Math.sin(ang(i));
+    const anchor = Math.abs(c) < .25 ? 'middle' : c > 0 ? 'start' : 'end', dy = s > .6 ? 9 : s < -.6 ? -14 : -4;
+    const p = ax.v[1] ? Math.round(ratio(ax.v) * 100) + '%' : '—';
+    return `<text class="hmr__lab" x="${f1(x)}" y="${f1(y + dy)}" text-anchor="${anchor}">${esc(ax.name)}</text><text class="hmr__val" x="${f1(x)}" y="${f1(y + dy + 15)}" text-anchor="${anchor}">${p}${ax.v[1] ? ` · ${ax.v[0]}/${ax.v[1]}` : ''}</text>`;
+  }).join('');
+  const dots = A.map((ax, i) => {
+    if(!ax.v[1]) return '';
+    const [x, y] = pt(i, HR.R * ratio(ax.v)), bp = B[i].v[1] ? Math.round(ratio(B[i].v) * 100) : null;
+    return `<circle class="hmr__dot${ax.v[1] < 4 ? ' hmr__dot--few' : ''}" cx="${f1(x)}" cy="${f1(y)}" r="5"><title>${esc(ax.full)}: ${Math.round(ratio(ax.v) * 100)}% (${ax.v[0]} из ${ax.v[1]})${bp != null ? ` · у всех ${bp}%` : ''}</title></circle>`;
+  }).join('');
+  const aria = 'Радар по типам вопросов: ' + A.map(ax => `${ax.full} ${ax.v[1] ? Math.round(ratio(ax.v) * 100) + '%' : 'нет данных'}`).join(', ');
+  return `<svg class="hmr" viewBox="0 0 460 392" role="img" aria-label="${esc(aria)}">
+      <defs><radialGradient id="hmrFill" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#ECB024" stop-opacity=".10"/><stop offset="1" stop-color="#ECB024" stop-opacity=".48"/></radialGradient></defs>
+      ${rings}${spokes}<polygon class="hmr__club" points="${poly(B)}"/><polygon class="hmr__me" points="${poly(A)}"/><g class="hmr__dots">${dots}</g>${labels}
+    </svg>
+    <p class="hm__legend"><span><i class="hm__key"></i>игрок</span><span><i class="hm__key hm__key--club"></i>все участники</span><span>○ меньше 4 вопросов</span></p>`;
+}
+
+/* объёмная карта: тип ответа × ступень, высота и цвет — доля верных */
+const HEAT_RAMP = [[0, [22, 42, 98]], [.5, [46, 116, 122]], [1, [236, 176, 36]]];   // синий → бирюзовый → золото
+function heatRamp(p){
+  const i = p < .5 ? 0 : 1, [a, ca] = HEAT_RAMP[i], [b, cb] = HEAT_RAMP[i + 1], t = (p - a) / (b - a);
+  return ca.map((v, k) => v + (cb[k] - v) * t);
+}
+const heatRGB = (c, f = 1) => `rgb(${c.map(v => Math.round(Math.min(255, v * f))).join(',')})`;
+function initHeat3D(wrap, mine, all){
+  const cv = wrap.querySelector('canvas'), tip = wrap.querySelector('.hm__tip'), ctx = cv.getContext('2d');
+  const COLS = HEAT_TIERS.length, ROWS = PACKS.cats.length, PITCH = 1.36, SIZE = 1, HMAX = 2.6, FIX_YAW = -.62;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const view = {yaw:FIX_YAW, pitch:1.0, vy:0, W:0, H:0, dpr:1};
+  let grow = 1, hover = null, polys = [], dirty = false, introStart = 0, started = false, drag = null;
+
+  function size(){
+    const w = wrap.clientWidth; if(!w) return;
+    const h = Math.round(w < 480 ? w * 1.02 : Math.min(460, w * .7));
+    view.dpr = Math.min(2, devicePixelRatio || 1);
+    cv.style.height = h + 'px'; cv.width = Math.round(w * view.dpr); cv.height = Math.round(h * view.dpr); view.W = w; view.H = h;
+  }
+  const proj = (x, y, z, k, cx, cy) => {
+    const xr = x * Math.cos(view.yaw) - y * Math.sin(view.yaw), yr = x * Math.sin(view.yaw) + y * Math.cos(view.yaw);
+    return [cx + xr * k, cy + (yr * Math.sin(view.pitch) - z * Math.cos(view.pitch)) * k, yr];
+  };
+  function frame(now){
+    dirty = false; let animating = false;
+    if(introStart){
+      const e = now - introStart;
+      grow = heatEase(e / 1100);
+      view.yaw = FIX_YAW - (1 - heatEase(e / 1300)) * .55;
+      if(e < 1500) animating = true; else { introStart = 0; grow = 1; view.yaw = FIX_YAW; }
+    }
+    if(Math.abs(view.vy) > 1e-4){ view.yaw += view.vy; view.vy *= .93; animating = true; } else view.vy = 0;
+    view.yaw = Math.max(-1.3, Math.min(-.2, view.yaw));
+    draw();
+    if(animating || dirty) requestAnimationFrame(frame);
+  }
+  const kick = () => { if(!dirty){ dirty = true; requestAnimationFrame(frame); } };
+
+  function draw(){
+    const {W, H, dpr} = view; if(!W) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const narrow = W < 480, diag = Math.hypot(COLS * PITCH, ROWS * PITCH) / 2;
+    const k = Math.min(W / 2 / diag, H / 2 / (diag * Math.sin(view.pitch) + HMAX * Math.cos(view.pitch))) * (narrow ? .74 : .98);
+    const cx = W / 2 + (narrow ? 34 : 18), cy = H / 2 + HMAX * Math.cos(view.pitch) * k * .45;
+    const ox = -COLS * PITCH / 2 + (PITCH - SIZE) / 2, oy = -ROWS * PITCH / 2 + (PITCH - SIZE) / 2;
+    const P = (x, y, z) => proj(x + ox, y + oy, z, k, cx, cy);
+    polys = [];
+    const path = pts => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); };
+    // пол
+    path([[-.25, -.25], [COLS * PITCH - .02, -.25], [COLS * PITCH - .02, ROWS * PITCH - .02], [-.25, ROWS * PITCH - .02]].map(([x, y]) => P(x, y, 0)));
+    ctx.fillStyle = 'rgba(14,35,88,.55)'; ctx.fill(); ctx.strokeStyle = 'rgba(246,236,214,.14)'; ctx.lineWidth = 1; ctx.stroke();
+    for(let j = 0; j < ROWS; j++) for(let i = 0; i < COLS; i++){
+      path([[i * PITCH, j * PITCH], [i * PITCH + SIZE, j * PITCH], [i * PITCH + SIZE, j * PITCH + SIZE], [i * PITCH, j * PITCH + SIZE]].map(([x, y]) => P(x, y, 0)));
+      ctx.fillStyle = 'rgba(246,236,214,.04)'; ctx.fill();
+    }
+    // столбики: от дальних к ближним
+    const cols = [];
+    for(let j = 0; j < ROWS; j++) for(let i = 0; i < COLS; i++){
+      const a = mine.ct[j][i], n = a[1], p = n ? a[0] / n : 0, delay = (i + j) * .045;
+      const g = heatEase((grow - delay) / (1 - delay));
+      cols.push({i, j, n, p, h:Math.max(.05, p * HMAX * (reduce ? 1 : g)), few:n > 0 && n < 4, depth:P(i * PITCH + .5, j * PITCH + .5, 0)[2]});
+    }
+    cols.sort((u, v) => u.depth - v.depth);
+    const best = cols.reduce((m, c) => c.n >= 4 && (!m || c.p > m.p) ? c : m, null);
+    cols.forEach(c => {
+      if(!c.n) return;
+      const {i, j, h} = c, x0 = i * PITCH, y0 = j * PITCH, hc = heatRamp(c.p);
+      const base = c.few ? hc.map((v, q) => v * .45 + [34, 52, 104][q] * .55) : hc;   // «матовые» — смешаны с полом
+      const lift = hover && hover.i === i && hover.j === j ? 1.18 : 1, edge = 'rgba(3,14,46,.55)', hit = [];
+      [[0, 1], [1, 0], [0, -1], [-1, 0]].forEach(([nx, ny]) => {   // боковые грани, обращённые к зрителю
+        const yrN = nx * Math.sin(view.yaw) + ny * Math.cos(view.yaw); if(yrN <= .001) return;
+        const xrN = nx * Math.cos(view.yaw) - ny * Math.sin(view.yaw);
+        const [ex, ey] = nx ? [x0 + (nx > 0 ? SIZE : 0), y0] : [x0, y0 + (ny > 0 ? SIZE : 0)], [dx, dy] = nx ? [0, SIZE] : [SIZE, 0];
+        const A = P(ex, ey, 0), Bp = P(ex + dx, ey + dy, 0), C = P(ex + dx, ey + dy, h), D = P(ex, ey, h);
+        const g = ctx.createLinearGradient(0, A[1], 0, D[1]), shade = (xrN > 0 ? .78 : .56) * lift;
+        g.addColorStop(0, heatRGB(base, shade * .72)); g.addColorStop(1, heatRGB(base, shade));
+        const pts = [A, Bp, C, D]; path(pts); ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = edge; ctx.lineWidth = 1; ctx.stroke(); hit.push(pts);
+      });
+      const top = [P(x0, y0, h), P(x0 + SIZE, y0, h), P(x0 + SIZE, y0 + SIZE, h), P(x0, y0 + SIZE, h)];
+      path(top); ctx.fillStyle = heatRGB(base, 1.1 * lift); ctx.fill(); ctx.strokeStyle = 'rgba(246,236,214,.28)'; ctx.lineWidth = 1; ctx.stroke();
+      hit.push(top); polys.push({i, j, pts:hit}); c.top = P(x0 + .5, y0 + .5, h);
+      if(c === best){ path(top); ctx.strokeStyle = 'rgba(241,203,116,.95)'; ctx.lineWidth = 2; ctx.stroke(); }
+    });
+    // подписи: процент у лучшего и у наведённого столбика, затем оси
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    cols.forEach(c => {
+      if(!c.n || (grow < .98 && !reduce)) return;
+      if(!((hover && hover.i === c.i && hover.j === c.j) || c === best)) return;
+      ctx.font = `800 ${Math.round(Math.max(11, k * .24))}px Manrope, sans-serif`;
+      ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(3,14,46,.85)'; ctx.fillStyle = '#F6ECD6';
+      const t = Math.round(c.p * 100) + '%'; ctx.strokeText(t, c.top[0], c.top[1] - 7); ctx.fillText(t, c.top[0], c.top[1] - 7);
+    });
+    ctx.fillStyle = 'rgba(246,236,214,.78)'; ctx.font = `600 ${Math.round(Math.max(10.5, Math.min(13, k * .26)))}px Manrope, sans-serif`;
+    HEAT_TIERS.forEach((t, i) => { const p = P(i * PITCH + .5, ROWS * PITCH + .1, 0); ctx.textAlign = 'center'; ctx.fillText(t, p[0], p[1] + 15); });
+    PACKS.cats.forEach((n, j) => {
+      const p = P(-.62, j * PITCH + .5, 0); ctx.textAlign = 'right';
+      const words = narrow ? [HEAT_SHORT[j] || n] : n.split(' / ');
+      words.forEach((w, q) => ctx.fillText(w + (q < words.length - 1 ? ' /' : ''), p[0] - 4, p[1] + 4 + (q - (words.length - 1) / 2) * 13));
+    });
+  }
+  function pick(mx, my){
+    for(let q = polys.length - 1; q >= 0; q--) for(const f of polys[q].pts){
+      let inside = false;
+      for(let a = 0, b = f.length - 1; a < f.length; b = a++){
+        const [xi, yi] = f[a], [xj, yj] = f[b];
+        if((yi > my) !== (yj > my) && mx < (xj - xi) * (my - yi) / (yj - yi) + xi) inside = !inside;
+      }
+      if(inside) return polys[q];
+    }
+    return null;
+  }
+  function showTip(h, e){
+    if(!h){ tip.classList.remove('on'); return; }
+    const a = mine.ct[h.j][h.i], c = all.ct[h.j][h.i], pc = c[1] >= 4 ? Math.round(c[0] / c[1] * 100) : null;
+    tip.innerHTML = `${esc(PACKS.cats[h.j])} · ступень ${HEAT_TIERS[h.i]}<br><b>${Math.round(a[0] / a[1] * 100)}%</b> · верно ${a[0]} из ${a[1]}${pc != null ? ` · у всех ${pc}%` : ''}${a[1] < 4 ? '<br>мало вопросов' : ''}`;
+    const r = wrap.getBoundingClientRect(); let x = e.clientX - r.left + 14; const y = e.clientY - r.top - 12;
+    tip.classList.add('on'); x = Math.min(x, r.width - tip.offsetWidth - 4); tip.style.left = Math.max(4, x) + 'px'; tip.style.top = Math.max(4, y - tip.offsetHeight) + 'px';
+  }
+  cv.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY}; view.vy = 0; cv.classList.add('is-drag'); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect();
+    if(drag){
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      view.yaw += dx * .0085; view.pitch = Math.max(.5, Math.min(1.2, view.pitch + dy * .004)); view.vy = dx * .0035;
+      drag.x = e.clientX; drag.y = e.clientY; introStart = 0; grow = 1; showTip(null); kick(); return;
+    }
+    const h = pick(e.clientX - r.left, e.clientY - r.top);
+    if((h && hover && h.i === hover.i && h.j === hover.j) || (!h && !hover)){ if(h) showTip(h, e); return; }
+    hover = h ? {i:h.i, j:h.j} : null; showTip(h, e); kick();
+  });
+  const end = () => { drag = null; cv.classList.remove('is-drag'); kick(); };
+  cv.addEventListener('keydown', e => {   // то же вращение с клавиатуры
+    const dy = {ArrowLeft:-.12, ArrowRight:.12}[e.key], dp = {ArrowUp:-.06, ArrowDown:.06}[e.key];
+    if(dy == null && dp == null) return;
+    e.preventDefault(); introStart = 0; grow = 1;
+    if(dy != null) view.yaw += dy; if(dp != null) view.pitch = Math.max(.5, Math.min(1.2, view.pitch + dp));
+    kick();
+  });
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('pointerleave', () => { if(hover){ hover = null; showTip(null); kick(); } });
+  if(window.ResizeObserver){
+    const ro = new ResizeObserver(() => { if(!cv.isConnected){ ro.disconnect(); return; } if(wrap.clientWidth){ size(); if(started) kick(); } });
+    ro.observe(wrap);
+  }
+  return {show(){   // вызывается, когда вкладка стала видимой: только тогда у холста есть ширина
+    size();
+    if(!started){ started = true; if(!reduce){ introStart = performance.now(); grow = 0; } }
+    kick();
+  }};
+}
+
+/* блок целиком и вкладки */
+function heatmapHTML(name){
+  if(!PACKS) return '';
+  const mine = heatAgg(DB.seasons.flatMap(se => se.items.filter(i => i.p === name).map(i => ({key:se.key, qn:i.qn}))));
+  if(!mine.games) return '';
+  const all = heatAll(), total = heatSum(mine.tier);
+  heatCtx = {mine, all};
+  const seasonsTxt = [...mine.seasons].map(k => k.split('_')[0]).join(', ');
+  const tab = (v, t, sel) => `<button class="hm__tab" type="button" role="tab" id="hmt-${v}" aria-controls="hmp-${v}" aria-selected="${sel}" tabindex="${sel ? 0 : -1}" data-view="${v}">${t}</button>`;
+  return `<section class="hm" aria-label="Карта ответов по типам вопросов">
+      <div class="hm__head">
+        <div>
+          <p class="field__label" style="margin:0">Карта ответов · турнир</p>
+          <p class="hm__sum">${mine.games} ${plural(mine.games, 'игра', 'игры', 'игр')}, верных <b>${total[0]}</b> из <b>${total[1]}</b> (${seasonsTxt})</p>
+        </div>
+        <div class="hm__tabs" role="tablist" aria-label="Вид карты">${tab('table', 'Таблица', true)}${tab('radar', 'Радар', false)}${tab('3d', '3D', false)}</div>
+      </div>
+      <div class="hm__pane" role="tabpanel" id="hmp-table" aria-labelledby="hmt-table" data-view="table">${heatTableHTML(mine, all)}</div>
+      <div class="hm__pane" role="tabpanel" id="hmp-radar" aria-labelledby="hmt-radar" data-view="radar" hidden>${heatRadarHTML(mine, all)}</div>
+      <div class="hm__pane" role="tabpanel" id="hmp-3d" aria-labelledby="hmt-3d" data-view="3d" hidden>
+        <div class="hm3d" id="hm3dWrap"><canvas role="img" tabindex="0" aria-label="Объёмная карта: высота и цвет столбиков показывают долю верных ответов по типу ответа и ступени. Стрелки поворачивают сцену. Те же цифры есть во вкладке «Таблица»."></canvas><div class="hm__tip"></div></div>
+        <p class="hm__legend"><span class="hm__scale">0%<i></i>100%</span><span>перетащите, чтобы повернуть</span><span>матовые — меньше 4 вопросов</span></p>
+      </div>
+      <p class="hm__note">Тип ответа — что нужно назвать. Ступень: 1 — самый дешёвый вопрос темы, 5 — самый дорогой, «Финал» — вопросы финального раунда.${mine.games === 1 ? ' Сыграна одна игра, поэтому картина пока приблизительная.' : ''}</p>
+    </section>`;
+}
+function initHeatViews(){
+  const root = document.querySelector('#modalBody .hm');
+  if(!root || !heatCtx) return;
+  const views = ['table', 'radar', '3d'], tabs = [...root.querySelectorAll('.hm__tab')];
+  let scene = null;
+  const show = (v, {user = false, focus = false} = {}) => {
+    tabs.forEach(b => { const on = b.dataset.view === v; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; if(on && focus) b.focus(); });
+    root.querySelectorAll('.hm__pane').forEach(p => {
+      const on = p.dataset.view === v; p.hidden = !on;
+      p.classList.toggle('is-enter', on && user);   // анимация только в ответ на действие, не при открытии профиля
+    });
+    if(v === '3d'){ scene ||= initHeat3D(root.querySelector('#hm3dWrap'), heatCtx.mine, heatCtx.all); scene.show(); }
+    try{ localStorage.setItem('kq-heat-view', v); }catch(e){}
+  };
+  tabs.forEach(b => b.addEventListener('click', () => show(b.dataset.view, {user:true})));
+  root.querySelector('.hm__tabs').addEventListener('keydown', e => {
+    const i = views.indexOf(document.activeElement?.dataset?.view); if(i < 0) return;
+    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0, to = e.key === 'Home' ? 0 : e.key === 'End' ? views.length - 1 : null;
+    if(!step && to == null) return;
+    e.preventDefault(); show(views[to ?? (i + step + views.length) % views.length], {user:true, focus:true});
+  });
+  let saved = null; try{ saved = localStorage.getItem('kq-heat-view'); }catch(e){}
+  if(views.includes(saved) && saved !== 'table') show(saved);
+}
+
 function openPlayer(name, {push = true} = {}){
   const r = DB.rating.find(x => x.p === name);
   const played = [];
@@ -4666,7 +5067,8 @@ function openPlayer(name, {push = true} = {}){
       ${avgCol('Классика', av.classic, '')}${avgCol('Турнирный формат', av.tour, ' avg2__col--tour')}
     </section>
     <p class="avg2__note">Средние за игру. Турнирный формат — турнирные сезоны и пакет #13: они игрались по одним правилам, без кнопки, поэтому очки там считаются отдельно.</p>
-    ${participationHTML(name, played, r)}`;
+    ${participationHTML(name, played, r)}
+    ${heatmapHTML(name)}`;
 
   const chart = hist.length > 1 ? `
     <section class="pro__chart">
@@ -4694,6 +5096,7 @@ function openPlayer(name, {push = true} = {}){
   const penalty = r && r.miss > 2 ? ` · штраф −${nf1.format(missPct(r.miss))}%` : '';
   openModal(name, r ? `Место ${r.rank ?? '—'} в сквозном рейтинге · пропусков: ${n0(r.miss)}${penalty}` : 'Карточка игрока', profileHead(actions) + chart + table,
     {route:`player/${encodeURIComponent(name)}`, push, shareText:`${name} — ${r ? `${r.rank ?? '—'} место, рейтинг ${n0(r.r)}` : 'карточка игрока'} · KinOlega Quiz`});
+  initHeatViews();
 }
 
 /* ---------------- modal ---------------- */
