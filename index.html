@@ -3333,12 +3333,46 @@ function tourNum(code){
 const gameTitle = g => g.tour ? (g.num ? `Игра №${g.num}` : String(g.n)) : `Игра №${g.n}`;
 
 // изменение рейтинга за последнее событие игрока (история — без штрафа)
-function lastStepHTML(r){
+// рейтинг до и после последнего события игрока — со штрафом за пропуски, как в «Все игры» профиля:
+// число рядом со стрелкой тоже со штрафом, поэтому и стрелка должна быть со штрафом
+function lastStepPair(r){
   const h = histSorted(r);
-  if(h.length < 2) return '';
-  const d = h[h.length - 1].r - h[h.length - 2].r;
+  if(h.length < 2) return null;
+  const key = h[h.length - 1].paket, prevKey = h[h.length - 2].paket;
+  let raw = null, pair = null;   // raw — «чистый» рейтинг до и после, pair — то же со штрафом за пропуски
+  if(SEASON_COL.test(key)){
+    const sr = DB.seasonRating?.[key]?.[r.p];
+    if(sr){ raw = [sr[0], sr[1]]; pair = ratingPair({tour:true, season:key}, {p:r.p, r:sr[0], nr:sr[1]}); }
+  } else {
+    const mine = DB.games.filter(g => g.paket === key && g.players.some(p => p.p === r.p))
+      .sort((a, b) => (a.date || '').localeCompare(b.date || '') || nCmp(a.n, b.n)).pop();
+    const me = mine?.players.find(p => p.p === r.p);
+    if(me){ raw = [me.r, me.nr]; pair = ratingPair(mine, me); }
+  }
+  if(!pair){   // подробностей события нет — берём округлённые значения из листа Rating
+    raw = [h[h.length - 2].r, h[h.length - 1].r];
+    pair = [withPenalty(raw[0], r.p, prevKey), withPenalty(raw[1], r.p, key)];
+  }
+  return {key, prevKey, before:pair[0], after:pair[1], rawBefore:raw?.[0], rawAfter:raw?.[1]};
+}
+const signed = v => (v > 0 ? '+' : v < 0 ? '−' : '') + n0(Math.abs(Math.round(v)));
+function lastStepHTML(r){
+  const s = lastStepPair(r);
+  if(!s || s.before == null || s.after == null) return '';
+  const d = s.after - s.before;
   if(Math.abs(d) < .5) return '';
-  return `<span class="delta rt-step ${d > 0 ? 'delta--up' : 'delta--down'}" title="За последнее событие — ${esc(histName(h[h.length - 1].paket))}"><span class="delta__ic" aria-hidden="true">${d > 0 ? '▲' : '▼'}</span>${n0(Math.abs(d))}</span>`;
+  // подсказка: что изменилось само по себе, а что — из-за штрафа за пропуски (последние 10 событий)
+  let tip = `За последнее событие — ${histName(s.key)}.`;
+  if(s.rawBefore != null && s.rawAfter != null){
+    const raw = s.rawAfter - s.rawBefore, pen = d - raw;
+    tip += ` Рейтинг без штрафа: ${signed(raw)}.`;
+    if(Math.abs(pen) >= .5){
+      const m0 = missAt(r.p, s.prevKey), m1 = missAt(r.p, s.key), p0 = missPct(m0), p1 = missPct(m1);
+      tip += ` Штраф за пропуски: ${nf1.format(p0)}% → ${nf1.format(p1)}% (пропусков было ${m0}, стало ${m1}), это ${signed(pen)}.`;
+    }
+    tip += ` Итого на сайте: ${signed(d)}.`;
+  }
+  return `<span class="delta rt-step ${d > 0 ? 'delta--up' : 'delta--down'}" title="${esc(tip)}"><span class="delta__ic" aria-hidden="true">${d > 0 ? '▲' : '▼'}</span><span class="sr-only">${d > 0 ? 'рост на ' : 'снижение на '}</span>${n0(Math.abs(d))}</span>`;
 }
 
 let tourCache = null;
