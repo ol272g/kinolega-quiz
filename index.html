@@ -975,6 +975,14 @@ tbody tr.clickable{cursor:pointer}
 .col-rank{width:64px}
 .col-bar{min-width:150px}
 .col-spark{width:130px; min-width:120px}
+.col-last{white-space:nowrap}
+#ratingTable .row-meta--last{display:none}
+@media (max-width:1020px){
+  #ratingTable .col-last,#ratingTable th[data-sort="last"]{display:none}
+  #ratingTable .row-meta--last{display:block}
+}
+.col-last .lg__d{display:block; color:var(--cream); font-size:14px; font-weight:600}
+.col-last .lg__n{display:block; margin-top:2px; color:var(--muted-2); font-size:12px}
 .bar{
   position:absolute; left:0; top:50%; width:100%; translate:0 -50%; height:26px; border-radius:var(--r-sm); z-index:0;
   background:linear-gradient(90deg, rgba(236,176,36,.32), rgba(236,176,36,.05));
@@ -2745,6 +2753,7 @@ footer.site-footer .wrap{display:block}
                 <th scope="col" class="sortable hide-sm" data-sort="w" aria-sort="none">Побед<span class="arr" aria-hidden="true">▾</span></th>
                 <th scope="col" class="sortable hide-sm" data-sort="g" aria-sort="none">Игр<span class="arr" aria-hidden="true">▾</span></th>
                 <th scope="col" class="sortable hide-md" data-sort="avgP" aria-sort="none">Ср. очки<span class="arr" aria-hidden="true">▾</span></th>
+                <th scope="col" class="sortable hide-sm" data-sort="last" aria-sort="none">Последняя игра<span class="arr" aria-hidden="true">▾</span></th>
                 <th scope="col" class="hide-md">Динамика</th>
               </tr>
             </thead>
@@ -3283,8 +3292,10 @@ function playStats(name){
   if(playStatsCache?.db !== DB){
     const map = new Map();
     allGames().forEach(g => g.players.forEach(p => {
-      const s = map.get(p.p) || {g:0, w:0};
+      const s = map.get(p.p) || {g:0, w:0, last:null};
       s.g++; if(p.pos === 1 && g.players.length > 1) s.w++;
+      const d = g.date || '', c = s.last;
+      if(d && (!c || d > c.date || (d === c.date && nCmp(g.n, c.g.n) > 0))) s.last = {date:d, g};
       map.set(p.p, s);
     }));
     playStatsCache = {db:DB, map};
@@ -3309,7 +3320,12 @@ function formatAverages(name){
 }
 const gamesAll  = r => playStats(r.p)?.g ?? r.g ?? null;
 const winsAll   = r => playStats(r.p)?.w ?? r.w ?? null;
-const ratingVal = (r, k) => k === 'g' ? gamesAll(r) : k === 'w' ? winsAll(r) : r[k];
+// последняя игра игрока (пакет или турнир): дата и подпись «KinOlega#15 · №3» / «Лето 2026 · №6»
+const lastGameOf = r => playStats(r.p)?.last || null;
+const lastGameLabel = x => x.g.tour
+  ? `${x.g.seasonName}${x.g.num ? ' · №' + x.g.num : ''}`
+  : `${x.g.paket} · №${x.g.n}`;
+const ratingVal = (r, k) => k === 'g' ? gamesAll(r) : k === 'w' ? winsAll(r) : k === 'last' ? (lastGameOf(r) ? Date.parse(lastGameOf(r).date) : null) : r[k];
 
 // штраф за пропуски (как в Apps Script): от 3 пропусков рейтинг делится на коэффициент, после 10 не растёт
 function missFactor(m){
@@ -4479,14 +4495,15 @@ function renderRating(){
   $('#ratingBody').innerHTML = rows.map((r,i) => {
     const pos = r.rank ?? i+1;
     const vals = histSorted(r).map(h => h.r);
-    const G = gamesAll(r), W = winsAll(r);
+    const G = gamesAll(r), W = winsAll(r), L = lastGameOf(r);
     return `<tr class="clickable" data-player="${esc(r.p)}">
       <td><span class="rank ${pos<=3?'rank--'+pos:''}">${pos}</span></td>
-      <td class="tname">${pcellHTML(r.p, `<span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span>`, false)}</td>
+      <td class="tname">${pcellHTML(r.p, `<span class="row-meta">${n0(G)} ${plural(Math.round(G||0),'игра','игры','игр')} · ${n0(W)} ${plural(Math.round(W||0),'победа','победы','побед')}</span>${L ? `<span class="row-meta row-meta--last">Последняя: ${fmtDate(L.date)} · ${esc(lastGameLabel(L))}</span>` : ''}`, false)}</td>
       <td class="num" style="color:var(--gold);font-weight:700">${n0(r.r)}${lastStepHTML(r)}</td>
       <td class="num hide-sm">${n0(W)}</td>
       <td class="num hide-sm">${n0(G)}</td>
       <td class="num tmuted hide-md">${n0(r.avgP)}</td>
+      <td class="hide-sm col-last">${L ? `<span class="lg__d num">${fmtDate(L.date)}</span><span class="lg__n">${esc(lastGameLabel(L))}</span>` : '<span class="tmuted">—</span>'}</td>
       <td class="hide-md col-spark">${vals.length>1 ? sparkline(vals,120,34) : '<span class="tmuted">—</span>'}</td>
     </tr>`;
   }).join('');
