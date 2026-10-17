@@ -1853,6 +1853,17 @@ html.ss-on{scroll-behavior:auto}
 .rflow__arr{flex:none; color:rgba(236,176,36,.75)}
 .rflow__a{color:var(--cream); font-weight:700}
 .game-table .row-meta{white-space:normal; margin-top:2px}   /* на телефоне подписи под именем переносятся — таблица не шире экрана */
+.tnote{display:flex; gap:12px; align-items:flex-start; margin:0 0 16px; padding:13px 16px; border-radius:14px;
+  background:linear-gradient(180deg,rgba(236,176,36,.09),rgba(236,176,36,.04)); border:1px solid rgba(236,176,36,.28)}
+.tnote svg{flex:none; margin-top:1px; color:var(--gold)}
+.tnote p{margin:0; font-size:13.5px; line-height:1.5; color:var(--cream)}
+.tnote b{color:var(--gold); font-weight:700}
+.game-table--tour thead th,.game-table--tour tbody td{padding-left:11px; padding-right:11px}
+.game-table--tour thead th{white-space:normal; line-height:1.3}
+.game-table--tour .row-meta--s{display:none}
+@media (max-width:900px){.game-table--tour .row-meta--s{display:block}}
+.game-table .spos{white-space:nowrap; color:var(--muted)}
+.game-table .spos b{color:var(--cream); font-weight:700}
 .game-table .pcell__txt .row-btn{white-space:normal}
 
 /* ---------- средние очки по форматам в карточке игрока ---------- */
@@ -2033,6 +2044,7 @@ footer.site-footer .wrap{display:block}
   .row-meta{font-size:12px}
 }
 @media (max-width:900px){.hide-md{display:none}}
+@media (max-width:1100px){.game-table .hide-lg{display:none}}
 
 /* пальцем — цели не меньше 44px */
 @media (pointer:coarse){
@@ -2187,6 +2199,7 @@ footer.site-footer .wrap{display:block}
     <symbol id="i-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="m17 9 5 6M22 9l-5 6"/></symbol>
     <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="m12 3 2.6 5.7 6.4.8-4.7 4.3 1.2 6.2-5.5-3-5.5 3 1.2-6.2L3 9.5l6.4-.8L12 3Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/></symbol>
     <symbol id="i-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2.5 2.5 0 0 0 0 5v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2.5 2.5 0 0 0 0-5V7Z"/><path d="M14 5v14" stroke-dasharray="2 2.5"/></symbol>
   </defs>
 </svg>
@@ -3231,17 +3244,17 @@ function tourGames(){
   if(tourCache?.db === DB) return tourCache.list;
   const list = [], stats = new Map();
   DB.seasons.forEach(se => {
-    const byGame = new Map();
+    const byGame = new Map(), seasonN = new Set(se.items.map(i => i.p)).size;
     se.items.forEach(it => { const k = it.game || '—'; if(!byGame.has(k)) byGame.set(k, []); byGame.get(k).push(it); });
     const seasonRows = [];
     byGame.forEach((items, code) => {
       const players = items.slice().sort((a,b) => (b.f ?? -Infinity) - (a.f ?? -Infinity)).map(it => {
         const sr = DB.seasonRating?.[se.key]?.[it.p];
-        return {p:it.p, pts:it.pts, f:it.f, ans:it.ans, r: sr ? sr[0] : null, nr: sr ? sr[1] : null};
+        return {p:it.p, pts:it.pts, f:it.f, ans:it.ans, sp:it.pos, r: sr ? sr[0] : null, nr: sr ? sr[1] : null};
       });
       players.forEach((p, i) => { p.pos = i && players[i - 1].f === p.f ? players[i - 1].pos : i + 1; });
       const date = items.map(i => i.date).filter(Boolean).sort()[0] || null;
-      const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, num:tourNum(code), date, players};
+      const g = {tour:true, season:se.key, seasonName:se.name, paket:'Турнир · ' + se.name, n:code, num:tourNum(code), date, players, seasonN};
       list.push(g);
       players.forEach(p => seasonRows.push({g, p}));
       players.forEach(p => {
@@ -3517,20 +3530,24 @@ function tourGameBodyHTML(g){
       <div class="kpi"><div class="kpi__v">${n0(Math.max(0, ...g.players.map(p => p.pts || 0)))}</div><div class="kpi__l">Лучший номинал</div></div>
       <div class="kpi"><div class="kpi__v">${fmtDate(g.date)}</div><div class="kpi__l">Дата</div></div>
     </div>
-    <div class="table-wrap"><div class="table-scroll"><table class="game-table">
+    ${hasR ? `<aside class="tnote"><svg width="18" height="18" aria-hidden="true"><use href="#i-info"/></svg>
+      <p><b>Почему рейтинг может упасть после победы.</b> «Место» в таблице — за этим столом. Рейтинг турнира считается по месту среди всех ${g.seasonN} участников сезона — оно указано у каждого игрока: если с вашим рейтингом ждали места выше, он снизится, даже если стол выигран.</p></aside>` : ''}
+    <div class="table-wrap"><div class="table-scroll"><table class="game-table game-table--tour">
       <thead><tr>
         <th scope="col" class="col-rank">Место</th><th scope="col">Игрок</th>
-        <th scope="col">fОчки</th><th scope="col" class="hide-md">Номинал</th><th scope="col" class="hide-md">Ответы</th>
+        <th scope="col">fОчки</th><th scope="col" class="hide-md">Номинал</th><th scope="col" class="hide-md hide-lg">Ответы</th>
+        <th scope="col" class="hide-md">В сезоне</th>
         <th scope="col" class="hide-sm">Рейтинг до → после</th><th scope="col">Δ за сезон</th>
       </tr></thead>
       <tbody>${g.players.map(p => {
         const [rb, ra] = ratingPair(g, p), shown = p.sLast && rb != null && ra != null;
         return `<tr>
         <td><span class="rank ${p.pos<=3?'rank--'+p.pos:''}">${p.pos}</span></td>
-        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">номинал ${n0(p.pts)}</span>${shown ? `<span class="row-meta num">${n0(rb)} → ${n0(ra)}</span>` : ''}`)}</td>
+        <td class="tname">${pcellHTML(p.p, `<span class="row-meta num">номинал ${n0(p.pts)}</span>${p.sp ? `<span class="row-meta row-meta--s num">${n0(p.sp)}-е из ${g.seasonN} в сезоне</span>` : ''}${shown ? `<span class="row-meta num">${n0(rb)} → ${n0(ra)}</span>` : ''}`)}</td>
         <td class="num">${n0(p.f)}</td>
         <td class="num tmuted hide-md">${n0(p.pts)}</td>
-        <td class="num tmuted hide-md">${n0(p.ans)}</td>
+        <td class="num tmuted hide-md hide-lg">${n0(p.ans)}</td>
+        <td class="num hide-md">${p.sp ? `<span class="spos"><b>${n0(p.sp)}</b> из ${g.seasonN}</span>` : '<span class="tmuted">—</span>'}</td>
         <td class="hide-sm">${shown ? rflowHTML(rb, ra) : '<span class="tmuted" title="Рейтинг турнира пересчитывается после последней игры игрока в сезоне">—</span>'}</td>
         <td>${seasonDeltaHTML(rb, ra, p.sLast)}</td>
       </tr>`;
