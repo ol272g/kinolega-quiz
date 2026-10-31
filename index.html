@@ -395,11 +395,11 @@ h1.intro__title{
 .row-btn:focus-visible{outline:3px solid var(--gold-400); outline-offset:3px; border-radius:var(--r-sm)}
 
 @media (max-width:560px){
-  .tablist{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; overflow:visible}
+  .tablist{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; overflow:visible}
   .tablist .tab{
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
     min-height:60px; padding:10px 2px 9px;
-    font-family:var(--font-body); font-size:12px; font-weight:600; letter-spacing:0; text-transform:none;
+    font-family:var(--font-body); font-size:11px; font-weight:600; letter-spacing:0; text-transform:none;
   }
   .tab__icon{display:block; width:20px; height:20px}
   .tab__count{display:none}
@@ -1374,6 +1374,142 @@ tbody tr.clickable{cursor:pointer}
   .hm__pane.is-enter .hm__c, .hm__pane.is-enter .hm__row,
   .hm__pane:not([hidden]) .hmr__me, .hm__pane:not([hidden]) .hmr__dots{animation:none}
   .hm__tip, .hm__tab{transition:none}
+}
+
+/* ---------- конструктор игры ---------- */
+.bd{max-width:880px}
+.bd__pick{position:relative; margin-bottom:var(--space-5)}
+.bd__combo{position:relative; margin-top:7px}
+.bd__input{padding-left:42px}
+.bd__combo>svg{position:absolute; left:14px; top:14px; color:var(--muted-2); pointer-events:none}
+.bd__list{position:absolute; z-index:5; left:0; right:0; top:calc(100% + 6px); margin:0; padding:6px; list-style:none; max-height:340px; overflow-y:auto; overscroll-behavior:contain;
+  border-radius:calc(var(--r-md) + 6px); background:#0A1B4A; box-shadow:0 0 0 1px var(--line), 0 24px 50px -20px rgba(0,0,0,.9)}
+.bd__list[hidden]{display:none}
+.bdo{display:flex; align-items:center; gap:12px; min-height:48px; padding:6px 10px; border-radius:var(--r-md); cursor:pointer; color:var(--cream)}
+.bdo.is-active{background:rgba(236,176,36,.14); box-shadow:inset 0 0 0 1px rgba(236,176,36,.45)}
+.bdo .face{margin-left:0; border-color:transparent}
+.bdo__name{flex:1; min-width:0; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bdo__meta{flex:none; font-size:12px; color:var(--muted-2); font-variant-numeric:tabular-nums}
+.bdo--empty{cursor:default; color:var(--muted-2); min-height:44px}
+.bd__qlabel{margin:14px 0 8px; font-size:12.5px; font-weight:600; color:var(--muted-2)}
+.bd__q{display:inline-flex; align-items:center; gap:8px; padding-left:6px}
+.bd__q .face{margin-left:0; width:26px; height:26px; font-size:9.5px; border-width:0}
+.bd__h{margin:var(--space-6) 0 var(--space-3); font:600 20px/1.2 var(--font-display); letter-spacing:.04em; text-transform:uppercase; text-wrap:balance}
+
+/* стол */
+.bdt{position:relative; width:100%; max-width:640px; height:340px; margin:0 auto 6px}
+.bdt__felt{position:absolute; inset:15% 9% 12%; border-radius:50%;
+  background:radial-gradient(ellipse at 50% 38%, rgba(30,66,150,.9), rgba(8,24,70,.95) 72%);
+  box-shadow:0 0 0 2px rgba(236,176,36,.55), 0 0 0 10px rgba(236,176,36,.07), inset 0 0 60px rgba(0,0,0,.45), 0 30px 60px -30px rgba(0,0,0,.9)}
+.bdt__mid{position:absolute; left:50%; top:47%; width:46%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; text-align:center; gap:2px; color:var(--muted); font-size:13.5px; line-height:1.3; text-wrap:balance}
+.bdt__big{font:700 56px/1 var(--font-display); color:var(--gold); font-variant-numeric:tabular-nums}
+.bdt__big--idle{font-size:26px; letter-spacing:.04em; text-transform:uppercase; color:var(--cream)}
+.bdt__mid small{font-size:12px; color:var(--muted-2)}
+.bdt__seat{position:absolute; transform:translate(-50%,-34%); width:92px; min-height:44px; padding:0; display:flex; flex-direction:column; align-items:center; gap:5px; background:none; border:0; color:var(--cream); cursor:pointer; -webkit-tap-highlight-color:transparent}
+.bdt__seat .ava{box-shadow:0 0 0 2px var(--gold), 0 8px 18px -6px rgba(0,0,0,.8); transition-property:box-shadow, scale; transition-duration:150ms; transition-timing-function:ease-out}
+.bdt__name{font-size:12px; line-height:1.2; font-weight:600; text-align:center; text-wrap:balance; max-width:92px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+.bdt__x{position:absolute; top:-3px; right:12px; width:22px; height:22px; border-radius:50%; display:grid; place-items:center; font-size:15px; line-height:1; color:var(--night); background:var(--gold-300); box-shadow:0 0 0 2px #0A1B4A; opacity:0; scale:.6; transition-property:opacity, scale; transition-duration:150ms; transition-timing-function:ease-out}
+.bdt__seat:focus-visible .bdt__x{opacity:1; scale:1}
+@media (hover:hover) and (pointer:fine){
+  .bdt__seat:hover .bdt__x{opacity:1; scale:1}
+  .bdt__seat:hover .ava{box-shadow:0 0 0 2px var(--gold-300), 0 10px 22px -6px rgba(0,0,0,.9)}
+}
+.bdt__seat:active .ava{scale:.96}
+.bdt__seat--empty .bdt__plus{width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-size:28px; font-weight:300; color:var(--muted); outline:2px dashed rgba(246,236,214,.35); outline-offset:-2px; transition-property:color, outline-color; transition-duration:150ms; transition-timing-function:ease-out}
+.bdt__seat--empty .bdt__name{color:var(--muted-2); font-weight:500}
+@media (hover:hover) and (pointer:fine){.bdt__seat--empty:hover .bdt__plus{color:var(--gold-300); outline-color:var(--gold)}}
+.bdt__seat.is-new .ava{animation:bdSeat 320ms cubic-bezier(.23,1,.32,1) both}
+@keyframes bdSeat{from{opacity:0; transform:scale(.7)} to{opacity:1; transform:none}}
+.bd__verdict{margin:var(--space-4) auto 0; max-width:62ch; text-align:center; font-size:16px; color:var(--cream); text-wrap:balance}
+.bd__size{margin:6px auto 0; max-width:62ch; text-align:center; font-size:13.5px; color:var(--gold-300); text-wrap:balance}
+.bd__size--soft{color:var(--muted-2)}
+.bd__tools{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:var(--space-4)}
+
+/* за столом больше шести человек: больше места и компактные сиденья */
+.bdt--many{height:420px; max-width:700px}
+.bdt--many .bdt__seat{width:70px}
+.bdt--many .bdt__seat .ava{width:46px; height:46px; font-size:16px}
+.bdt--many .bdt__name{max-width:70px; -webkit-line-clamp:1}
+.bdt--many .bdt__mid{width:40%}
+
+/* карточки пакетов */
+.bdp__grid{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; align-items:start}
+.bdp{padding:14px 16px 16px; border-radius:18px; background:linear-gradient(170deg, rgba(20,44,108,.55), rgba(4,14,42,.55));
+  box-shadow:0 0 0 1px rgba(214,168,90,.24), inset 3px 0 0 var(--gold), inset 0 1px 0 rgba(246,236,214,.06)}
+.bdp--season{box-shadow:0 0 0 1px rgba(111,168,168,.34), inset 3px 0 0 var(--teal), inset 0 1px 0 rgba(246,236,214,.06)}
+.bdp__top{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.bdp__name{margin:0; font:600 24px/1.1 var(--font-display); letter-spacing:.03em}
+.bdp__kind{font-size:12px; font-weight:700; color:var(--gold-300)}
+.bdp--season .bdp__kind{color:#B6D3D0}
+.bdp__meta{margin:4px 0 0; font-size:13px; color:var(--muted)}
+.bdp__btn{margin-top:12px; min-height:40px}
+.bdp__who{margin-top:12px; padding-top:12px; border-top:1px solid var(--line-soft)}
+.bdp__who[hidden]{display:none}
+.bdp__hint,.bdp__none{margin:0 0 8px; font-size:12.5px; color:var(--muted-2); text-wrap:pretty}
+.bdp__hint b{color:var(--cream); font-variant-numeric:tabular-nums}
+.bdw{list-style:none; margin:0; padding:0; display:grid; gap:4px}
+.bdw__row{display:flex; align-items:center; gap:10px; min-height:48px}
+.bdw__row .face{margin-left:0; border-color:transparent}
+.bdw__txt{flex:1; min-width:0; display:flex; flex-direction:column; line-height:1.25}
+.bdw__txt b{font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bdw__txt small{font-size:11.5px; color:var(--muted-2)}
+.bdw .btn{flex:none; min-height:40px; padding-left:12px; padding-right:12px}
+
+/* «играли не все» */
+.bdn{margin-top:var(--space-6); border-radius:18px; background:rgba(246,236,214,.03); box-shadow:0 0 0 1px var(--line-soft)}
+.bdn__sum{display:flex; align-items:center; gap:12px; min-height:56px; padding:10px 16px; cursor:pointer; list-style:none; font-weight:700}
+.bdn__sum::-webkit-details-marker{display:none}
+.bdn__sum span{flex:none}
+.bdn__sum small{flex:1; min-width:0; font-weight:500; font-size:12.5px; color:var(--muted-2)}
+.bdn__chev{flex:none; color:var(--muted-2); transition:rotate 200ms ease-out}
+.bdn[open] .bdn__chev{rotate:180deg}
+.bdn__list{list-style:none; margin:0; padding:0 8px 8px}
+.bdn__row{display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:10px 8px; border-top:1px solid var(--line-soft)}
+.bdn__name{flex:1 1 130px; font:600 18px/1.2 var(--font-display); letter-spacing:.03em}
+.bdn__cnt{font-size:13px; color:var(--gold-300)}
+.bdn__who{display:inline-flex; padding-left:7px}
+.bdn__who .face{font-size:9px; width:26px; height:26px}
+
+/* матрица «кто что играл» */
+.bdm__rows{display:grid; gap:10px; padding:14px; border-radius:18px; background:rgba(246,236,214,.03); box-shadow:0 0 0 1px var(--line-soft)}
+.bdm__row{display:grid; grid-template-columns:170px minmax(0,1fr); gap:6px 12px; align-items:center}
+.bdm__who{display:flex; align-items:center; gap:8px; min-width:0; font-size:13.5px; font-weight:600; line-height:1.25}
+.bdm__who .face{margin-left:0; flex:none; border-color:transparent}
+.bdm__evs{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(42px, 1fr)); gap:5px}
+.bdm__e{height:30px; display:grid; place-items:center; border-radius:8px; font-size:11.5px; font-weight:700; font-variant-numeric:tabular-nums; cursor:default;
+  color:rgba(246,236,214,.38); background:rgba(4,15,48,.55); box-shadow:inset 0 0 0 1px rgba(246,236,214,.1)}
+.bdm__e.is-on{color:var(--gold-300); background:rgba(236,176,36,.17); box-shadow:inset 0 0 0 1px rgba(236,176,36,.5)}
+.bdm__e.is-on.is-season{color:#B6D3D0; background:rgba(111,168,168,.2); box-shadow:inset 0 0 0 1px rgba(111,168,168,.6)}
+.bdm__row--free{padding-top:10px; border-top:1px dashed var(--line-soft)}
+.bdm__row--free .bdm__who{color:var(--gold-300)}
+.bdm__e.is-free{color:var(--night); background:linear-gradient(135deg, var(--gold-300), var(--gold)); box-shadow:var(--shadow-glow)}
+.bd__legend{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin:10px 0 0; font-size:12px; color:var(--muted-2)}
+.bdm__key{display:inline-block; width:12px; height:12px; border-radius:4px; margin-left:8px; background:rgba(236,176,36,.35); box-shadow:inset 0 0 0 1px rgba(236,176,36,.7)}
+.bd__legend .bdm__key:first-child{margin-left:0}
+.bdm__key--season{background:rgba(111,168,168,.4); box-shadow:inset 0 0 0 1px rgba(111,168,168,.8)}
+.bdm__key--free{background:var(--gold); box-shadow:none}
+@media (max-width:640px){
+  .bdt{height:300px}
+  .bdt--many{height:400px}
+  .bdt--many .bdt__seat{width:58px}
+  .bdt--many .bdt__seat .ava{width:40px; height:40px; font-size:14px}
+  .bdt--many .bdt__name{font-size:10.5px; max-width:58px}
+  .bdt--many .bdt__mid{width:46%}
+  .bdt__felt{inset:17% 6% 14%}
+  .bdt__big{font-size:44px}
+  .bdt__mid{width:50%; font-size:12.5px}
+  .bdt__seat{width:76px}
+  .bdt__seat .ava{width:46px; height:46px; font-size:16px}
+  .bdt__seat--empty .bdt__plus{width:46px; height:46px; font-size:24px}
+  .bdt__name{font-size:11px; max-width:76px}
+  .bdt__x{right:6px}
+  .bdm__row{grid-template-columns:minmax(0,1fr)}
+  .bdm__evs{grid-template-columns:repeat(auto-fill, minmax(38px, 1fr))}
+  .bdo__meta{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .bdt__seat.is-new .ava{animation:none}
+  .bdt__seat .ava, .bdt__x, .bdt__plus, .bdn__chev{transition:none}
 }
 
 .pchart{position:relative; margin:0; padding:14px 14px 10px; border:1px solid var(--line-soft); border-radius:var(--r-lg); background:linear-gradient(180deg, rgba(236,176,36,.05), rgba(246,236,214,.012))}
@@ -2509,6 +2645,7 @@ footer.site-footer .wrap{display:block}
         <button class="tab" role="tab" id="tab-tournament" aria-controls="panel-tournament" aria-selected="false" tabindex="-1" data-tab="tournament"><svg class="tab__icon" aria-hidden="true"><use href="#i-trophy"/></svg>Турнир</button>
         <button class="tab" role="tab" id="tab-rating" aria-controls="panel-rating" aria-selected="false" tabindex="-1" data-tab="rating"><svg class="tab__icon" aria-hidden="true"><use href="#i-chart"/></svg>Рейтинг<span class="tab__count" id="cntRating">—</span></button>
         <button class="tab" role="tab" id="tab-schedule" aria-controls="panel-schedule" aria-selected="false" tabindex="-1" data-tab="schedule"><svg class="tab__icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="tab__long">Расписание игр</span><span class="tab__short" aria-hidden="true">Расписание</span></button>
+        <button class="tab" role="tab" id="tab-builder" aria-controls="panel-builder" aria-selected="false" tabindex="-1" data-tab="builder"><svg class="tab__icon" aria-hidden="true"><use href="#i-users"/></svg><span class="tab__long">Конструктор игры</span><span class="tab__short" aria-hidden="true">Конструктор</span></button>
         <span class="tab-ink" aria-hidden="true"></span>
       </div>
     </div>
@@ -2698,6 +2835,29 @@ footer.site-footer .wrap{display:block}
   </section>
 
   <!-- ============ РАСПИСАНИЕ ============ -->
+  <!-- ============ КОНСТРУКТОР ИГРЫ ============ -->
+  <section class="panel" id="panel-builder" role="tabpanel" aria-labelledby="tab-builder" tabindex="-1" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-head__eyebrow">Соберите стол</p>
+        <h2 class="sec-head__title">Конструктор игры</h2>
+        <p class="sec-head__desc">Выберите тех, кто хочет сыграть. Конструктор покажет пакеты и турнирные сезоны, которых никто из вас ещё не играл, и подскажет, кого позвать, чтобы собрать стол.</p>
+      </div>
+      <div class="bd">
+        <div class="bd__pick">
+          <label class="field__label" for="bdSearch">Кто хочет сыграть</label>
+          <div class="bd__combo">
+            <svg width="18" height="18" aria-hidden="true"><use href="#i-search"/></svg>
+            <input class="input bd__input" id="bdSearch" type="text" role="combobox" aria-expanded="false" aria-controls="bdList" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="Начните вводить имя">
+            <ul class="bd__list" id="bdList" role="listbox" aria-label="Игроки" hidden></ul>
+          </div>
+          <div id="bdQuick"></div>
+        </div>
+        <div id="bdBody"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="panel" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" tabindex="-1" hidden>
     <div class="wrap">
       <div class="sec-head">
@@ -5515,8 +5675,214 @@ const TERMS = {
     {rootMargin:'0px 0px -55% 0px', threshold:0}).observe(about);
 })();
 
+/* ---------------- конструктор игры ----------------
+   Выбираешь игроков — видишь пакеты и турнирные сезоны, которых не играл никто из них.
+   «Играл» = в этом пакете (или сезоне) у игрока есть хотя бы одна игра в таблице. */
+const BD_MAX = 9;                                   // самая большая игра в архиве — 9 человек
+const BD_NO_RESULTS = new Set(['KinOlega#2']);      // по этому пакету не сохранились результаты — кто играл, неизвестно
+const BD_MON = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+state.bd = [];
+let bdCache = null, bdActive = 0, bdWho = '', bdAdded = '';
+function bdData(){
+  if(bdCache?.db === DB) return bdCache;
+  const pd = penData();
+  const pkgNames = [...new Set(DB.games.map(g => g.paket))], seasonKeys = DB.seasons.map(se => se.key), known = new Set(pkgNames.concat(seasonKeys));
+  let order = (DB.histCols?.length ? DB.histCols : pkgNames.slice().sort(paketOrder).concat(seasonKeys)).filter(e => known.has(e));
+  known.forEach(e => { if(!order.includes(e)) order.push(e); });
+  order = order.filter(e => !BD_NO_RESULTS.has(e));
+  const meta = new Map(order.map(k => [k, {key:k, season:SEASON_COL.test(k), who:new Set(), games:0, first:'', last:''}]));
+  const span = (m, d) => { if(!d) return; if(!m.first || d < m.first) m.first = d; if(!m.last || d > m.last) m.last = d; };
+  DB.games.forEach(g => { const m = meta.get(g.paket); if(!m) return; m.games++; span(m, g.date); g.players.forEach(p => m.who.add(p.p)); });
+  DB.seasons.forEach(se => {
+    const m = meta.get(se.key); if(!m) return;
+    const codes = new Set(); se.items.forEach(i => { if(i.game) codes.add(i.game); span(m, i.date); m.who.add(i.p); });
+    m.games = codes.size;
+  });
+  const rate = new Map(DB.rating.map(r => [r.p, r.r]));
+  const people = [...pd.played.entries()].map(([p, set]) => ({p, set, n:order.filter(e => set.has(e)).length, last:playStats(p)?.last?.date || '', r:rate.get(p)}))
+    .filter(x => x.n > 0).sort((a, b) => b.last.localeCompare(a.last) || b.n - a.n || a.p.localeCompare(b.p, 'ru'));
+  const sizes = allGames().map(g => g.players.length), mid = sizes.filter(n => n >= 3 && n <= 5).length;
+  bdCache = {db:DB, order, meta, people, byName:new Map(people.map(x => [x.p, x]), ), mid, total:sizes.length};
+  return bdCache;
+}
+const bdLabel = k => SEASON_COL.test(k) ? k.replace('_', ' ') : k;
+const bdShort = k => SEASON_COL.test(k) ? k.split('_')[0] : k.replace('KinOlega', '');
+function bdPeriod(m){
+  if(!m.first) return '';
+  const f = m.first.split('-').map(Number), l = m.last.split('-').map(Number);
+  const a = `${BD_MON[f[1] - 1]} ${f[0]}`, b = `${BD_MON[l[1] - 1]} ${l[0]}`;
+  if(a === b) return a;
+  return f[0] === l[0] ? `${BD_MON[f[1] - 1]} – ${b}` : `${a} – ${b}`;
+}
+// что не играл никто из выбранных / не играл только кто-то из них
+function bdSplit(){
+  const d = bdData(), sel = state.bd.map(n => d.byName.get(n)).filter(Boolean);
+  const free = [], partial = [];
+  d.order.forEach(k => {
+    const played = sel.filter(x => x.set.has(k)), fresh = sel.length - played.length;
+    if(!sel.length) return;
+    if(!played.length) free.push(d.meta.get(k));
+    else if(fresh > 0) partial.push({m:d.meta.get(k), played, fresh});
+  });
+  partial.sort((a, b) => b.fresh - a.fresh || b.m.last.localeCompare(a.m.last));
+  free.sort((a, b) => b.last.localeCompare(a.last));
+  return {sel, free, partial};
+}
+function bdAdd(name){
+  if(!bdData().byName.has(name) || state.bd.includes(name) || state.bd.length >= BD_MAX) return;
+  state.bd.push(name); bdAdded = name; bdSync(); renderBuilder();
+}
+function bdRemove(name){ state.bd = state.bd.filter(n => n !== name); bdAdded = ''; bdSync(); renderBuilder(); }
+function bdSync(){ if(state.tab === 'builder') history.replaceState(null, '', '#' + routeFor('builder')); }
+
+/* поле выбора игрока: список подсказок с клавиатурой */
+function bdSuggest(q){
+  const d = bdData(), sel = new Set(state.bd), norm = s => s.toLowerCase().replace(/ё/g, 'е');
+  const tokens = norm(q.trim()).split(/\s+/).filter(Boolean);
+  return d.people.filter(p => !sel.has(p.p) && tokens.every(t => norm(p.p).includes(t))).slice(0, 8);
+}
+function bdRenderList(open){
+  const inp = $('#bdSearch'), ul = $('#bdList'), d = bdData();
+  const items = bdSuggest(inp.value);
+  bdActive = Math.max(0, Math.min(bdActive, items.length - 1));
+  ul.innerHTML = items.length ? items.map((p, i) => `<li class="bdo${i === bdActive ? ' is-active' : ''}" role="option" id="bdo${i}" data-bd-add="${esc(p.p)}" aria-selected="${i === bdActive}">
+      <span class="face face--${faceTone(p.p)}" aria-hidden="true">${esc(initials(p.p))}</span>
+      <span class="bdo__name">${esc(p.p)}</span><span class="bdo__meta">${p.n} из ${d.order.length} · ${p.last ? fmtDate(p.last) : '—'}</span></li>`).join('')
+    : `<li class="bdo bdo--empty" role="presentation">${inp.value.trim() ? 'Такого игрока нет в архиве' : 'Все игроки уже за столом'}</li>`;
+  const show = open && !inp.disabled;
+  ul.hidden = !show;
+  inp.setAttribute('aria-expanded', show);
+  if(show && items.length) inp.setAttribute('aria-activedescendant', 'bdo' + bdActive); else inp.removeAttribute('aria-activedescendant');
+}
+function bdQuickHTML(){
+  const sel = new Set(state.bd);
+  const list = bdData().people.filter(p => !sel.has(p.p)).slice(0, 8);
+  if(!list.length || state.bd.length >= BD_MAX) return '';
+  return `<p class="bd__qlabel">Недавно играли</p><div class="chips bd__quick">${list.map(p =>
+    `<button class="chip bd__q" type="button" data-bd-add="${esc(p.p)}"><span class="face face--${faceTone(p.p)}" aria-hidden="true">${esc(initials(p.p))}</span>${esc(p.p)}</button>`).join('')}</div>`;
+}
+
+/* стол: места игроков и число свободных пакетов в центре */
+function bdTableHTML(free){
+  const n = state.bd.length, seats = Math.max(3, n), many = seats > 6;   // за большим столом — компактные места: только имя
+  const pos = i => { const a = -Math.PI / 2 + i * 2 * Math.PI / seats; return `left:${(50 + 41 * Math.cos(a)).toFixed(1)}%;top:${(47 + 33 * Math.sin(a)).toFixed(1)}%`; };
+  const people = state.bd.map((name, i) => `<button class="bdt__seat${name === bdAdded ? ' is-new' : ''}" type="button" style="${pos(i)}" data-bd-remove="${esc(name)}" aria-label="Убрать из состава: ${esc(name)}">
+      ${avatarHTML(name, 'md')}<span class="bdt__name">${esc(many ? name.split(' ')[0] : name)}</span><span class="bdt__x" aria-hidden="true">×</span></button>`);
+  const empty = Array.from({length:seats - n}, (_, j) => `<button class="bdt__seat bdt__seat--empty" type="button" style="${pos(n + j)}" data-bd-focus aria-label="Добавить игрока"><span class="bdt__plus" aria-hidden="true">+</span><span class="bdt__name">место свободно</span></button>`);
+  let mid;
+  if(!n) mid = `<b class="bdt__big bdt__big--idle">Стол пуст</b><span>Посадите за стол тех, кто хочет сыграть</span>`;
+  else if(!free) mid = `<b class="bdt__big bdt__big--idle">Свободных нет</b><span>${n === 1 ? 'Все пакеты из архива уже сыграны' : 'Каждый из вас уже играл что-то из архива'}</span>`;
+  else mid = `<b class="bdt__big">${free}</b><span>${plural(free, 'свободный пакет', 'свободных пакета', 'свободных пакетов')}</span><small>${n === 1 ? 'их вы ещё не играли' : 'не играл никто из вас'}</small>`;
+  return `<div class="bdt${many ? ' bdt--many' : ''}" role="group" aria-label="Состав игры"><div class="bdt__felt" aria-hidden="true"></div><div class="bdt__mid">${mid}</div>${people.join('')}${empty.join('')}</div>`;
+}
+
+/* карточки */
+function bdCardHTML(m, d, sel){
+  const total = d.people.length, open = bdWho === m.key;
+  return `<li class="bdp${m.season ? ' bdp--season' : ''}">
+      <div class="bdp__top"><h4 class="bdp__name">${esc(bdLabel(m.key))}</h4><span class="bdp__kind">${m.season ? 'Турнир' : 'Пакет'}</span></div>
+      <p class="bdp__meta num">${esc(bdPeriod(m))}${m.games ? ` · ${m.games} ${plural(m.games, 'игра', 'игры', 'игр')}` : ''}</p>
+      <p class="bdp__meta">Играли ${m.who.size} из ${total}</p>
+      <button class="btn btn--ghost btn--sm bdp__btn" type="button" data-bd-who="${esc(m.key)}" aria-expanded="${open}" aria-controls="bdw-${esc(m.key)}"><svg width="17" height="17" aria-hidden="true"><use href="#i-users"/></svg>Кого позвать</button>
+      <div class="bdp__who" id="bdw-${esc(m.key)}"${open ? '' : ' hidden'}>${open ? bdWhoHTML(m.key) : ''}</div>
+    </li>`;
+}
+function bdWhoHTML(key){
+  const d = bdData(), m = d.meta.get(key), sel = new Set(state.bd), full = state.bd.length >= BD_MAX;
+  const all = d.people.filter(p => !sel.has(p.p) && !p.set.has(key)), list = all.slice(0, 8);
+  if(!all.length) return `<p class="bdp__none">Этот пакет уже играли все, кто есть в архиве.</p>`;
+  return `<p class="bdp__hint">Не играли ${esc(bdLabel(key))}: <b>${all.length}</b> ${plural(all.length, 'игрок', 'игрока', 'игроков')}. Сначала те, кто играл недавно.</p>
+    <ul class="bdw">${list.map(p => `<li class="bdw__row"><span class="face face--${faceTone(p.p)}" aria-hidden="true">${esc(initials(p.p))}</span>
+      <span class="bdw__txt"><b>${esc(p.p)}</b><small class="num">${p.r != null ? `рейтинг ${n0(p.r)} · ` : ''}${p.last ? 'играл ' + fmtDate(p.last) : 'без игр'}</small></span>
+      <button class="btn btn--ghost btn--sm" type="button" data-bd-add="${esc(p.p)}"${full ? ' disabled' : ''}>За стол</button></li>`).join('')}</ul>
+    ${all.length > list.length ? `<p class="bdp__hint">…и ещё ${all.length - list.length}. Начните вводить имя в поле выше.</p>` : ''}`;
+}
+function bdMatrixHTML(sp){
+  const d = bdData(), freeSet = new Set(sp.free.map(m => m.key));
+  const chips = (fn) => d.order.map(k => fn(k)).join('');
+  const row = x => `<div class="bdm__row"><span class="bdm__who"><span class="face face--${faceTone(x.p)}" aria-hidden="true">${esc(initials(x.p))}</span>${esc(x.p)}</span>
+      <ul class="bdm__evs">${chips(k => { const on = x.set.has(k); return `<li class="bdm__e${on ? ' is-on' : ''}${SEASON_COL.test(k) ? ' is-season' : ''}" title="${esc(bdLabel(k))} — ${on ? 'играл' : 'не играл'}"><span class="sr-only">${esc(bdLabel(k))} — ${on ? 'играл' : 'не играл'}</span><span aria-hidden="true">${esc(bdShort(k))}</span></li>`; })}</ul></div>`;
+  return `<section class="bdm" aria-labelledby="bdmT">
+      <h3 class="bd__h" id="bdmT">Кто что играл</h3>
+      <div class="bdm__rows">${sp.sel.map(row).join('')}
+        <div class="bdm__row bdm__row--free"><span class="bdm__who">Свободно для всех</span>
+          <ul class="bdm__evs">${chips(k => `<li class="bdm__e${freeSet.has(k) ? ' is-free' : ''}" title="${esc(bdLabel(k))}${freeSet.has(k) ? ' — не играл никто из вас' : ''}"><span class="sr-only">${esc(bdLabel(k))}${freeSet.has(k) ? ' — свободен' : ''}</span><span aria-hidden="true">${esc(bdShort(k))}</span></li>`)}</ul></div>
+      </div>
+      <p class="bd__legend"><i class="bdm__key"></i>играл <i class="bdm__key bdm__key--season"></i>турнир <i class="bdm__key bdm__key--free"></i>свободно для всех</p>
+    </section>`;
+}
+function bdPartialHTML(sp){
+  if(!sp.partial.length) return '';
+  const n = sp.sel.length, list = sp.partial.slice(0, 8);
+  return `<details class="bdn"${sp.free.length ? '' : ' open'}><summary class="bdn__sum"><span>Играли не все</span><small>${sp.partial.length} ${plural(sp.partial.length, 'пакет', 'пакета', 'пакетов')}: новые для части компании</small><svg class="bdn__chev" width="18" height="18" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+      <ul class="bdn__list">${list.map(({m, played, fresh}) => `<li class="bdn__row"><span class="bdn__name">${esc(bdLabel(m.key))}</span>
+        <span class="bdn__cnt">новый для ${fresh} из ${n}</span>
+        <span class="bdn__who" aria-label="Играли: ${esc(played.map(x => x.p).join(', '))}">${played.slice(0, 6).map(x => `<span class="face face--${faceTone(x.p)}" title="${esc(x.p)} играл">${esc(initials(x.p))}</span>`).join('')}${played.length > 6 ? `<span class="face face--more">+${played.length - 6}</span>` : ''}</span></li>`).join('')}</ul>
+      ${sp.partial.length > list.length ? `<p class="bd__legend">Показаны ${list.length} из ${sp.partial.length}.</p>` : ''}</details>`;
+}
+function renderBuilder(){
+  const root = $('#bdBody'); if(!root) return;
+  const d = bdData(), inp = $('#bdSearch');
+  state.bd = state.bd.filter(n => d.byName.has(n)).slice(0, BD_MAX);
+  const sp = bdSplit(), n = state.bd.length, full = n >= BD_MAX;
+  inp.disabled = full; inp.placeholder = full ? `За столом ${BD_MAX} — это максимум` : 'Начните вводить имя';
+  $('#bdQuick').innerHTML = bdQuickHTML();
+  bdRenderList(document.activeElement === inp);
+  let verdict = '';
+  if(!n) verdict = 'Добавьте игроков, и конструктор покажет, какие пакеты вы ещё не играли.';
+  else if(!sp.free.length) verdict = n === 1 ? 'Все пакеты из архива этот игрок уже играл.' : `Свежих для всех ${n} пакетов нет: каждый уже играл что-то из архива. Ниже — пакеты, которые новы хотя бы для части компании.`;
+  else verdict = `${n === 1 ? 'Ещё не играл' : 'Не играл никто из вас'}: ${sp.free.map(m => bdLabel(m.key)).slice(0, 4).join(', ')}${sp.free.length > 4 ? ' и ещё ' + (sp.free.length - 4) : ''}.`;
+  const size = n && n < 3 ? `За столом ${n} из обычных 3–5. Добавьте ещё ${3 - n}, чтобы набрать минимальную игру.`
+    : n > 5 ? `Чаще всего за столом 3–5 человек. Для ${n} лучше разделиться на два стола.` : '';
+  root.innerHTML = `${bdTableHTML(sp.free.length)}
+    <p class="bd__verdict" role="status">${esc(verdict)}</p>
+    ${size ? `<p class="bd__size">${esc(size)}</p>` : `<p class="bd__size bd__size--soft">В ${d.mid} из ${d.total} игр архива за столом было 3–5 человек.</p>`}
+    ${n ? `<div class="bd__tools"><button class="btn btn--ghost btn--sm" type="button" data-bd-share><svg width="17" height="17" aria-hidden="true"><use href="#i-share"/></svg>Скопировать ссылку</button><button class="btn btn--ghost btn--sm" type="button" data-bd-clear>Очистить стол</button></div>` : ''}
+    ${sp.free.length ? `<section aria-labelledby="bdfT"><h3 class="bd__h" id="bdfT">Можно играть</h3><ul class="bdp__grid">${sp.free.map(m => bdCardHTML(m, d, sp.sel)).join('')}</ul></section>` : ''}
+    ${bdPartialHTML(sp)}
+    ${n ? bdMatrixHTML(sp) : ''}`;
+  bdAdded = '';
+}
+function bdInit(){
+  const inp = $('#bdSearch'), ul = $('#bdList');
+  if(!inp) return;
+  inp.addEventListener('input', () => { bdActive = 0; bdRenderList(true); });
+  inp.addEventListener('focus', () => bdRenderList(true));
+  inp.addEventListener('blur', () => bdRenderList(false));
+  inp.addEventListener('keydown', e => {
+    const items = bdSuggest(inp.value);
+    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      if(!items.length) return;
+      bdActive = (bdActive + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; bdRenderList(true);
+      $('#bdo' + bdActive)?.scrollIntoView({block:'nearest'});
+    } else if(e.key === 'Enter'){
+      if(items[bdActive]){ e.preventDefault(); const name = items[bdActive].p; inp.value = ''; bdActive = 0; bdAdd(name); bdRenderList(true); }
+    } else if(e.key === 'Escape'){ bdRenderList(false); }
+    else if(e.key === 'Backspace' && !inp.value && state.bd.length){ bdRemove(state.bd[state.bd.length - 1]); }
+  });
+  ul.addEventListener('pointerdown', e => e.preventDefault());     // не терять фокус поля при выборе
+  document.addEventListener('click', e => {
+    const add = e.target.closest('[data-bd-add]');
+    if(add){ inp.value = ''; bdActive = 0; bdAdd(add.dataset.bdAdd); if(add.closest('.bdo')) { inp.focus(); bdRenderList(true); } return; }
+    const rem = e.target.closest('[data-bd-remove]');
+    if(rem){ bdRemove(rem.dataset.bdRemove); return; }
+    if(e.target.closest('[data-bd-focus]')){ inp.focus({preventScroll:false}); return; }
+    const who = e.target.closest('[data-bd-who]');
+    if(who){ bdWho = bdWho === who.dataset.bdWho ? '' : who.dataset.bdWho; renderBuilder(); $(`[data-bd-who="${CSS.escape(bdWho || who.dataset.bdWho)}"]`)?.focus(); return; }
+    if(e.target.closest('[data-bd-clear]')){ state.bd = []; bdWho = ''; bdSync(); renderBuilder(); inp.focus(); return; }
+    if(e.target.closest('[data-bd-share]')){ bdShare(); }
+  });
+}
+async function bdShare(){
+  const url = location.origin + location.pathname + '#' + routeFor('builder');
+  try{ await navigator.clipboard.writeText(url); toast('Ссылка на состав скопирована'); }
+  catch(err){ prompt('Скопируйте ссылку', url); }
+}
+bdInit();
+
 /* ---------------- tabs ---------------- */
-const TABS = ['games','tournament','rating','schedule'];
+const TABS = ['games','tournament','rating','schedule','builder'];
 let scrollGuard = 0;
 // человек сам крутит страницу — не перехватываем
 ['wheel','touchstart','keydown'].forEach(ev =>
@@ -5570,8 +5936,9 @@ $('.tablist').addEventListener('keydown', e => {
 window.addEventListener('resize', moveInk);
 window.addEventListener('resize', moveSegPill);
 window.addEventListener('resize', sizeMaxScroll);
-/* Адреса: #games · #tournament · #tournament/Зима_2026 · #rating · #schedule · #player/<имя> · #game/<пакет>/<№> */
+/* Адреса: #games · #tournament · #tournament/Зима_2026 · #rating · #schedule · #builder/<имя>~<имя> · #player/<имя> · #game/<пакет>/<№> */
 function routeFor(tab){
+  if(tab === 'builder' && state.bd.length) return 'builder/' + state.bd.map(encodeURIComponent).join('~');
   return tab === 'tournament' && state.tour !== 'year' ? 'tournament/' + encodeURIComponent(state.tour) : tab;
 }
 function parseRoute(){
@@ -5600,6 +5967,13 @@ function applyRoute({scroll = true} = {}){
     const key = a && DB.seasons.some(se => se.key === a) ? a : 'year';
     if(key !== state.tour){ state.tour = key; renderTourSeg(); renderTournament(); }
     setTab('tournament', {scroll: scroll && state.tab !== 'tournament', push:false});
+    return true;
+  }
+  if(kind === 'builder'){
+    const known = bdData().byName;
+    state.bd = [...new Set((a || '').split('~').filter(n => known.has(n)))].slice(0, BD_MAX);
+    renderBuilder();
+    setTab('builder', {scroll: scroll && state.tab !== 'builder', push:false});
     return true;
   }
   if(TABS.includes(kind)){
@@ -6188,6 +6562,7 @@ function renderAll(){
   renderRating();
   renderRatingHowto();
   renderH2H();
+  renderBuilder();
   moveInk();
 }
 
